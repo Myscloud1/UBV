@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>UBV - Ultimate Baller Values</title>
   
-  <!-- Fonts & Icons -->
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700;800&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -112,7 +111,7 @@
       text-transform: uppercase;
     }
 
-    /* SEARCH & BUTTONS */
+    /* SEARCH & LIST TOGGLE BUTTONS */
     #search-section { text-align: center; margin-bottom: 2rem; }
     #search-box {
       padding: 14px 24px;
@@ -143,18 +142,21 @@
       font-size: 1rem;
       font-weight: 700;
       cursor: pointer;
-      text-decoration: none;
       display: inline-block;
       transition: all 0.3s ease;
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
 
-    .custom-btn:hover {
+    .custom-btn:hover, .custom-btn.active-btn {
       background: var(--accent-yellow);
       color: #0f172a;
       box-shadow: 0 0 16px var(--accent-yellow);
       transform: translateY(-2px);
     }
+
+    /* LIST SECTIONS (TOGGLEABLE) */
+    .list-section { display: none; }
+    .list-section.active-list { display: block; }
 
     /* VALUE LIST TABLE */
     .table-wrapper {
@@ -242,60 +244,64 @@
       font-weight: 600;
     }
 
-    /* LIST EDITORS TABLE */
+    /* BÜYÜTÜLMÜŞ LIST EDITORS TABLOSU */
     .editors-table {
       width: 100%;
       border-collapse: collapse;
       background: #b0b0b0;
       color: #000000;
       font-weight: 700;
-      border: 3px solid #000;
+      border: 4px solid #000;
     }
 
     .editors-table th {
       background: #000000;
       color: #ffffff;
-      font-size: 1.2rem;
-      padding: 14px;
+      font-size: 1.4rem;
+      padding: 18px 20px;
       text-align: center;
-      border: 2px solid #000;
+      border: 3px solid #000;
+      letter-spacing: 1px;
     }
 
     .editors-table td {
       background: #c2c2c2;
       color: #000000;
-      border: 2px solid #666;
-      font-size: 1.1rem;
-      padding: 12px;
+      border: 3px solid #555;
+      font-size: 1.25rem;
+      padding: 20px 18px;
       vertical-align: middle;
       text-align: center;
     }
 
+    /* Büyütülmüş Avatar */
     .editor-avatar {
-      width: 60px;
-      height: 60px;
-      border-radius: 8px;
+      width: 90px;
+      height: 90px;
+      border-radius: 12px;
       object-fit: cover;
       background: #333;
-      border: 2px solid #000;
+      border: 3px solid #000;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     }
 
     .roblox-tag {
-      color: #0056b3;
+      color: #004499;
       text-decoration: underline;
       font-weight: 800;
+      font-size: 1.2rem;
     }
 
     .status-box {
       display: inline-block;
-      width: 35px;
-      height: 35px;
+      width: 45px;
+      height: 45px;
       background: #00e600;
-      border: 2px solid #000;
-      border-radius: 4px;
+      border: 3px solid #000;
+      border-radius: 6px;
       text-align: center;
-      line-height: 31px;
-      font-size: 1.2rem;
+      line-height: 40px;
+      font-size: 1.5rem;
       color: #000;
     }
 
@@ -314,12 +320,13 @@
       .nav-links a { font-size: 0.8rem; }
       .nav-social-wrap { display: none; }
       .page-title { font-size: 2.8rem; }
+      .editor-avatar { width: 65px; height: 65px; }
+      .editors-table td { font-size: 1rem; padding: 12px 8px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- NAVBAR -->
   <nav class="navbar">
     <ul class="nav-links">
       <li><a href="#" class="nav-link active" onclick="openTab(event, 'valuelists')">Value Lists</a></li>
@@ -337,16 +344,14 @@
     </div>
   </nav>
 
-  <!-- CONTAINER -->
   <div class="main-container">
 
-    <!-- VALUE LISTS TAB -->
     <div id="valuelists" class="tab-content active">
       <h1 class="page-title">VALUE LISTS</h1>
 
       <div id="custom-button-group">
-        <a href="#normal-section" class="custom-btn">Main List</a>
-        <a href="#collectable-section" class="custom-btn">Collectors List</a>
+        <button class="custom-btn active-btn" onclick="toggleList('normal-section', this)">Main List</button>
+        <button class="custom-btn" onclick="toggleList('collectable-section', this)">Collectors List</button>
       </div>
 
       <div id="search-section">
@@ -355,47 +360,48 @@
 
       <div id="loading" class="loading-text">Loading items from Google Sheets...</div>
 
-      <!-- Main Items Table -->
-      <div class="table-wrapper" id="normal-section">
-        <table>
-          <thead>
-            <tr>
-              <th>ITEM</th>
-              <th>VALUE</th>
-              <th>AVERAGE RAP</th>
-              <th>DEMAND SCALE</th>
-              <th>DEMAND RANKING</th>
-              <th>VALUE STATUS</th>
-              <th>DEMAND STATUS</th>
-              <th>ITEM QUALITY</th>
-            </tr>
-          </thead>
-          <tbody id="normal-body"></tbody>
-        </table>
+      <div class="list-section active-list" id="normal-section">
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>ITEM</th>
+                <th>VALUE</th>
+                <th>AVERAGE RAP</th>
+                <th>DEMAND SCALE</th>
+                <th>DEMAND RANKING</th>
+                <th>VALUE STATUS</th>
+                <th>DEMAND STATUS</th>
+                <th>ITEM QUALITY</th>
+              </tr>
+            </thead>
+            <tbody id="normal-body"></tbody>
+          </table>
+        </div>
       </div>
 
-      <!-- Collectables Table -->
-      <div class="page-title" style="font-size: 2.2rem;" id="collectable-section">Collectable Items</div>
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th>ITEM</th>
-              <th>VALUE</th>
-              <th>AVERAGE RAP</th>
-              <th>DEMAND SCALE</th>
-              <th>DEMAND RANKING</th>
-              <th>VALUE STATUS</th>
-              <th>DEMAND STATUS</th>
-              <th>ITEM QUALITY</th>
-            </tr>
-          </thead>
-          <tbody id="collectable-body"></tbody>
-        </table>
+      <div class="list-section" id="collectable-section">
+        <div class="page-title" style="font-size: 2.2rem; margin-bottom: 15px;">Collectable Items</div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>ITEM</th>
+                <th>VALUE</th>
+                <th>AVERAGE RAP</th>
+                <th>DEMAND SCALE</th>
+                <th>DEMAND RANKING</th>
+                <th>VALUE STATUS</th>
+                <th>DEMAND STATUS</th>
+                <th>ITEM QUALITY</th>
+              </tr>
+            </thead>
+            <tbody id="collectable-body"></tbody>
+          </table>
+        </div>
       </div>
     </div>
 
-    <!-- UPDATES TAB -->
     <div id="updates" class="tab-content">
       <h1 class="page-title">UPDATES</h1>
       <div class="updates-wrapper" id="updates-container">
@@ -403,7 +409,6 @@
       </div>
     </div>
 
-    <!-- ABOUT TAB -->
     <div id="about" class="tab-content">
       <h1 class="page-title">ABOUT US</h1>
       <div class="info-card">
@@ -414,25 +419,24 @@
       </div>
     </div>
 
-    <!-- LIST EDITORS TAB -->
     <div id="editors" class="tab-content">
       <h1 class="page-title">LIST EDITORS</h1>
       <div class="table-wrapper">
         <table class="editors-table">
           <thead>
             <tr>
-              <th style="width: 90px;"></th>
+              <th style="width: 120px;">Avatar</th>
               <th>Username</th>
               <th>Role</th>
-              <th>Roblox</th>
-              <th>Activity Status</th>
+              <th>Roblox Profile</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody id="editors-body">
             <tr>
               <td><img src="https://ui-avatars.com/api/?name=M&background=333&color=fff" class="editor-avatar"></td>
-              <td>Myscloud</td>
-              <td style="color: #444;">List Editor</td>
+              <td style="font-size: 1.3rem;">Myscloud</td>
+              <td style="color: #333;">List Editor</td>
               <td><a href="https://www.roblox.com" target="_blank" class="roblox-tag">@myscloud</a></td>
               <td><span class="status-box">✅</span></td>
             </tr>
@@ -454,6 +458,19 @@
       evt.currentTarget.classList.add("active");
     }
 
+    // MAIN LIST VE COLLECTORS LIST BUTON GEÇİŞLERİ
+    function toggleList(sectionId, btn) {
+      const sections = document.getElementsByClassName("list-section");
+      for (let i = 0; i < sections.length; i++) {
+        sections[i].classList.remove("active-list");
+      }
+      document.getElementById(sectionId).classList.add("active-list");
+
+      const buttons = document.querySelectorAll("#custom-button-group .custom-btn");
+      buttons.forEach(b => b.classList.remove("active-btn"));
+      btn.classList.add("active-btn");
+    }
+
     const SHEET_ID = '1g-5-zj5fz1WfKhrPxMUzyAMmtbXOFf8ujufdd-yYKMo';
     let originalData = [];
 
@@ -473,133 +490,3 @@
         console.error(err);
         document.getElementById('loading').innerText = "Failed to load items.";
       }
-    }
-
-    function renderTables(data) {
-      // Collectors etiketi 4. veya 5. sütunda (Demand Ranking / Value Status) geçenleri ayırır
-      const normal = data.filter(row => {
-        const rowStr = row.join(' ');
-        return rowStr.indexOf("Collectors") === -1;
-      });
-      
-      const collectable = data.filter(row => {
-        const rowStr = row.join(' ');
-        return rowStr.indexOf("Collectors") !== -1;
-      });
-
-      renderTable(normal, document.getElementById("normal-body"));
-      renderTable(collectable, document.getElementById("collectable-body"));
-    }
-
-    function renderTable(data, tbody) {
-      if(!tbody) return;
-      tbody.innerHTML = "";
-
-      data.forEach(row => {
-        // Boş satırları veya Item adı bulunmayan satırları atla
-        if (!row || row.length === 0 || !row[0]) return;
-
-        // E-tablonun ilk satırı "Item" başlığıysa onu tabloya ekleme
-        if (String(row[0]).trim().toLowerCase() === 'item') return;
-
-        const tr = document.createElement("tr");
-
-        // 8 Adet Sütunu (A, B, C, D, E, F, G, H) Sırayla Ekler:
-        // A: Item, B: Value, C: Average RAP, D: Demand Scale, E: Demand Ranking, F: Value Status, G: Demand Status, H: Item Quality
-        for (let idx = 0; idx < 8; idx++) {
-          const td = document.createElement("td");
-          if (idx === 0) {
-            td.className = "item-cell";
-          }
-          td.textContent = String(row[idx] ?? '-');
-          tr.appendChild(td);
-        }
-
-        tbody.appendChild(tr);
-      });
-    }
-
-    function filterTable() {
-      const query = document.getElementById("search-box").value.toLowerCase();
-      const filtered = originalData.filter(row => row.some(cell => String(cell).toLowerCase().includes(query)));
-      renderTables(filtered);
-    }
-
-    // UPDATES SAYFASI
-    function handleUpdatesData(json) {
-      const container = document.getElementById('updates-container');
-      container.innerHTML = '';
-      try {
-        const rows = json.table.rows;
-        rows.forEach(r => {
-          if (!r.c || !r.c[0]) return;
-          const title = r.c[0] ? r.c[0].v : 'UPDATE';
-          const date = r.c[1] ? r.c[1].v : '';
-          const content = r.c[2] ? r.c[2].v : '';
-
-          const block = document.createElement('div');
-          block.className = 'update-block';
-          block.innerHTML = `
-            <div class="update-header-title">${title}</div>
-            ${date ? `<div class="update-date-tag">${date}</div>` : ''}
-            <div class="update-content-text">${content}</div>
-          `;
-          container.appendChild(block);
-        });
-      } catch(e) {
-        container.innerHTML = '<p>No updates found in Google Sheets.</p>';
-      }
-    }
-
-    // LIST EDITORS SAYFASI
-    function handleEditorsData(json) {
-      const tbody = document.getElementById('editors-body');
-      try {
-        const rows = json.table.rows;
-        if (!rows || rows.length === 0) return;
-        tbody.innerHTML = '';
-
-        rows.forEach(r => {
-          if (!r.c || !r.c[1]) return;
-          
-          // Header satırını atla
-          if (String(r.c[1].v).toLowerCase() === 'username') return;
-
-          const avatarImg = r.c[0] ? r.c[0].v : '';
-          const username = r.c[1] ? r.c[1].v : '';
-          const role = r.c[2] ? r.c[2].v : 'List Editor';
-          const profileUrl = r.c[3] ? r.c[3].v : '#';
-          const status = r.c[4] ? r.c[4].v : 'Active';
-
-          const imgSrc = (avatarImg && String(avatarImg).startsWith('http')) 
-            ? avatarImg 
-            : `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=333&color=fff`;
-
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td><img src="${imgSrc}" class="editor-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=333&color=fff'"></td>
-            <td>${username}</td>
-            <td style="color: #444;">${role}</td>
-            <td><a href="${profileUrl}" target="_blank" class="roblox-tag">@${username.toLowerCase()}</a></td>
-            <td><span class="status-box">${status.toLowerCase() === 'active' || status === '✅' ? '✅' : '❌'}</span></td>
-          `;
-          tbody.appendChild(tr);
-        });
-      } catch(e) { console.log("Using default editors."); }
-    }
-
-    // GOOGLE SHEETS SCRIPT ÇAĞRILARI
-    const scriptMain = document.createElement('script');
-    scriptMain.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?headers=0&tqx=responseHandler:handleGoogleSheetData`;
-    document.body.appendChild(scriptMain);
-
-    const scriptUpdates = document.createElement('script');
-    scriptUpdates.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=Updates&headers=0&tqx=responseHandler:handleUpdatesData`;
-    document.body.appendChild(scriptUpdates);
-
-    const scriptEditors = document.createElement('script');
-    scriptEditors.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=Editors&headers=0&tqx=responseHandler:handleEditorsData`;
-    document.body.appendChild(scriptEditors);
-  </script>
-</body>
-</html>
