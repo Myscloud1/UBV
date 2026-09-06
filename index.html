@@ -246,7 +246,7 @@
       font-weight: 600;
     }
 
-    /* LIST EDITORS TABLE (BÜYÜTÜLMÜŞ TASARIM) */
+    /* LIST EDITORS TABLE */
     .editors-table {
       width: 100%;
       border-collapse: collapse;
@@ -424,7 +424,7 @@
       </div>
     </div>
 
-    <!-- LIST EDITORS TAB (BÜYÜTÜLMÜŞ TABLO VE FOTOĞRAFLAR) -->
+    <!-- LIST EDITORS TAB -->
     <div id="editors" class="tab-content">
       <h1 class="page-title">LIST EDITORS</h1>
       <div class="table-wrapper">
@@ -477,10 +477,16 @@
 
       document.getElementById(targetId).classList.add("active-sublist");
       document.getElementById(btnId).classList.add("active-subtab");
+
+      // Sekme değiştiğinde var olan arama filtresini yeni sekmeye uygular
+      filterTable();
     }
 
     const SHEET_ID = '1g-5-zj5fz1WfKhrPxMUzyAMmtbXOFf8ujufdd-yYKMo';
-    let originalData = [];
+    
+    // Verileri iki ayrı dizide saklıyoruz
+    let mainListData = [];
+    let collectableListData = [];
 
     // GOOGLE SHEETS TABLO VERİSİ
     function handleGoogleSheetData(json) {
@@ -488,43 +494,41 @@
 
       try {
         const rawRows = json.table.rows;
-        originalData = rawRows.map(row => {
+        const allData = rawRows.map(row => {
           if (!row.c) return [];
           return row.c.map(cell => cell ? (cell.v !== null ? cell.v : '') : '');
         });
 
-        renderTables(originalData);
+        // Verileri A sütunundaki başlığa göre böl
+        mainListData = [];
+        collectableListData = [];
+        let isCollectableSection = false;
+
+        allData.forEach(row => {
+          if (!row || row.length === 0) return;
+          
+          const firstCell = String(row[0] ?? '').trim().toLowerCase();
+          
+          if (firstCell.includes("collectors") || firstCell.includes("collectable")) {
+            isCollectableSection = true;
+            return;
+          }
+
+          if (isCollectableSection) {
+            collectableListData.push(row);
+          } else {
+            mainListData.push(row);
+          }
+        });
+
+        // İlk açılışta verileri ekrana bas
+        renderTable(mainListData, document.getElementById("normal-body"));
+        renderTable(collectableListData, document.getElementById("collectable-body"));
+
       } catch (err) {
         console.error(err);
         document.getElementById('loading').innerText = "Failed to load items.";
       }
-    }
-
-    function renderTables(data) {
-      let normal = [];
-      let collectable = [];
-      let isCollectableSection = false;
-
-      // A sütununda (row[0]) "Collectors" geçtiği andan itibaren altındaki satırları Collectable listesine atar
-      data.forEach(row => {
-        if (!row || row.length === 0) return;
-        
-        const firstCell = String(row[0] ?? '').trim().toLowerCase();
-        
-        if (firstCell.includes("collectors") || firstCell.includes("collectable")) {
-          isCollectableSection = true;
-          return; // Bölüm başlığı olan satırı tablolara eklemiyoruz
-        }
-
-        if (isCollectableSection) {
-          collectable.push(row);
-        } else {
-          normal.push(row);
-        }
-      });
-
-      renderTable(normal, document.getElementById("normal-body"));
-      renderTable(collectable, document.getElementById("collectable-body"));
     }
 
     function renderTable(data, tbody) {
@@ -550,10 +554,24 @@
       });
     }
 
+    // ARAMA FONKSİYONU (YALNIZCA AKTİF SEKMEYİ FİLTRELER)
     function filterTable() {
       const query = document.getElementById("search-box").value.toLowerCase();
-      const filtered = originalData.filter(row => row.some(cell => String(cell).toLowerCase().includes(query)));
-      renderTables(filtered);
+      const isMainActive = document.getElementById("normal-section").classList.contains("active-sublist");
+
+      if (isMainActive) {
+        // Yalnızca Main List içinde arama yap
+        const filtered = mainListData.filter(row => 
+          row.some(cell => String(cell).toLowerCase().includes(query))
+        );
+        renderTable(filtered, document.getElementById("normal-body"));
+      } else {
+        // Yalnızca Collectors List içinde arama yap
+        const filtered = collectableListData.filter(row => 
+          row.some(cell => String(cell).toLowerCase().includes(query))
+        );
+        renderTable(filtered, document.getElementById("collectable-body"));
+      }
     }
 
     // UPDATES SAYFASI
