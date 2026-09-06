@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>UBV - Ultimate Baller Values</title>
-  
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700;800&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -94,13 +93,8 @@
       width: 100%;
     }
 
-    .tab-content { display: none; animation: fadeIn 0.3s ease-in-out; }
+    .tab-content { display: none; }
     .tab-content.active { display: block; }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
 
     .page-title {
       font-family: 'Bebas Neue', cursive;
@@ -111,7 +105,7 @@
       text-transform: uppercase;
     }
 
-    /* SEARCH & LIST TOGGLE BUTTONS */
+    /* SEARCH & TOGGLE BUTTONS */
     #search-section { text-align: center; margin-bottom: 2rem; }
     #search-box {
       padding: 14px 24px;
@@ -147,16 +141,16 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
 
-    .custom-btn:hover, .custom-btn.active-btn {
+    .custom-btn.active-subtab, .custom-btn:hover {
       background: var(--accent-yellow);
       color: #0f172a;
       box-shadow: 0 0 16px var(--accent-yellow);
       transform: translateY(-2px);
     }
 
-    /* LIST SECTIONS (TOGGLEABLE) */
-    .list-section { display: none; }
-    .list-section.active-list { display: block; }
+    /* SUBTAB SAYFA DEĞİŞİMİ */
+    .sublist-tab { display: none; }
+    .sublist-tab.active-sublist { display: block; }
 
     /* VALUE LIST TABLE */
     .table-wrapper {
@@ -209,7 +203,6 @@
       padding: 30px 40px;
       border-radius: 16px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      font-family: 'Montserrat', sans-serif;
     }
 
     .update-block {
@@ -218,16 +211,13 @@
       padding-bottom: 25px;
     }
 
-    .update-block:last-child {
-      border-bottom: none;
-    }
+    .update-block:last-child { border-bottom: none; }
 
     .update-header-title {
       font-size: 1.8rem;
       font-weight: 800;
       color: #ffffff;
       margin-bottom: 15px;
-      letter-spacing: 1px;
     }
 
     .update-date-tag {
@@ -244,7 +234,7 @@
       font-weight: 600;
     }
 
-    /* BÜYÜTÜLMÜŞ LIST EDITORS TABLOSU */
+    /* LIST EDITORS TABLE (BÜYÜTÜLMÜŞ TASARIM) */
     .editors-table {
       width: 100%;
       border-collapse: collapse;
@@ -258,7 +248,7 @@
       background: #000000;
       color: #ffffff;
       font-size: 1.4rem;
-      padding: 18px 20px;
+      padding: 22px;
       text-align: center;
       border: 3px solid #000;
       letter-spacing: 1px;
@@ -268,13 +258,12 @@
       background: #c2c2c2;
       color: #000000;
       border: 3px solid #555;
-      font-size: 1.25rem;
-      padding: 20px 18px;
+      font-size: 1.35rem;
+      padding: 22px 18px;
       vertical-align: middle;
       text-align: center;
     }
 
-    /* Büyütülmüş Avatar */
     .editor-avatar {
       width: 90px;
       height: 90px;
@@ -286,23 +275,24 @@
     }
 
     .roblox-tag {
-      color: #004499;
+      color: #0056b3;
       text-decoration: underline;
       font-weight: 800;
-      font-size: 1.2rem;
+      font-size: 1.3rem;
     }
 
     .status-box {
       display: inline-block;
-      width: 45px;
-      height: 45px;
+      width: 48px;
+      height: 48px;
       background: #00e600;
       border: 3px solid #000;
-      border-radius: 6px;
+      border-radius: 8px;
       text-align: center;
-      line-height: 40px;
-      font-size: 1.5rem;
+      line-height: 42px;
+      font-size: 1.6rem;
       color: #000;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     }
 
     .info-card {
@@ -350,8 +340,8 @@
       <h1 class="page-title">VALUE LISTS</h1>
 
       <div id="custom-button-group">
-        <button class="custom-btn active-btn" onclick="toggleList('normal-section', this)">Main List</button>
-        <button class="custom-btn" onclick="toggleList('collectable-section', this)">Collectors List</button>
+        <button id="btn-main" class="custom-btn active-subtab" onclick="switchListTab('normal-section', 'btn-main')">Main List</button>
+        <button id="btn-collect" class="custom-btn" onclick="switchListTab('collectable-section', 'btn-collect')">Collectors List</button>
       </div>
 
       <div id="search-section">
@@ -360,45 +350,40 @@
 
       <div id="loading" class="loading-text">Loading items from Google Sheets...</div>
 
-      <div class="list-section active-list" id="normal-section">
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>ITEM</th>
-                <th>VALUE</th>
-                <th>AVERAGE RAP</th>
-                <th>DEMAND SCALE</th>
-                <th>DEMAND RANKING</th>
-                <th>VALUE STATUS</th>
-                <th>DEMAND STATUS</th>
-                <th>ITEM QUALITY</th>
-              </tr>
-            </thead>
-            <tbody id="normal-body"></tbody>
-          </table>
-        </div>
+      <div class="table-wrapper sublist-tab active-sublist" id="normal-section">
+        <table>
+          <thead>
+            <tr>
+              <th>ITEM</th>
+              <th>VALUE</th>
+              <th>AVERAGE RAP</th>
+              <th>DEMAND SCALE</th>
+              <th>DEMAND RANKING</th>
+              <th>VALUE STATUS</th>
+              <th>DEMAND STATUS</th>
+              <th>ITEM QUALITY</th>
+            </tr>
+          </thead>
+          <tbody id="normal-body"></tbody>
+        </table>
       </div>
 
-      <div class="list-section" id="collectable-section">
-        <div class="page-title" style="font-size: 2.2rem; margin-bottom: 15px;">Collectable Items</div>
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>ITEM</th>
-                <th>VALUE</th>
-                <th>AVERAGE RAP</th>
-                <th>DEMAND SCALE</th>
-                <th>DEMAND RANKING</th>
-                <th>VALUE STATUS</th>
-                <th>DEMAND STATUS</th>
-                <th>ITEM QUALITY</th>
-              </tr>
-            </thead>
-            <tbody id="collectable-body"></tbody>
-          </table>
-        </div>
+      <div class="table-wrapper sublist-tab" id="collectable-section">
+        <table>
+          <thead>
+            <tr>
+              <th>ITEM</th>
+              <th>VALUE</th>
+              <th>AVERAGE RAP</th>
+              <th>DEMAND SCALE</th>
+              <th>DEMAND RANKING</th>
+              <th>VALUE STATUS</th>
+              <th>DEMAND STATUS</th>
+              <th>ITEM QUALITY</th>
+            </tr>
+          </thead>
+          <tbody id="collectable-body"></tbody>
+        </table>
       </div>
     </div>
 
@@ -425,7 +410,7 @@
         <table class="editors-table">
           <thead>
             <tr>
-              <th style="width: 120px;">Avatar</th>
+              <th style="width: 140px;">Avatar</th>
               <th>Username</th>
               <th>Role</th>
               <th>Roblox Profile</th>
@@ -435,7 +420,7 @@
           <tbody id="editors-body">
             <tr>
               <td><img src="https://ui-avatars.com/api/?name=M&background=333&color=fff" class="editor-avatar"></td>
-              <td style="font-size: 1.3rem;">Myscloud</td>
+              <td>Myscloud</td>
               <td style="color: #333;">List Editor</td>
               <td><a href="https://www.roblox.com" target="_blank" class="roblox-tag">@myscloud</a></td>
               <td><span class="status-box">✅</span></td>
@@ -458,17 +443,19 @@
       evt.currentTarget.classList.add("active");
     }
 
-    // MAIN LIST VE COLLECTORS LIST BUTON GEÇİŞLERİ
-    function toggleList(sectionId, btn) {
-      const sections = document.getElementsByClassName("list-section");
-      for (let i = 0; i < sections.length; i++) {
-        sections[i].classList.remove("active-list");
+    // MAIN LIST VE COLLECTORS LIST İKİ AYRI SEKME OLARAK ÇALIŞIR
+    function switchListTab(targetId, btnId) {
+      const subtabs = document.getElementsByClassName("sublist-tab");
+      for (let i = 0; i < subtabs.length; i++) {
+        subtabs[i].classList.remove("active-sublist");
       }
-      document.getElementById(sectionId).classList.add("active-list");
+      const btns = document.getElementsByClassName("custom-btn");
+      for (let i = 0; i < btns.length; i++) {
+        btns[i].classList.remove("active-subtab");
+      }
 
-      const buttons = document.querySelectorAll("#custom-button-group .custom-btn");
-      buttons.forEach(b => b.classList.remove("active-btn"));
-      btn.classList.add("active-btn");
+      document.getElementById(targetId).classList.add("active-sublist");
+      document.getElementById(btnId).classList.add("active-subtab");
     }
 
     const SHEET_ID = '1g-5-zj5fz1WfKhrPxMUzyAMmtbXOFf8ujufdd-yYKMo';
@@ -490,3 +477,126 @@
         console.error(err);
         document.getElementById('loading').innerText = "Failed to load items.";
       }
+    }
+
+    function renderTables(data) {
+      const normal = data.filter(row => {
+        const rowStr = row.join(' ');
+        return rowStr.indexOf("Collectors") === -1;
+      });
+      
+      const collectable = data.filter(row => {
+        const rowStr = row.join(' ');
+        return rowStr.indexOf("Collectors") !== -1;
+      });
+
+      renderTable(normal, document.getElementById("normal-body"));
+      renderTable(collectable, document.getElementById("collectable-body"));
+    }
+
+    function renderTable(data, tbody) {
+      if(!tbody) return;
+      tbody.innerHTML = "";
+
+      data.forEach(row => {
+        if (!row || row.length === 0 || !row[0]) return;
+        if (String(row[0]).trim().toLowerCase() === 'item') return;
+
+        const tr = document.createElement("tr");
+
+        for (let idx = 0; idx < 8; idx++) {
+          const td = document.createElement("td");
+          if (idx === 0) {
+            td.className = "item-cell";
+          }
+          td.textContent = String(row[idx] ?? '-');
+          tr.appendChild(td);
+        }
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    function filterTable() {
+      const query = document.getElementById("search-box").value.toLowerCase();
+      const filtered = originalData.filter(row => row.some(cell => String(cell).toLowerCase().includes(query)));
+      renderTables(filtered);
+    }
+
+    // UPDATES SAYFASI
+    function handleUpdatesData(json) {
+      const container = document.getElementById('updates-container');
+      container.innerHTML = '';
+      try {
+        const rows = json.table.rows;
+        rows.forEach(r => {
+          if (!r.c || !r.c[0]) return;
+          const title = r.c[0] ? r.c[0].v : 'UPDATE';
+          const date = r.c[1] ? r.c[1].v : '';
+          const content = r.c[2] ? r.c[2].v : '';
+
+          const block = document.createElement('div');
+          block.className = 'update-block';
+          block.innerHTML = `
+            <div class="update-header-title">${title}</div>
+            ${date ? `<div class="update-date-tag">${date}</div>` : ''}
+            <div class="update-content-text">${content}</div>
+          `;
+          container.appendChild(block);
+        });
+      } catch(e) {
+        container.innerHTML = '<p>No updates found in Google Sheets.</p>';
+      }
+    }
+
+    // LIST EDITORS SAYFASI (VERİ ÇEKME)
+    function handleEditorsData(json) {
+      const tbody = document.getElementById('editors-body');
+      try {
+        const rows = json.table.rows;
+        if (!rows || rows.length === 0) return;
+        tbody.innerHTML = '';
+
+        rows.forEach(r => {
+          if (!r.c || !r.c[1]) return;
+          
+          if (String(r.c[1].v).toLowerCase() === 'username') return;
+
+          const avatarImg = r.c[0] ? r.c[0].v : '';
+          const username = r.c[1] ? r.c[1].v : '';
+          const role = r.c[2] ? r.c[2].v : 'List Editor';
+          const profileUrl = r.c[3] ? r.c[3].v : '#';
+          const status = r.c[4] ? r.c[4].v : 'Active';
+
+          const imgSrc = (avatarImg && String(avatarImg).startsWith('http')) 
+            ? avatarImg 
+            : `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=333&color=fff`;
+
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><img src="${imgSrc}" class="editor-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=333&color=fff'"></td>
+            <td>${username}</td>
+            <td style="color: #333;">${role}</td>
+            <td><a href="${profileUrl}" target="_blank" class="roblox-tag">@${username.toLowerCase()}</a></td>
+            <td><span class="status-box">${status.toLowerCase() === 'active' || status === '✅' ? '✅' : '❌'}</span></td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch(e) { console.log("Using default editors."); }
+    }
+
+    // GOOGLE SHEETS BAGLANTILARI
+    const scriptMain = document.createElement('script');
+    scriptMain.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?headers=0&tqx=responseHandler:handleGoogleSheetData`;
+    document.body.appendChild(scriptMain);
+
+    const scriptUpdates = document.createElement('script');
+    scriptUpdates.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=Updates&headers=0&tqx=responseHandler:handleUpdatesData`;
+    document.body.appendChild(scriptUpdates);
+
+    const scriptEditors = document.createElement('script');
+    scriptEditors.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=Editors&headers=0&tqx=responseHandler:handleEditorsData`;
+    document.body.appendChild(scriptEditors);
+  </script>
+</body>
+</html>
