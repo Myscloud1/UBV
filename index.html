@@ -198,21 +198,9 @@
       font-weight: 800;
       color: #ffffff;
       font-size: 1.05rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
     }
 
-    .showcase-link {
-      color: #ffeaa7;
-      text-decoration: none;
-      font-size: 1.1rem;
-      transition: transform 0.2s;
-    }
-    .showcase-link:hover { transform: scale(1.3); }
-
-    /* UPDATES (FOTOĞRAFTAKİ KARANLIK DÜZENLİ YAZI FORMATI) */
+    /* UPDATES TAB */
     .updates-wrapper {
       background: #000000;
       color: #ffffff;
@@ -445,21 +433,7 @@
               <td><img src="https://ui-avatars.com/api/?name=M&background=333&color=fff" class="editor-avatar"></td>
               <td>Myscloud</td>
               <td style="color: #444;">List Editor</td>
-              <td><a href="https://www.roblox.com/search/users?keyword=myscloud" target="_blank" class="roblox-tag">@myscloud</a></td>
-              <td><span class="status-box">✅</span></td>
-            </tr>
-            <tr>
-              <td><img src="https://ui-avatars.com/api/?name=B&background=333&color=fff" class="editor-avatar"></td>
-              <td>Based</td>
-              <td style="color: #444;">List Editor</td>
-              <td><a href="https://www.roblox.com/search/users?keyword=witheredvision" target="_blank" class="roblox-tag">@witheredvision</a></td>
-              <td><span class="status-box">✅</span></td>
-            </tr>
-            <tr>
-              <td><img src="https://ui-avatars.com/api/?name=R&background=333&color=fff" class="editor-avatar"></td>
-              <td>Roy</td>
-              <td style="color: #444;">List Editor</td>
-              <td><a href="https://www.roblox.com/search/users?keyword=Royverses" target="_blank" class="roblox-tag">@Royverses</a></td>
+              <td><a href="https://www.roblox.com" target="_blank" class="roblox-tag">@myscloud</a></td>
               <td><span class="status-box">✅</span></td>
             </tr>
           </tbody>
@@ -501,9 +475,9 @@
     }
 
     function renderTables(data) {
-      // 7. Sütun (Collectors) Kontrolü
-      const normal = data.filter(row => String(row[7] || '').indexOf("Collectors") === -1);
-      const collectable = data.filter(row => String(row[7] || '').indexOf("Collectors") !== -1);
+      // 6. Sütunda (Demand Status/Collectors) "Collectors" geçenleri ayırır
+      const normal = data.filter(row => String(row[6] || '').indexOf("Collectors") === -1 && String(row[7] || '').indexOf("Collectors") === -1);
+      const collectable = data.filter(row => String(row[6] || '').indexOf("Collectors") !== -1 || String(row[7] || '').indexOf("Collectors") !== -1);
 
       renderTable(normal, document.getElementById("normal-body"));
       renderTable(collectable, document.getElementById("collectable-body"));
@@ -514,29 +488,23 @@
       tbody.innerHTML = "";
 
       data.forEach(row => {
-        if (!row || row.length < 2) return;
+        if (!row || row.length === 0 || !row[0]) return;
 
         const tr = document.createElement("tr");
 
-        // 1. Sütun: ITEM ADI (B Sütunundan Alınır) + Showcase Varsa Kamera Emojisi (A Sütunu)
-        const itemName = row[1] || 'N/A';
-        const videoLink = row[0] && String(row[0]).startsWith('http') ? row[0] : '';
-
+        // A Sütunu: ITEM ADI
+        const itemName = row[0] || 'N/A';
         const itemTd = document.createElement("td");
         itemTd.className = "item-cell";
-        itemTd.innerHTML = `
-          <span>${itemName}</span>
-          ${videoLink ? `<a href="${videoLink}" target="_blank" class="showcase-link" title="Watch Showcase">🎥</a>` : ''}
-        `;
+        itemTd.textContent = itemName;
         tr.appendChild(itemTd);
 
-        // Diğer Sütunlar: Value(C), Average RAP(D), Demand Scale(E), Demand Ranking(F), Value Status(G), Demand Status(H), Item Quality(I)
-        const colIndices = [2, 3, 4, 5, 6, 7, 8];
-        colIndices.forEach(idx => {
+        // Sırasıyla Diğer Sütunlar: Value(B), Average RAP(C), Demand Scale(D), Demand Ranking(E), Value Status(F), Demand Status(G), Item Quality(H)
+        for (let idx = 1; idx <= 7; idx++) {
           const td = document.createElement("td");
           td.textContent = String(row[idx] ?? '-');
           tr.appendChild(td);
-        });
+        }
 
         tbody.appendChild(tr);
       });
@@ -548,7 +516,7 @@
       renderTables(filtered);
     }
 
-    // UPDATES SAYFASI (E-TABLODAKİ FORMAT)
+    // UPDATES SAYFASI
     function handleUpdatesData(json) {
       const container = document.getElementById('updates-container');
       container.innerHTML = '';
@@ -587,14 +555,11 @@
           const avatarImg = r.c[0] ? r.c[0].v : '';
           const username = r.c[1] ? r.c[1].v : '';
           const role = r.c[2] ? r.c[2].v : 'List Editor';
-          const robloxUser = r.c[3] ? r.c[3].v : '';
+          const profileUrl = r.c[3] ? r.c[3].v : '#';
           const status = r.c[4] ? r.c[4].v : 'Active';
 
-          const cleanTag = robloxUser.replace('@','');
-          const robloxProfileUrl = `https://www.roblox.com/search/users?keyword=${cleanTag}`;
-          
-          // Profil resmi var ise onu kullan, yoksa harfli profil simgesi göster
-          const imgSrc = avatarImg.startsWith('http') 
+          // Resim URL'si geçerliyse kullan yoksa varsayılan baş harf ikonu oluştur
+          const imgSrc = (avatarImg && String(avatarImg).startsWith('http')) 
             ? avatarImg 
             : `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=333&color=fff`;
 
@@ -603,7 +568,7 @@
             <td><img src="${imgSrc}" class="editor-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=333&color=fff'"></td>
             <td>${username}</td>
             <td style="color: #444;">${role}</td>
-            <td><a href="${robloxProfileUrl}" target="_blank" class="roblox-tag">@${cleanTag}</a></td>
+            <td><a href="${profileUrl}" target="_blank" class="roblox-tag">@${username.toLowerCase()}</a></td>
             <td><span class="status-box">${status.toLowerCase() === 'active' || status === '✅' ? '✅' : '❌'}</span></td>
           `;
           tbody.appendChild(tr);
