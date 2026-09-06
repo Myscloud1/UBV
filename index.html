@@ -464,7 +464,8 @@
       try {
         const rawRows = json.table.rows;
         originalData = rawRows.map(row => {
-          return row.c ? row.c.map(cell => cell ? (cell.v !== null ? cell.v : '') : '') : [];
+          if (!row.c) return [];
+          return row.c.map(cell => cell ? (cell.v !== null ? cell.v : '') : '');
         });
 
         renderTables(originalData);
@@ -475,9 +476,16 @@
     }
 
     function renderTables(data) {
-      // 6. Sütunda (Demand Status/Collectors) "Collectors" geçenleri ayırır
-      const normal = data.filter(row => String(row[6] || '').indexOf("Collectors") === -1 && String(row[7] || '').indexOf("Collectors") === -1);
-      const collectable = data.filter(row => String(row[6] || '').indexOf("Collectors") !== -1 || String(row[7] || '').indexOf("Collectors") !== -1);
+      // Collectors etiketi 4. veya 5. sütunda (Demand Ranking / Value Status) geçenleri ayırır
+      const normal = data.filter(row => {
+        const rowStr = row.join(' ');
+        return rowStr.indexOf("Collectors") === -1;
+      });
+      
+      const collectable = data.filter(row => {
+        const rowStr = row.join(' ');
+        return rowStr.indexOf("Collectors") !== -1;
+      });
 
       renderTable(normal, document.getElementById("normal-body"));
       renderTable(collectable, document.getElementById("collectable-body"));
@@ -488,20 +496,21 @@
       tbody.innerHTML = "";
 
       data.forEach(row => {
+        // Boş satırları veya Item adı bulunmayan satırları atla
         if (!row || row.length === 0 || !row[0]) return;
+
+        // E-tablonun ilk satırı "Item" başlığıysa onu tabloya ekleme
+        if (String(row[0]).trim().toLowerCase() === 'item') return;
 
         const tr = document.createElement("tr");
 
-        // A Sütunu: ITEM ADI
-        const itemName = row[0] || 'N/A';
-        const itemTd = document.createElement("td");
-        itemTd.className = "item-cell";
-        itemTd.textContent = itemName;
-        tr.appendChild(itemTd);
-
-        // Sırasıyla Diğer Sütunlar: Value(B), Average RAP(C), Demand Scale(D), Demand Ranking(E), Value Status(F), Demand Status(G), Item Quality(H)
-        for (let idx = 1; idx <= 7; idx++) {
+        // 8 Adet Sütunu (A, B, C, D, E, F, G, H) Sırayla Ekler:
+        // A: Item, B: Value, C: Average RAP, D: Demand Scale, E: Demand Ranking, F: Value Status, G: Demand Status, H: Item Quality
+        for (let idx = 0; idx < 8; idx++) {
           const td = document.createElement("td");
+          if (idx === 0) {
+            td.className = "item-cell";
+          }
           td.textContent = String(row[idx] ?? '-');
           tr.appendChild(td);
         }
@@ -547,18 +556,21 @@
       const tbody = document.getElementById('editors-body');
       try {
         const rows = json.table.rows;
-        if (rows.length === 0) return;
+        if (!rows || rows.length === 0) return;
         tbody.innerHTML = '';
 
         rows.forEach(r => {
           if (!r.c || !r.c[1]) return;
+          
+          // Header satırını atla
+          if (String(r.c[1].v).toLowerCase() === 'username') return;
+
           const avatarImg = r.c[0] ? r.c[0].v : '';
           const username = r.c[1] ? r.c[1].v : '';
           const role = r.c[2] ? r.c[2].v : 'List Editor';
           const profileUrl = r.c[3] ? r.c[3].v : '#';
           const status = r.c[4] ? r.c[4].v : 'Active';
 
-          // Resim URL'si geçerliyse kullan yoksa varsayılan baş harf ikonu oluştur
           const imgSrc = (avatarImg && String(avatarImg).startsWith('http')) 
             ? avatarImg 
             : `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=333&color=fff`;
@@ -578,15 +590,15 @@
 
     // GOOGLE SHEETS SCRIPT ÇAĞRILARI
     const scriptMain = document.createElement('script');
-    scriptMain.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=responseHandler:handleGoogleSheetData`;
+    scriptMain.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?headers=0&tqx=responseHandler:handleGoogleSheetData`;
     document.body.appendChild(scriptMain);
 
     const scriptUpdates = document.createElement('script');
-    scriptUpdates.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=Updates&tqx=responseHandler:handleUpdatesData`;
+    scriptUpdates.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=Updates&headers=0&tqx=responseHandler:handleUpdatesData`;
     document.body.appendChild(scriptUpdates);
 
     const scriptEditors = document.createElement('script');
-    scriptEditors.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=Editors&tqx=responseHandler:handleEditorsData`;
+    scriptEditors.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=Editors&headers=0&tqx=responseHandler:handleEditorsData`;
     document.body.appendChild(scriptEditors);
   </script>
 </body>
