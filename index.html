@@ -464,8 +464,12 @@
       evt.currentTarget.classList.add("active");
     }
 
-    // MAIN LIST VE COLLECTORS LIST ARASINDA SEKMELİ GEÇİŞ
+    // Hangisinin aktif olduğunu kesin tutmak için global değişken
+    let currentSubTab = 'normal-section';
+
     function switchListTab(targetId, btnId) {
+      currentSubTab = targetId;
+
       const subtabs = document.getElementsByClassName("sublist-tab");
       for (let i = 0; i < subtabs.length; i++) {
         subtabs[i].classList.remove("active-sublist");
@@ -478,13 +482,12 @@
       document.getElementById(targetId).classList.add("active-sublist");
       document.getElementById(btnId).classList.add("active-subtab");
 
-      // Sekme değiştiğinde var olan arama filtresini yeni sekmeye uygular
+      // Arama kutusundaki mevcut metin ile yeni sekmeyi filtrele
       filterTable();
     }
 
     const SHEET_ID = '1g-5-zj5fz1WfKhrPxMUzyAMmtbXOFf8ujufdd-yYKMo';
     
-    // Verileri iki ayrı dizide saklıyoruz
     let mainListData = [];
     let collectableListData = [];
 
@@ -499,15 +502,17 @@
           return row.c.map(cell => cell ? (cell.v !== null ? cell.v : '') : '');
         });
 
-        // Verileri A sütunundaki başlığa göre böl
         mainListData = [];
         collectableListData = [];
         let isCollectableSection = false;
 
         allData.forEach(row => {
-          if (!row || row.length === 0) return;
+          if (!row || row.length === 0 || !row[0]) return;
           
-          const firstCell = String(row[0] ?? '').trim().toLowerCase();
+          const firstCell = String(row[0]).trim().toLowerCase();
+
+          // Header satırını ve ayırıcı satırı es geç
+          if (firstCell === 'item') return;
           
           if (firstCell.includes("collectors") || firstCell.includes("collectable")) {
             isCollectableSection = true;
@@ -521,7 +526,7 @@
           }
         });
 
-        // İlk açılışta verileri ekrana bas
+        // İlk yüklemede ekrana bas
         renderTable(mainListData, document.getElementById("normal-body"));
         renderTable(collectableListData, document.getElementById("collectable-body"));
 
@@ -537,7 +542,6 @@
 
       data.forEach(row => {
         if (!row || row.length === 0 || !row[0]) return;
-        if (String(row[0]).trim().toLowerCase() === 'item') return;
 
         const tr = document.createElement("tr");
 
@@ -554,19 +558,18 @@
       });
     }
 
-    // ARAMA FONKSİYONU (YALNIZCA AKTİF SEKMEYİ FİLTRELER)
+    // ARAMA FONKSİYONU
     function filterTable() {
-      const query = document.getElementById("search-box").value.toLowerCase();
-      const isMainActive = document.getElementById("normal-section").classList.contains("active-sublist");
+      const query = document.getElementById("search-box").value.toLowerCase().trim();
 
-      if (isMainActive) {
-        // Yalnızca Main List içinde arama yap
+      if (currentSubTab === 'normal-section') {
+        // Sadece Main List veri kümesinde arama yap
         const filtered = mainListData.filter(row => 
           row.some(cell => String(cell).toLowerCase().includes(query))
         );
         renderTable(filtered, document.getElementById("normal-body"));
       } else {
-        // Yalnızca Collectors List içinde arama yap
+        // Sadece Collectors List veri kümesinde arama yap
         const filtered = collectableListData.filter(row => 
           row.some(cell => String(cell).toLowerCase().includes(query))
         );
