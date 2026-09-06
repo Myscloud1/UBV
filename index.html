@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>UBV - Ultimate Baller Values</title>
+  
+  <!-- Fonts & Icons -->
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700;800&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -93,8 +95,13 @@
       width: 100%;
     }
 
-    .tab-content { display: none; }
+    .tab-content { display: none; animation: fadeIn 0.3s ease-in-out; }
     .tab-content.active { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
     .page-title {
       font-family: 'Bebas Neue', cursive;
@@ -105,7 +112,7 @@
       text-transform: uppercase;
     }
 
-    /* SEARCH & TOGGLE BUTTONS */
+    /* SEARCH & BUTTONS */
     #search-section { text-align: center; margin-bottom: 2rem; }
     #search-box {
       padding: 14px 24px;
@@ -136,21 +143,18 @@
       font-size: 1rem;
       font-weight: 700;
       cursor: pointer;
+      text-decoration: none;
       display: inline-block;
       transition: all 0.3s ease;
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
 
-    .custom-btn.active-subtab, .custom-btn:hover {
+    .custom-btn:hover {
       background: var(--accent-yellow);
       color: #0f172a;
       box-shadow: 0 0 16px var(--accent-yellow);
       transform: translateY(-2px);
     }
-
-    /* SUBTAB SAYFA DEĞİŞİMİ */
-    .sublist-tab { display: none; }
-    .sublist-tab.active-sublist { display: block; }
 
     /* VALUE LIST TABLE */
     .table-wrapper {
@@ -203,6 +207,7 @@
       padding: 30px 40px;
       border-radius: 16px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      font-family: 'Montserrat', sans-serif;
     }
 
     .update-block {
@@ -211,13 +216,16 @@
       padding-bottom: 25px;
     }
 
-    .update-block:last-child { border-bottom: none; }
+    .update-block:last-child {
+      border-bottom: none;
+    }
 
     .update-header-title {
       font-size: 1.8rem;
       font-weight: 800;
       color: #ffffff;
       margin-bottom: 15px;
+      letter-spacing: 1px;
     }
 
     .update-date-tag {
@@ -234,65 +242,61 @@
       font-weight: 600;
     }
 
-    /* LIST EDITORS TABLE (BÜYÜTÜLMÜŞ TASARIM) */
+    /* LIST EDITORS TABLE */
     .editors-table {
       width: 100%;
       border-collapse: collapse;
       background: #b0b0b0;
       color: #000000;
       font-weight: 700;
-      border: 4px solid #000;
+      border: 3px solid #000;
     }
 
     .editors-table th {
       background: #000000;
       color: #ffffff;
-      font-size: 1.4rem;
-      padding: 22px;
+      font-size: 1.2rem;
+      padding: 14px;
       text-align: center;
-      border: 3px solid #000;
-      letter-spacing: 1px;
+      border: 2px solid #000;
     }
 
     .editors-table td {
       background: #c2c2c2;
       color: #000000;
-      border: 3px solid #555;
-      font-size: 1.35rem;
-      padding: 22px 18px;
+      border: 2px solid #666;
+      font-size: 1.1rem;
+      padding: 12px;
       vertical-align: middle;
       text-align: center;
     }
 
     .editor-avatar {
-      width: 90px;
-      height: 90px;
-      border-radius: 12px;
+      width: 60px;
+      height: 60px;
+      border-radius: 8px;
       object-fit: cover;
       background: #333;
-      border: 3px solid #000;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      border: 2px solid #000;
     }
 
     .roblox-tag {
       color: #0056b3;
       text-decoration: underline;
       font-weight: 800;
-      font-size: 1.3rem;
     }
 
     .status-box {
       display: inline-block;
-      width: 48px;
-      height: 48px;
+      width: 35px;
+      height: 35px;
       background: #00e600;
-      border: 3px solid #000;
-      border-radius: 8px;
+      border: 2px solid #000;
+      border-radius: 4px;
       text-align: center;
-      line-height: 42px;
-      font-size: 1.6rem;
+      line-height: 31px;
+      font-size: 1.2rem;
       color: #000;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     }
 
     .info-card {
@@ -310,13 +314,12 @@
       .nav-links a { font-size: 0.8rem; }
       .nav-social-wrap { display: none; }
       .page-title { font-size: 2.8rem; }
-      .editor-avatar { width: 65px; height: 65px; }
-      .editors-table td { font-size: 1rem; padding: 12px 8px; }
     }
   </style>
 </head>
 <body>
 
+  <!-- NAVBAR -->
   <nav class="navbar">
     <ul class="nav-links">
       <li><a href="#" class="nav-link active" onclick="openTab(event, 'valuelists')">Value Lists</a></li>
@@ -334,14 +337,16 @@
     </div>
   </nav>
 
+  <!-- CONTAINER -->
   <div class="main-container">
 
+    <!-- VALUE LISTS TAB -->
     <div id="valuelists" class="tab-content active">
       <h1 class="page-title">VALUE LISTS</h1>
 
       <div id="custom-button-group">
-        <button id="btn-main" class="custom-btn active-subtab" onclick="switchListTab('normal-section', 'btn-main')">Main List</button>
-        <button id="btn-collect" class="custom-btn" onclick="switchListTab('collectable-section', 'btn-collect')">Collectors List</button>
+        <a href="#normal-section" class="custom-btn">Main List</a>
+        <a href="#collectable-section" class="custom-btn">Collectors List</a>
       </div>
 
       <div id="search-section">
@@ -350,7 +355,8 @@
 
       <div id="loading" class="loading-text">Loading items from Google Sheets...</div>
 
-      <div class="table-wrapper sublist-tab active-sublist" id="normal-section">
+      <!-- Main Items Table -->
+      <div class="table-wrapper" id="normal-section">
         <table>
           <thead>
             <tr>
@@ -368,7 +374,9 @@
         </table>
       </div>
 
-      <div class="table-wrapper sublist-tab" id="collectable-section">
+      <!-- Collectables Table -->
+      <div class="page-title" style="font-size: 2.2rem;" id="collectable-section">Collectable Items</div>
+      <div class="table-wrapper">
         <table>
           <thead>
             <tr>
@@ -387,6 +395,7 @@
       </div>
     </div>
 
+    <!-- UPDATES TAB -->
     <div id="updates" class="tab-content">
       <h1 class="page-title">UPDATES</h1>
       <div class="updates-wrapper" id="updates-container">
@@ -394,6 +403,7 @@
       </div>
     </div>
 
+    <!-- ABOUT TAB -->
     <div id="about" class="tab-content">
       <h1 class="page-title">ABOUT US</h1>
       <div class="info-card">
@@ -404,24 +414,25 @@
       </div>
     </div>
 
+    <!-- LIST EDITORS TAB -->
     <div id="editors" class="tab-content">
       <h1 class="page-title">LIST EDITORS</h1>
       <div class="table-wrapper">
         <table class="editors-table">
           <thead>
             <tr>
-              <th style="width: 140px;">Avatar</th>
+              <th style="width: 90px;"></th>
               <th>Username</th>
               <th>Role</th>
-              <th>Roblox Profile</th>
-              <th>Status</th>
+              <th>Roblox</th>
+              <th>Activity Status</th>
             </tr>
           </thead>
           <tbody id="editors-body">
             <tr>
               <td><img src="https://ui-avatars.com/api/?name=M&background=333&color=fff" class="editor-avatar"></td>
               <td>Myscloud</td>
-              <td style="color: #333;">List Editor</td>
+              <td style="color: #444;">List Editor</td>
               <td><a href="https://www.roblox.com" target="_blank" class="roblox-tag">@myscloud</a></td>
               <td><span class="status-box">✅</span></td>
             </tr>
@@ -441,21 +452,6 @@
       for (let i = 0; i < navLinks.length; i++) navLinks[i].classList.remove("active");
       document.getElementById(tabName).classList.add("active");
       evt.currentTarget.classList.add("active");
-    }
-
-    // MAIN LIST VE COLLECTORS LIST İKİ AYRI SEKME OLARAK ÇALIŞIR
-    function switchListTab(targetId, btnId) {
-      const subtabs = document.getElementsByClassName("sublist-tab");
-      for (let i = 0; i < subtabs.length; i++) {
-        subtabs[i].classList.remove("active-sublist");
-      }
-      const btns = document.getElementsByClassName("custom-btn");
-      for (let i = 0; i < btns.length; i++) {
-        btns[i].classList.remove("active-subtab");
-      }
-
-      document.getElementById(targetId).classList.add("active-sublist");
-      document.getElementById(btnId).classList.add("active-subtab");
     }
 
     const SHEET_ID = '1g-5-zj5fz1WfKhrPxMUzyAMmtbXOFf8ujufdd-yYKMo';
@@ -480,6 +476,7 @@
     }
 
     function renderTables(data) {
+      // Collectors etiketi 4. veya 5. sütunda (Demand Ranking / Value Status) geçenleri ayırır
       const normal = data.filter(row => {
         const rowStr = row.join(' ');
         return rowStr.indexOf("Collectors") === -1;
@@ -499,11 +496,16 @@
       tbody.innerHTML = "";
 
       data.forEach(row => {
+        // Boş satırları veya Item adı bulunmayan satırları atla
         if (!row || row.length === 0 || !row[0]) return;
+
+        // E-tablonun ilk satırı "Item" başlığıysa onu tabloya ekleme
         if (String(row[0]).trim().toLowerCase() === 'item') return;
 
         const tr = document.createElement("tr");
 
+        // 8 Adet Sütunu (A, B, C, D, E, F, G, H) Sırayla Ekler:
+        // A: Item, B: Value, C: Average RAP, D: Demand Scale, E: Demand Ranking, F: Value Status, G: Demand Status, H: Item Quality
         for (let idx = 0; idx < 8; idx++) {
           const td = document.createElement("td");
           if (idx === 0) {
@@ -549,7 +551,7 @@
       }
     }
 
-    // LIST EDITORS SAYFASI (VERİ ÇEKME)
+    // LIST EDITORS SAYFASI
     function handleEditorsData(json) {
       const tbody = document.getElementById('editors-body');
       try {
@@ -560,6 +562,7 @@
         rows.forEach(r => {
           if (!r.c || !r.c[1]) return;
           
+          // Header satırını atla
           if (String(r.c[1].v).toLowerCase() === 'username') return;
 
           const avatarImg = r.c[0] ? r.c[0].v : '';
@@ -576,7 +579,7 @@
           tr.innerHTML = `
             <td><img src="${imgSrc}" class="editor-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=333&color=fff'"></td>
             <td>${username}</td>
-            <td style="color: #333;">${role}</td>
+            <td style="color: #444;">${role}</td>
             <td><a href="${profileUrl}" target="_blank" class="roblox-tag">@${username.toLowerCase()}</a></td>
             <td><span class="status-box">${status.toLowerCase() === 'active' || status === '✅' ? '✅' : '❌'}</span></td>
           `;
@@ -585,7 +588,7 @@
       } catch(e) { console.log("Using default editors."); }
     }
 
-    // GOOGLE SHEETS BAGLANTILARI
+    // GOOGLE SHEETS SCRIPT ÇAĞRILARI
     const scriptMain = document.createElement('script');
     scriptMain.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?headers=0&tqx=responseHandler:handleGoogleSheetData`;
     document.body.appendChild(scriptMain);
