@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UBV - Ultimate Baller Values</title>
+  
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700;800&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --navbar-bg: #0084d6;
+      --page-bg: #ff9f1c;
+      --text-dark: #1e293b;
+      --accent-yellow: #fdcb6e;
+      --table-dark: rgba(15, 23, 42, 0.92);
+      --table-header: rgba(30, 41, 59, 0.98);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: var(--page-bg);
+      color: var(--text-dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .navbar {
+      background-color: var(--navbar-bg);
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      padding: 0 5vw;
+      height: 70px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 8px 4px;
+      transition: all 0.2s ease;
+    }
+
+    .nav-links a.active, .nav-links a:hover {
+      border-bottom: 2px solid #ffffff;
+    }
+
+    .nav-logo {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: 1px;
+      text-decoration: none;
+      text-align: center;
+    }
+
+    .nav-social-wrap {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .nav-social {
+      color: #ffffff;
+      font-size: 1.5rem;
+      transition: transform 0.2s ease;
+      text-decoration: none;
+    }
+
+    .nav-social:hover { transform: scale(1.15); }
+
+    .main-container {
+      flex: 1;
+      padding: 40px 5vw;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .tab-content { display: none; animation: fadeIn 0.3s ease-in-out; }
+    .tab-content.active { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .page-title {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 3.8rem;
+      letter-spacing: 2px;
+      color: #1e293b;
+      margin-bottom: 25px;
+      text-transform: uppercase;
+    }
+
+    #search-section { text-align: center; margin-bottom: 2rem; }
+    #search-box {
+      padding: 14px 24px;
+      width: 80%;
+      max-width: 500px;
+      font-size: 1.05rem;
+      border-radius: 35px;
+      border: 2px solid rgba(255, 255, 255, 0.4);
+      background: rgba(15, 23, 42, 0.85);
+      color: #ffffff;
+      outline: none;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      transition: all 0.3s ease;
+    }
+
+    #search-box::placeholder { color: #94a3b8; }
+    #search-box:focus { border-color: #ffffff; box-shadow: 0 0 15px rgba(255, 255, 255, 0.5); }
+
+    #custom-button-group { text-align: center; margin: 1.5rem 0 2.5rem; }
+    .custom-btn {
+      font-family: 'Montserrat', sans-serif;
+      background: rgba(15, 23, 42, 0.9);
+      border: 2px solid var(--accent-yellow);
+      color: #ffeaa7;
+      padding: 12px 28px;
+      margin: 8px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .custom-btn:hover {
+      background: var(--accent-yellow);
+      color: #0f172a;
+      box-shadow: 0 0 16px var(--accent-yellow);
+      transform: translateY(-2px);
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+      border-radius: 16px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+      margin-bottom: 3rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--table-dark);
+      color: #f1f5f9;
+      min-width: 800px;
+    }
+
+    th {
+      padding: 1.2rem;
+      background: var(--table-header);
+      color: #fdcb6e;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+      border-bottom: 2px solid rgba(255,255,255,0.1);
+      text-align: center;
+    }
+
+    td {
+      padding: 1.1rem 1rem;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      color: #cbd5e1;
+      font-size: 0.95rem;
+    }
+
+    tr:hover td { background-color: rgba(255, 255, 255, 0.05); }
+
+    .item-cell {
+      font-weight: 700;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .showcase-link {
+      color: #ffeaa7;
+      text-decoration: none;
+      font-size: 1.1rem;
+      transition: transform 0.2s;
+    }
+    .showcase-link:hover { transform: scale(1.3); }
+
+    .updates-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 30px;
+    }
+
+    .update-card {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+
+    .update-date { font-size: 0.85rem; color: #64748b; margin-bottom: 8px; }
+    .update-title { font-size: 1.4rem; font-weight: 800; color: #0f172a; margin-bottom: 12px; }
+    .update-body { color: #334155; line-height: 1.5; font-size: 0.95rem; }
+
+    .editors-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #b0b0b0;
+      color: #000000;
+      font-weight: 700;
+      border: 3px solid #000;
+    }
+
+    .editors-table th {
+      background: #000000;
+      color: #ffffff;
+      font-size: 1.2rem;
+      padding: 14px;
+      text-align: center;
+      border: 2px solid #000;
+    }
+
+    .editors-table td {
+      background: #c2c2c2;
+      color: #000000;
+      border: 2px solid #666;
+      font-size: 1.1rem;
+      padding: 12px;
+      vertical-align: middle;
+    }
+
+    .editor-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 8px;
+      object-fit: cover;
+      background: #333;
+      border: 1px solid #000;
+    }
+
+    .roblox-tag {
+      color: #0056b3;
+      text-decoration: underline;
+    }
+
+    .status-box {
+      display: inline-block;
+      width: 35px;
+      height: 35px;
+      background: #00e600;
+      border: 2px solid #000;
+      border-radius: 4px;
+      text-align: center;
+      line-height: 31px;
+      font-size: 1.2rem;
+      color: #000;
+    }
+
+    .info-card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    .loading-text { text-align: center; padding: 40px; font-size: 1.1rem; color: #ffffff; }
+
+    @media (max-width: 768px) {
+      .navbar { grid-template-columns: 1fr auto; padding: 0 15px; }
+      .nav-links { gap: 10px; }
+      .nav-links a { font-size: 0.8rem; }
+      .nav-social-wrap { display: none; }
+      .page-title { font-size: 2.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <ul class="nav-links">
+      <li><a href="#" class="nav-link active" onclick="openTab(event, 'valuelists')">Value Lists</a></li>
+      <li><a href="#" class="nav-link" onclick="openTab(event, 'updates')">Updates</a></li>
+      <li><a href="#" class="nav-link" onclick="openTab(event, 'about')">About</a></li>
+      <li><a href="#" class="nav-link" onclick="openTab(event, 'editors')">List Editors</a></li>
+    </ul>
+
+    <a href="#" class="nav-logo">UBV</a>
+
+    <div class="nav-social-wrap">
+      <a href="https://discord.gg/ubv" target="_blank" class="nav-social" title="Discord Server">
+        <i class="fab fa-discord"></i>
+      </a>
+    </div>
+  </nav>
+
+  <!-- CONTAINER -->
+  <div class="main-container">
+
+    <!-- VALUE LISTS TAB -->
+    <div id="valuelists" class="tab-content active">
+      <h1 class="page-title">VALUE LISTS</h1>
+
+      <div id="custom-button-group">
+        <a href="#normal-section" class="custom-btn">Main List</a>
+        <a href="#collectable-section" class="custom-btn">Collectors List</a>
+      </div>
+
+      <div id="search-section">
+        <input type="text" id="search-box" placeholder="🔍 Search item name..." oninput="filterTable()">
+      </div>
+
+      <div id="loading" class="loading-text">Loading items from Google Sheets...</div>
+
+      <!-- Main Items Table -->
+      <div class="table-wrapper" id="normal-section">
+        <table>
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Value</th>
+              <th>Average RAP</th>
+              <th>Demand Scale</th>
+              <th>Demand Ranking</th>
+              <th>Value Status</th>
+              <th>Demand Status</th>
+              <th>Item Quality</th>
+            </tr>
+          </thead>
+          <tbody id="normal-body"></tbody>
+        </table>
+      </div>
+
+      <!-- Collectables Table -->
+      <div class="page-title" style="font-size: 2.2rem;" id="collectable-section">Collectable Items</div>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Value</th>
+              <th>Average RAP</th>
+              <th>Demand Scale</th>
+              <th>Demand Ranking</th>
+              <th>Value Status</th>
+              <th>Demand Status</th>
+              <th>Item Quality</th>
+            </tr>
+          </thead>
+          <tbody id="collectable-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- UPDATES TAB -->
+    <div id="updates" class="tab-content">
+      <h1 class="page-title">UPDATES</h1>
+      <div class="updates-grid" id="updates-container">
+        <div class="loading-text">Loading updates...</div>
+      </div>
+    </div>
+
+    <!-- ABOUT TAB -->
+    <div id="about" class="tab-content">
+      <h1 class="page-title">ABOUT US</h1>
+      <div class="info-card">
+        <h2>About UBV</h2>
+        <p style="margin-top: 12px; line-height: 1.6; color: #475569;">
+          UBV is a dedicated platform providing live trading values, market analytics, average RAP metrics, and item showcases for the Roblox trading community.
+        </p>
+      </div>
+    </div>
+
+    <!-- LIST EDITORS TAB -->
+    <div id="editors" class="tab-content">
+      <h1 class="page-title">LIST EDITORS</h1>
+      <div class="table-wrapper">
+        <table class="editors-table">
+          <thead>
+            <tr>
+              <th style="width: 90px;"></th>
+              <th>Username</th>
+              <th>Role</th>
+              <th>Roblox</th>
+              <th>Activity Status</th>
+            </tr>
+          </thead>
+          <tbody id="editors-body">
+            <tr>
+              <td><img src="https://tr.rbxcdn.com/30DAY-AvatarHeadshot-CBD1C25D4264639B078B5D4E396E9B93-Png/150/150/AvatarHeadshot/Png/noFilter" class="editor-avatar"></td>
+              <td>Myscloud</td>
+              <td style="color: #444;">List Editor</td>
+              <td><a href="https://www.roblox.com" target="_blank" class="roblox-tag">@myscloud</a></td>
+              <td><span class="status-box">✅</span></td>
+            </tr>
+            <tr>
+              <td><img src="https://tr.rbxcdn.com/30DAY-AvatarHeadshot-CBD1C25D4264639B078B5D4E396E9B93-Png/150/150/AvatarHeadshot/Png/noFilter" class="editor-avatar"></td>
+              <td>Based</td>
+              <td style="color: #444;">List Editor</td>
+              <td><a href="https://www.roblox.com" target="_blank" class="roblox-tag">@witheredvision</a></td>
+              <td><span class="status-box">✅</span></td>
+            </tr>
+            <tr>
+              <td><img src="https://tr.rbxcdn.com/30DAY-AvatarHeadshot-CBD1C25D4264639B078B5D4E396E9B93-Png/150/150/AvatarHeadshot/Png/noFilter" class="editor-avatar"></td>
+              <td>Roy</td>
+              <td style="color: #444;">List Editor</td>
+              <td><a href="https://www.roblox.com" target="_blank" class="roblox-tag">@Royverses</a></td>
+              <td><span class="status-box">✅</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function openTab(evt, tabName) {
+      evt.preventDefault();
+      const tabContents = document.getElementsByClassName("tab-content");
+      for (let i = 0; i < tabContents.length; i++) tabContents[i].classList.remove("active");
+      const navLinks = document.getElementsByClassName("nav-link");
+      for (let i = 0; i < navLinks.length; i++) navLinks[i].classList.remove("active");
+      document.getElementById(tabName).classList.add("active");
+      evt.currentTarget.classList.add("active");
+    }
+
+    const SHEET_ID = '1g-5-zj5fz1WfKhrPxMUzyAMmtbXOFf8ujufdd-yYKMo';
+    let originalData = [];
+
+    function handleGoogleSheetData(json) {
+      document.getElementById('loading').style.display = 'none';
+
+      try {
+        const rawRows = json.table.rows;
+        originalData = rawRows.map(row => {
+          return row.c ? row.c.map(cell => cell ? (cell.v !== null ? cell.v : '') : '') : [];
+        });
+
+        renderTables(originalData);
+      } catch (err) {
+        console.error(err);
+        document.getElementById('loading').innerText = "Failed to load items.";
+      }
+    }
+
+    function renderTables(data) {
+      const normal = data.filter(row => String(row[7] || '').indexOf("Collectors") === -1);
+      const collectable = data.filter(row => String(row[7] || '').indexOf("Collectors") !== -1);
+
+      renderTable(normal, document.getElementById("normal-body"));
+      renderTable(collectable, document.getElementById("collectable-body"));
+    }
+
+    function renderTable(data, tbody) {
+      if(!tbody) return;
+      tbody.innerHTML = "";
+
+      data.forEach(row => {
+        if (!row || row.length < 2) return;
+
+        const tr = document.createElement("tr");
+
+        const itemName = row[1] || '';
+        const videoLink = row[0] && String(row[0]).startsWith('http') ? row[0] : '';
+
+        const itemTd = document.createElement("td");
+        itemTd.className = "item-cell";
+        itemTd.innerHTML = `
+          <span>${itemName}</span>
+          ${videoLink ? `<a href="${videoLink}" target="_blank" class="showcase-link" title="Watch Showcase">🎥</a>` : ''}
+        `;
+        tr.appendChild(itemTd);
+
+        const colIndices = [2, 3, 4, 5, 6, 7, 8];
+        colIndices.forEach(idx => {
+          const td = document.createElement("td");
+          td.textContent = String(row[idx] ?? '-');
+          tr.appendChild(td);
+        });
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    function filterTable() {
+      const query = document.getElementById("search-box").value.toLowerCase();
+      const filtered = originalData.filter(row => row.some(cell => String(cell).toLowerCase().includes(query)));
+      renderTables(filtered);
+    }
+
+    function handleUpdatesData(json) {
+      const container = document.getElementById('updates-container');
+      container.innerHTML = '';
+      try {
+        const rows = json.table.rows;
+        rows.forEach(r => {
+          if (!r.c || !r.c[0]) return;
+          const title = r.c[0] ? r.c[0].v : 'Update';
+          const date = r.c[1] ? r.c[1].v : '';
+          const content = r.c[2] ? r.c[2].v : '';
+
+          const card = document.createElement('div');
+          card.className = 'update-card';
+          card.innerHTML = `
+            <div class="update-date">${date}</div>
+            <div class="update-title">${title}</div>
+            <div class="update-body">${content}</div>
+          `;
+          container.appendChild(card);
+        });
+      } catch(e) {
+        container.innerHTML = '<p>No updates found in Google Sheets.</p>';
+      }
+    }
+
+    function handleEditorsData(json) {
+      const tbody = document.getElementById('editors-body');
+      try {
+        const rows = json.table.rows;
+        if (rows.length === 0) return;
+        tbody.innerHTML = '';
+
+        rows.forEach(r => {
+          if (!r.c || !r.c[1]) return;
+          const userId = r.c[0] ? r.c[0].v : '';
+          const username = r.c[1] ? r.c[1].v : '';
+          const role = r.c[2] ? r.c[2].v : 'List Editor';
+          const tag = r.c[3] ? r.c[3].v : '';
+          const status = r.c[4] ? r.c[4].v : 'Active';
+
+          const avatarUrl = userId 
+            ? `https://tr.rbxcdn.com/30DAY-AvatarHeadshot-${userId}-Png/150/150/AvatarHeadshot/Png/noFilter` 
+            : 'https://tr.rbxcdn.com/30DAY-AvatarHeadshot-CBD1C25D4264639B078B5D4E396E9B93-Png/150/150/AvatarHeadshot/Png/noFilter';
+
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><img src="${avatarUrl}" class="editor-avatar" onerror="this.src='https://tr.rbxcdn.com/30DAY-AvatarHeadshot-CBD1C25D4264639B078B5D4E396E9B93-Png/150/150/AvatarHeadshot/Png/noFilter'"></td>
+            <td>${username}</td>
+            <td style="color: #444;">${role}</td>
+            <td><a href="https://www.roblox.com/search/users?keyword=${tag.replace('@','')}" target="_blank" class="roblox-tag">${tag}</a></td>
+            <td><span class="status-box">${status === 'Active' ? '✅' : '❌'}</span></td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch(e) { console.log("Using default editors."); }
+    }
+
+    const scriptMain = document.createElement('script');
+    scriptMain.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=responseHandler:handleGoogleSheetData`;
+    document.body.appendChild(scriptMain);
+
+    const scriptUpdates = document.createElement('script');
+    scriptUpdates.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=Updates&tqx=responseHandler:handleUpdatesData`;
+    document.body.appendChild(scriptUpdates);
+
+    const scriptEditors = document.createElement('script');
+    scriptEditors.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=Editors&tqx=responseHandler:handleEditorsData`;
+    document.body.appendChild(scriptEditors);
+  </script>
+</body>
+</html>
