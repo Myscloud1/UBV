@@ -156,7 +156,6 @@
       transform: translateY(-2px);
     }
 
-    /* SUBTAB KONTROLÜ */
     .sublist-tab { display: none; }
     .sublist-tab.active-sublist { display: block; }
 
@@ -211,7 +210,6 @@
       padding: 30px 40px;
       border-radius: 16px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      font-family: 'Montserrat', sans-serif;
     }
 
     .update-block {
@@ -261,19 +259,19 @@
       font-family: 'Montserrat', sans-serif;
       font-style: italic;
       font-weight: 800;
-      font-size: 1.2rem;
-      padding: 12px 15px;
-      text-align: center;
+      font-size: 1.3rem;
+      padding: 14px 15px;
+      text-align: left;
       border-bottom: 2px solid #333;
-      margin-top: 10px;
+      margin-top: 15px;
     }
 
     .terms-section-title:first-child { margin-top: 0; }
 
     .term-row {
       display: grid;
-      grid-template-columns: 280px 1fr;
-      gap: 4px;
+      grid-template-columns: 260px 1fr;
+      gap: 6px;
     }
 
     .term-badge {
@@ -286,6 +284,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      border-radius: 4px;
     }
 
     .term-desc {
@@ -297,6 +296,7 @@
       font-size: 1.05rem;
       display: flex;
       align-items: center;
+      border-radius: 4px;
     }
 
     /* LIST EDITORS TABLE */
@@ -383,8 +383,6 @@
       .nav-links a { font-size: 0.8rem; }
       .nav-social-wrap { display: none; }
       .page-title { font-size: 2.8rem; }
-      .editor-avatar { width: 70px; height: 70px; }
-      .editors-table td { font-size: 1.05rem; padding: 12px 8px; }
       .term-row { grid-template-columns: 1fr; }
     }
   </style>
@@ -530,28 +528,22 @@
 
     function switchListTab(targetId, btnId) {
       currentSubTab = targetId;
-
       const subtabs = document.getElementsByClassName("sublist-tab");
       for (let i = 0; i < subtabs.length; i++) subtabs[i].classList.remove("active-sublist");
-      
       const btns = document.getElementsByClassName("custom-btn");
       for (let i = 0; i < btns.length; i++) btns[i].classList.remove("active-subtab");
-
       document.getElementById(targetId).classList.add("active-sublist");
       document.getElementById(btnId).classList.add("active-subtab");
-
       filterTable();
     }
 
     const SHEET_ID = '1g-5-zj5fz1WfKhrPxMUzyAMmtbXOFf8ujufdd-yYKMo';
-    
     let mainListData = [];
     let collectableListData = [];
 
-    // GOOGLE SHEETS TABLO VERİSİ
+    // MAIN LIST DATA
     function handleGoogleSheetData(json) {
       document.getElementById('loading').style.display = 'none';
-
       try {
         const rawRows = json.table.rows;
         const allData = rawRows.map(row => {
@@ -565,11 +557,8 @@
 
         allData.forEach(row => {
           if (!row || row.length === 0 || !row[0]) return;
-          
           const firstCell = String(row[0]).trim().toLowerCase();
-
           if (firstCell === 'item') return;
-          
           if (firstCell.includes("collectors") || firstCell.includes("collectable")) {
             isCollectableSection = true;
             return;
@@ -584,50 +573,39 @@
 
         renderTable(mainListData, document.getElementById("normal-body"));
         renderTable(collectableListData, document.getElementById("collectable-body"));
-
       } catch (err) {
         console.error(err);
-        document.getElementById('loading').innerText = "Failed to load items.";
       }
     }
 
     function renderTable(data, tbody) {
       if(!tbody) return;
       tbody.innerHTML = "";
-
       data.forEach(row => {
         if (!row || row.length === 0 || !row[0]) return;
-
         const tr = document.createElement("tr");
-
         for (let idx = 0; idx < 8; idx++) {
           const td = document.createElement("td");
           if (idx === 0) td.className = "item-cell";
           td.textContent = String(row[idx] ?? '-');
           tr.appendChild(td);
         }
-
         tbody.appendChild(tr);
       });
     }
 
     function filterTable() {
       const query = document.getElementById("search-box").value.toLowerCase().trim();
-
-      if (currentSubTab === 'normal-section') {
-        const filtered = mainListData.filter(row => 
-          row.some(cell => String(cell).toLowerCase().includes(query))
-        );
-        renderTable(filtered, document.getElementById("normal-body"));
-      } else {
-        const filtered = collectableListData.filter(row => 
-          row.some(cell => String(cell).toLowerCase().includes(query))
-        );
-        renderTable(filtered, document.getElementById("collectable-body"));
-      }
+      const targetData = currentSubTab === 'normal-section' ? mainListData : collectableListData;
+      const targetBody = currentSubTab === 'normal-section' ? document.getElementById("normal-body") : document.getElementById("collectable-body");
+      
+      const filtered = targetData.filter(row => 
+        row.some(cell => String(cell).toLowerCase().includes(query))
+      );
+      renderTable(filtered, targetBody);
     }
 
-    // UPDATES SAYFASI
+    // UPDATES DATA
     function handleUpdatesData(json) {
       const container = document.getElementById('updates-container');
       container.innerHTML = '';
@@ -653,7 +631,29 @@
       }
     }
 
-    // TERMS SAYFASI
+    // OTOMATİK RENK HARİTASI (Spreadsheet'te Hex kodu yazmasa bile bunları atar)
+    const DEFAULT_COLORS = {
+      'insanely high': '#b197fc',
+      'great': '#a29bfe',
+      'good': '#2ecc71',
+      'above average': '#81ecec',
+      'slightly above average': '#74b9ff',
+      'average': '#dfe6e9',
+      'slightly below average': '#ff7675',
+      'below average': '#e17055',
+      'bad': '#d63031',
+      'horrendous': '#8b0000',
+      'rising': '#2ecc71',
+      'slowly rising': '#55efc4',
+      'stable': '#dfe6e9',
+      'slowly dropping': '#ff7675',
+      'dropping': '#d63031',
+      'hyped': '#f1c40f',
+      'unstable': '#74b9ff',
+      'collectors': '#a29bfe'
+    };
+
+    // TERMS DATA HANDLER (Geliştirilmiş)
     function handleTermsData(json) {
       const container = document.getElementById('terms-container');
       container.innerHTML = '';
@@ -662,11 +662,18 @@
         rows.forEach(r => {
           if (!r.c || !r.c[0]) return;
           
-          const term = r.c[0] ? r.c[0].v : '';
-          const desc = r.c[1] ? r.c[1].v : '';
-          const color = r.c[2] ? r.c[2].v : '#ffffff';
+          const term = r.c[0] ? String(r.c[0].v).trim() : '';
+          const desc = r.c[1] ? String(r.c[1].v).trim() : '';
+          let color = r.c[2] ? String(r.c[2].v).trim() : '';
 
-          if (desc === 'SECTION_HEADER') {
+          // Otomatik Renk Atama (C sütunu boşsa)
+          if (!color || !color.startsWith('#')) {
+            const lowerTerm = term.toLowerCase();
+            color = DEFAULT_COLORS[lowerTerm] || '#e2e8f0';
+          }
+
+          // Başlık Kontrolü (B sütunu boşsa VEYA 'SECTION_HEADER' ise başlık kabul et)
+          if (desc === 'SECTION_HEADER' || desc === '' || term.toLowerCase().includes('terms')) {
             const header = document.createElement('div');
             header.className = 'terms-section-title';
             header.textContent = term;
@@ -686,7 +693,7 @@
       }
     }
 
-    // LIST EDITORS SAYFASI
+    // LIST EDITORS DATA
     function handleEditorsData(json) {
       const tbody = document.getElementById('editors-body');
       try {
@@ -696,7 +703,6 @@
 
         rows.forEach(r => {
           if (!r.c || !r.c[1]) return;
-          
           if (String(r.c[1].v).toLowerCase() === 'username') return;
 
           const avatarImg = r.c[0] ? r.c[0].v : '';
@@ -726,7 +732,7 @@
       } catch(e) { console.log("Error loading editors."); }
     }
 
-    // GOOGLE SHEETS SCRIPT BİNDINGS
+    // SCRIPT IMPORTS
     const scriptMain = document.createElement('script');
     scriptMain.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?headers=0&tqx=responseHandler:handleGoogleSheetData`;
     document.body.appendChild(scriptMain);
