@@ -6,7 +6,7 @@
   <title>UBV - Ultimate Baller Values</title>
   
   <!-- Fonts & Icons -->
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700;800&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;1,600;1,700;1,800&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
@@ -156,7 +156,7 @@
       transform: translateY(-2px);
     }
 
-    /* SEKMELER ARASI GEÇİŞ İÇİN SUBTAB KONTROLÜ */
+    /* SUBTAB KONTROLÜ */
     .sublist-tab { display: none; }
     .sublist-tab.active-sublist { display: block; }
 
@@ -220,9 +220,7 @@
       padding-bottom: 25px;
     }
 
-    .update-block:last-child {
-      border-bottom: none;
-    }
+    .update-block:last-child { border-bottom: none; }
 
     .update-header-title {
       font-size: 1.8rem;
@@ -244,6 +242,61 @@
       line-height: 1.8;
       color: #e2e8f0;
       font-weight: 600;
+    }
+
+    /* TERMS TAB STYLES */
+    .terms-wrapper {
+      background: #000000;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .terms-section-title {
+      background: #000000;
+      color: #ffffff;
+      font-family: 'Montserrat', sans-serif;
+      font-style: italic;
+      font-weight: 800;
+      font-size: 1.2rem;
+      padding: 12px 15px;
+      text-align: center;
+      border-bottom: 2px solid #333;
+      margin-top: 10px;
+    }
+
+    .terms-section-title:first-child { margin-top: 0; }
+
+    .term-row {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 4px;
+    }
+
+    .term-badge {
+      padding: 12px 16px;
+      font-weight: 800;
+      font-style: italic;
+      font-size: 1.1rem;
+      text-align: center;
+      color: #000000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .term-desc {
+      background: #ffffff;
+      color: #000000;
+      padding: 12px 18px;
+      font-weight: 700;
+      font-style: italic;
+      font-size: 1.05rem;
+      display: flex;
+      align-items: center;
     }
 
     /* LIST EDITORS TABLE */
@@ -295,16 +348,24 @@
 
     .status-box {
       display: inline-block;
-      width: 50px;
-      height: 50px;
-      background: #00e600;
+      padding: 10px 20px;
       border: 3px solid #000;
-      border-radius: 8px;
+      border-radius: 10px;
       text-align: center;
-      line-height: 44px;
-      font-size: 1.7rem;
-      color: #000;
+      font-size: 1.1rem;
+      font-weight: 800;
+      text-transform: uppercase;
       box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    .status-box.active {
+      background-color: #2ecc71;
+      color: #000000;
+    }
+
+    .status-box.inactive {
+      background-color: #e74c3c;
+      color: #ffffff;
     }
 
     .info-card {
@@ -324,6 +385,7 @@
       .page-title { font-size: 2.8rem; }
       .editor-avatar { width: 70px; height: 70px; }
       .editors-table td { font-size: 1.05rem; padding: 12px 8px; }
+      .term-row { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -334,6 +396,7 @@
     <ul class="nav-links">
       <li><a href="#" class="nav-link active" onclick="openTab(event, 'valuelists')">Value Lists</a></li>
       <li><a href="#" class="nav-link" onclick="openTab(event, 'updates')">Updates</a></li>
+      <li><a href="#" class="nav-link" onclick="openTab(event, 'terms')">Terms</a></li>
       <li><a href="#" class="nav-link" onclick="openTab(event, 'about')">About</a></li>
       <li><a href="#" class="nav-link" onclick="openTab(event, 'editors')">List Editors</a></li>
     </ul>
@@ -354,7 +417,6 @@
     <div id="valuelists" class="tab-content active">
       <h1 class="page-title">VALUE LISTS</h1>
 
-      <!-- MAIN LIST VE COLLECTORS LIST BUTONLARI -->
       <div id="custom-button-group">
         <button id="btn-main" class="custom-btn active-subtab" onclick="switchListTab('normal-section', 'btn-main')">Main List</button>
         <button id="btn-collect" class="custom-btn" onclick="switchListTab('collectable-section', 'btn-collect')">Collectors List</button>
@@ -413,13 +475,21 @@
       </div>
     </div>
 
+    <!-- TERMS TAB -->
+    <div id="terms" class="tab-content">
+      <h1 class="page-title">TERMS</h1>
+      <div class="terms-wrapper" id="terms-container">
+        <div class="loading-text">Loading terms...</div>
+      </div>
+    </div>
+
     <!-- ABOUT TAB -->
     <div id="about" class="tab-content">
       <h1 class="page-title">ABOUT US</h1>
       <div class="info-card">
         <h2>About UBV</h2>
         <p style="margin-top: 12px; line-height: 1.6; color: #475569;">
-          i guess bro
+          UBV is a dedicated platform providing live trading values, market analytics, average RAP metrics, and item showcases for the Roblox trading community.
         </p>
       </div>
     </div>
@@ -438,15 +508,7 @@
               <th>Status</th>
             </tr>
           </thead>
-          <tbody id="editors-body">
-            <tr>
-              <td><img src="https://ui-avatars.com/api/?name=M&background=333&color=fff" class="editor-avatar"></td>
-              <td>Myscloud</td>
-              <td style="color: #333;">List Editor</td>
-              <td><a href="https://www.roblox.com" target="_blank" class="roblox-tag">@myscloud</a></td>
-              <td><span class="status-box">✅</span></td>
-            </tr>
-          </tbody>
+          <tbody id="editors-body"></tbody>
         </table>
       </div>
     </div>
@@ -464,25 +526,20 @@
       evt.currentTarget.classList.add("active");
     }
 
-    // Hangisinin aktif olduğunu kesin tutmak için global değişken
     let currentSubTab = 'normal-section';
 
     function switchListTab(targetId, btnId) {
       currentSubTab = targetId;
 
       const subtabs = document.getElementsByClassName("sublist-tab");
-      for (let i = 0; i < subtabs.length; i++) {
-        subtabs[i].classList.remove("active-sublist");
-      }
+      for (let i = 0; i < subtabs.length; i++) subtabs[i].classList.remove("active-sublist");
+      
       const btns = document.getElementsByClassName("custom-btn");
-      for (let i = 0; i < btns.length; i++) {
-        btns[i].classList.remove("active-subtab");
-      }
+      for (let i = 0; i < btns.length; i++) btns[i].classList.remove("active-subtab");
 
       document.getElementById(targetId).classList.add("active-sublist");
       document.getElementById(btnId).classList.add("active-subtab");
 
-      // Arama kutusundaki mevcut metin ile yeni sekmeyi filtrele
       filterTable();
     }
 
@@ -511,7 +568,6 @@
           
           const firstCell = String(row[0]).trim().toLowerCase();
 
-          // Header satırını ve ayırıcı satırı es geç
           if (firstCell === 'item') return;
           
           if (firstCell.includes("collectors") || firstCell.includes("collectable")) {
@@ -526,7 +582,6 @@
           }
         });
 
-        // İlk yüklemede ekrana bas
         renderTable(mainListData, document.getElementById("normal-body"));
         renderTable(collectableListData, document.getElementById("collectable-body"));
 
@@ -547,9 +602,7 @@
 
         for (let idx = 0; idx < 8; idx++) {
           const td = document.createElement("td");
-          if (idx === 0) {
-            td.className = "item-cell";
-          }
+          if (idx === 0) td.className = "item-cell";
           td.textContent = String(row[idx] ?? '-');
           tr.appendChild(td);
         }
@@ -558,18 +611,15 @@
       });
     }
 
-    // ARAMA FONKSİYONU
     function filterTable() {
       const query = document.getElementById("search-box").value.toLowerCase().trim();
 
       if (currentSubTab === 'normal-section') {
-        // Sadece Main List veri kümesinde arama yap
         const filtered = mainListData.filter(row => 
           row.some(cell => String(cell).toLowerCase().includes(query))
         );
         renderTable(filtered, document.getElementById("normal-body"));
       } else {
-        // Sadece Collectors List veri kümesinde arama yap
         const filtered = collectableListData.filter(row => 
           row.some(cell => String(cell).toLowerCase().includes(query))
         );
@@ -599,7 +649,40 @@
           container.appendChild(block);
         });
       } catch(e) {
-        container.innerHTML = '<p>No updates found</p>';
+        container.innerHTML = '<p class="loading-text">No updates found.</p>';
+      }
+    }
+
+    // TERMS SAYFASI
+    function handleTermsData(json) {
+      const container = document.getElementById('terms-container');
+      container.innerHTML = '';
+      try {
+        const rows = json.table.rows;
+        rows.forEach(r => {
+          if (!r.c || !r.c[0]) return;
+          
+          const term = r.c[0] ? r.c[0].v : '';
+          const desc = r.c[1] ? r.c[1].v : '';
+          const color = r.c[2] ? r.c[2].v : '#ffffff';
+
+          if (desc === 'SECTION_HEADER') {
+            const header = document.createElement('div');
+            header.className = 'terms-section-title';
+            header.textContent = term;
+            container.appendChild(header);
+          } else {
+            const row = document.createElement('div');
+            row.className = 'term-row';
+            row.innerHTML = `
+              <div class="term-badge" style="background-color: ${color};">${term}</div>
+              <div class="term-desc">${desc}</div>
+            `;
+            container.appendChild(row);
+          }
+        });
+      } catch(e) {
+        container.innerHTML = '<p class="loading-text">Failed to load terms.</p>';
       }
     }
 
@@ -620,11 +703,15 @@
           const username = r.c[1] ? r.c[1].v : '';
           const role = r.c[2] ? r.c[2].v : 'List Editor';
           const profileUrl = r.c[3] ? r.c[3].v : '#';
-          const status = r.c[4] ? r.c[4].v : 'Active';
+          const status = r.c[4] ? String(r.c[4].v) : 'Active';
 
           const imgSrc = (avatarImg && String(avatarImg).startsWith('http')) 
             ? avatarImg 
             : `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=333&color=fff`;
+
+          const isActive = status.toLowerCase().trim() === 'active';
+          const statusClass = isActive ? 'active' : 'inactive';
+          const statusText = isActive ? 'ACTIVE' : 'INACTIVE';
 
           const tr = document.createElement('tr');
           tr.innerHTML = `
@@ -632,14 +719,14 @@
             <td>${username}</td>
             <td style="color: #333;">${role}</td>
             <td><a href="${profileUrl}" target="_blank" class="roblox-tag">@${username.toLowerCase()}</a></td>
-            <td><span class="status-box">${status.toLowerCase() === 'active' || status === '✅' ? '✅' : '❌'}</span></td>
+            <td><span class="status-box ${statusClass}">${statusText}</span></td>
           `;
           tbody.appendChild(tr);
         });
-      } catch(e) { console.log("Using default editors."); }
+      } catch(e) { console.log("Error loading editors."); }
     }
 
-    // GOOGLE SHEETS BÖLÜMLERİ
+    // GOOGLE SHEETS SCRIPT BİNDINGS
     const scriptMain = document.createElement('script');
     scriptMain.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?headers=0&tqx=responseHandler:handleGoogleSheetData`;
     document.body.appendChild(scriptMain);
@@ -647,6 +734,10 @@
     const scriptUpdates = document.createElement('script');
     scriptUpdates.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=Updates&headers=0&tqx=responseHandler:handleUpdatesData`;
     document.body.appendChild(scriptUpdates);
+
+    const scriptTerms = document.createElement('script');
+    scriptTerms.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=Terms&headers=0&tqx=responseHandler:handleTermsData`;
+    document.body.appendChild(scriptTerms);
 
     const scriptEditors = document.createElement('script');
     scriptEditors.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=Editors&headers=0&tqx=responseHandler:handleEditorsData`;
