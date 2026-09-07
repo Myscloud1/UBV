@@ -630,17 +630,6 @@
     // C SÜTUNUNDAN OTOMATİK DOLDURULACAK RENK SÖZLÜĞÜ (TERMS TAB'DAN GELİR)
     let dynamicColorMap = {};
 
-    // RARITY / TYPE İÇİN VARSAYILAN ATAMALAR (H SÜTUNUNA VEYA RENK KODUNA GÖRE)
-    const RARITY_COLOR_FALLBACKS = {
-      'mythic': '#d800ff',
-      'legendary': '#f39c12',
-      'epic': '#9b59b6',
-      'rare': '#3498db',
-      'uncommon': '#2ecc71',
-      'common': '#95a5a6',
-      'godly': '#e74c3c'
-    };
-
     function getTextColor(bgColor) {
       if (!bgColor || bgColor === '#000000') return '#ffffff';
       const hex = bgColor.replace('#', '');
@@ -695,31 +684,22 @@
         if (!row || row.length === 0 || !row[0]) return;
         const tr = document.createElement("tr");
 
-        // ITEM TYPE (H SÜTÜNU - index 7) ÜZERİNDEN RENK TESPİTİ
-        const itemTypeRaw = String(row[7] ?? '').trim();
-        const itemTypeLower = itemTypeRaw.toLowerCase();
+        // ITEM RENK TESPİTİ (I SÜTUNU - INDEX 8)
+        let itemBgColor = String(row[8] ?? '').trim();
         
-        // Item Arka Plan Rengini Tespiti:
-        // 1. C sütunundan çekilen dinamik sözlük
-        // 2. Eğer HEX kodu yazıldıysa doğrudan HEX
-        // 3. Fallback Rarity haritası (mythic, legendary vb.)
-        let itemBgColor = '#d800ff'; // Varsayılan Mor
-        
-        if (itemTypeRaw.startsWith('#')) {
-          itemBgColor = itemTypeRaw;
-        } else if (dynamicColorMap[itemTypeLower]) {
-          itemBgColor = dynamicColorMap[itemTypeLower];
-        } else if (RARITY_COLOR_FALLBACKS[itemTypeLower]) {
-          itemBgColor = RARITY_COLOR_FALLBACKS[itemTypeLower];
+        // Eğer I sütununda geçerli bir HEX kodu yoksa varsayılan mor atanır
+        if (!itemBgColor.startsWith('#')) {
+          itemBgColor = '#d800ff';
         }
 
+        // SADECE İLK 8 SÜTUN (A-H / INDEX 0-7) TABLOYA YAZDIRILIR. INDEX 8 (I SÜTÜNU) GİZLİ KALIR.
         for (let idx = 0; idx < 8; idx++) {
           const td = document.createElement("td");
           const rawText = String(row[idx] ?? '-').trim();
           const lowerText = rawText.toLowerCase();
 
           if (idx === 0) {
-            // ITEM ISMI SÜTUNU (Dinamik Renk)
+            // ITEM ISMI SÜTUNU (I Sütunundaki HEX Koduyla Boyanır)
             td.className = "item-cell";
             td.style.backgroundColor = itemBgColor;
             td.style.color = getTextColor(itemBgColor);
@@ -734,7 +714,7 @@
             td.textContent = rawText;
           } 
           else if (idx === 4 || idx === 5 || idx === 6) {
-            // RANKING & STATUS SÜTUNLARI (C Sütunundaki HEX Kodlarına Göre)
+            // RANKING & STATUS SÜTUNLARI (Terms Tab'ından Çekilen Dinamik Renkler)
             const mappedColor = dynamicColorMap[lowerText];
             if (mappedColor) {
               const textColor = getTextColor(mappedColor);
