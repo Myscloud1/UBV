@@ -15,8 +15,6 @@
       --page-bg: #ff9f1c;
       --text-dark: #1e293b;
       --accent-yellow: #fdcb6e;
-      --table-dark: rgba(15, 23, 42, 0.95);
-      --table-header: rgba(30, 41, 59, 0.98);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -30,7 +28,7 @@
       flex-direction: column;
     }
 
-    /* NAVBAR - Masaüstü Orijinal Düzeni */
+    /* NAVBAR - MASAÜSTÜ */
     .navbar {
       background-color: var(--navbar-bg);
       display: flex;
@@ -61,7 +59,6 @@
       transition: color 0.3s ease;
     }
 
-    /* Şık Alt Çizgi Animasyonu */
     .nav-links a::after {
       content: '';
       position: absolute;
@@ -108,7 +105,7 @@
     .main-container {
       flex: 1;
       padding: 30px 20px;
-      max-width: 1300px;
+      max-width: 1350px;
       margin: 0 auto;
       width: 100%;
     }
@@ -199,55 +196,85 @@
     .sublist-tab { display: none; }
     .sublist-tab.active-sublist { display: block; }
 
-    /* MASAÜSTÜ TABLO STİLLERİ VE HOVER EFEKTLERİ */
+    /* GÖRSELE UYGUN YENİ SİYAH TABLO STİLİ */
     .table-wrapper {
       width: 100%;
-      border-radius: 14px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      border-radius: 12px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
       margin-bottom: 2rem;
       overflow: hidden;
+      background: #000000;
+      border: 2px solid #000000;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      background: var(--table-dark);
-      color: #f1f5f9;
+      background: #000000;
+      color: #ffffff;
     }
 
     th {
-      padding: 1.2rem 1rem;
-      background: var(--table-header);
-      color: #fdcb6e;
-      font-weight: 700;
+      padding: 1rem 0.6rem;
+      background: #000000;
+      color: #ffffff;
+      font-weight: 800;
       text-transform: uppercase;
-      font-size: 0.85rem;
-      letter-spacing: 0.8px;
-      border-bottom: 2px solid rgba(255,255,255,0.1);
+      font-size: 0.9rem;
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid #333333;
+      border-right: 1px solid #222222;
       text-align: center;
     }
+
+    th:last-child { border-right: none; }
 
     td {
-      padding: 1rem;
+      padding: 0.75rem 0.5rem;
       text-align: center;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-      color: #cbd5e1;
-      font-size: 0.92rem;
-      transition: background 0.2s ease;
+      border-bottom: 1px solid #1a1a1a;
+      border-right: 1px solid #111111;
+      font-size: 0.95rem;
+      font-weight: 700;
     }
 
-    tbody tr {
-      transition: transform 0.2s ease, background-color 0.2s ease;
-    }
+    td:last-child { border-right: none; }
 
-    tbody tr:hover {
-      background-color: rgba(255, 255, 255, 0.05);
-    }
-
+    /* SÜTUN ÖZELLEŞTİRMELERİ */
     .item-cell {
+      background-color: #d800ff !important;
+      color: #000000 !important;
       font-weight: 800;
+      font-style: italic;
+      font-size: 1rem;
+      text-shadow: none;
+    }
+
+    .val-cell {
       color: #ffffff;
+      font-weight: 800;
       font-size: 1.05rem;
+      background-color: #000000;
+    }
+
+    .scale-cell {
+      color: #b197fc;
+      font-weight: 800;
+      font-size: 1.1rem;
+      background-color: #000000;
+    }
+
+    /* BADGE (ETİKET) STİLLERİ */
+    .badge-tag {
+      display: inline-block;
+      width: 95%;
+      padding: 8px 4px;
+      border-radius: 4px;
+      font-weight: 800;
+      font-style: italic;
+      font-size: 0.9rem;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
 
     /* UPDATES TAB */
@@ -288,7 +315,7 @@
       font-weight: 600;
     }
 
-    /* TERMS TAB (MASAÜSTÜ GRID) */
+    /* TERMS TAB */
     .terms-wrapper {
       background: #000000;
       padding: 20px;
@@ -318,11 +345,6 @@
       display: grid;
       grid-template-columns: 260px 1fr;
       gap: 8px;
-      transition: transform 0.2s ease;
-    }
-
-    .term-row:hover {
-      transform: translateX(4px);
     }
 
     .term-badge {
@@ -386,11 +408,6 @@
       object-fit: cover;
       background: #333;
       border: 2px solid #000;
-      transition: transform 0.3s ease;
-    }
-
-    .editor-avatar:hover {
-      transform: scale(1.1);
     }
 
     .roblox-tag {
@@ -423,14 +440,9 @@
 
     .loading-text { text-align: center; padding: 30px; font-size: 1.1rem; color: #ffffff; font-weight: 700; }
 
-    /* ========================================================= */
-    /* SADECE MOBİL İÇİN DÜZENLEMELER (768px VE ALTI)             */
-    /* Masaüstünü Hiç Etkilemez!                                 */
-    /* ========================================================= */
+    /* MOBİL ÖZEL STİLLER (768px VE ALTI) */
     @media (max-width: 768px) {
-      html, body {
-        overflow-x: hidden; /* Sadece mobilde ekrandan taşmayı engeller */
-      }
+      html, body { overflow-x: hidden; }
 
       .navbar {
         flex-direction: column;
@@ -450,17 +462,13 @@
 
       #custom-button-group { flex-wrap: wrap; }
 
-      /* Tabloların taşmasını önleyip kaydırılabilir alan yapar */
       .table-wrapper {
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
       }
 
-      table, .editors-table {
-        min-width: 650px; /* Tablo içeriğinin ezilmesini önler */
-      }
+      table, .editors-table { min-width: 680px; }
 
-      /* Mobilde Terms dikey sıralansın */
       .term-row {
         grid-template-columns: 1fr;
         gap: 2px;
@@ -496,7 +504,7 @@
 
     <!-- VALUE LISTS TAB -->
     <div id="valuelists" class="tab-content active">
-      <h1 class="page-title">VALUE LIST</h1>
+      <h1 class="page-title">VALUE LISTS</h1>
 
       <div id="custom-button-group">
         <button id="btn-main" class="custom-btn active-subtab" onclick="switchListTab('normal-section', 'btn-main')">Main List</button>
@@ -624,6 +632,39 @@
     let mainListData = [];
     let collectableListData = [];
 
+    // RENK HARİTASI (TERMS İLE BİREBİR UYUMLU)
+    const COLOR_MAP = {
+      'insanely high': '#b197fc',
+      'great': '#a29bfe',
+      'good': '#2ecc71',
+      'above average': '#81ecec',
+      'slightly above average': '#74b9ff',
+      'average': '#dfe6e9',
+      'slightly below average': '#ff7675',
+      'below average': '#e17055',
+      'bad': '#d63031',
+      'horrendous': '#8b0000',
+      'rising': '#2ecc71',
+      'slowly rising': '#55efc4',
+      'stable': '#f5f5f5',
+      'slowly dropping': '#ff7675',
+      'dropping': '#d63031',
+      'hyped': '#f1c40f',
+      'unstable': '#e74c3c',
+      'collectors': '#a29bfe'
+    };
+
+    // Metnin açık veya koyu renkte olacağını bulan fonksiyon
+    function getTextColor(bgColor) {
+      if (!bgColor || bgColor === '#000000') return '#ffffff';
+      const hex = bgColor.replace('#', '');
+      const r = parseInt(hex.substr(0, 2), 16);
+      const g = parseInt(hex.substr(2, 2), 16);
+      const b = parseInt(hex.substr(4, 2), 16);
+      const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+      return brightness > 145 ? '#000000' : '#ffffff';
+    }
+
     // MAIN LIST DATA
     function handleGoogleSheetData(json) {
       document.getElementById('loading').style.display = 'none';
@@ -661,16 +702,48 @@
       }
     }
 
+    // RENKLİ TABLO OLUŞTURUCU
     function renderTable(data, tbody) {
       if(!tbody) return;
       tbody.innerHTML = "";
       data.forEach(row => {
         if (!row || row.length === 0 || !row[0]) return;
         const tr = document.createElement("tr");
+
         for (let idx = 0; idx < 8; idx++) {
           const td = document.createElement("td");
-          if (idx === 0) td.className = "item-cell";
-          td.textContent = String(row[idx] ?? '-');
+          const rawText = String(row[idx] ?? '-').trim();
+          const lowerText = rawText.toLowerCase();
+
+          if (idx === 0) {
+            // ITEM ISMI SÜTUNU (Görseldeki Pembe/Mor Stil)
+            td.className = "item-cell";
+            td.textContent = rawText;
+          } 
+          else if (idx === 1) {
+            // VALUE SÜTUNU
+            td.className = "val-cell";
+            td.textContent = rawText;
+          } 
+          else if (idx === 3) {
+            // DEMAND SCALE SÜTUNU
+            td.className = "scale-cell";
+            td.textContent = rawText;
+          } 
+          else if (idx === 4 || idx === 5 || idx === 6) {
+            // STATUS VE RANKING SÜTUNLARI (Renk Rozetleri/Badges)
+            if (COLOR_MAP[lowerText]) {
+              const bgColor = COLOR_MAP[lowerText];
+              const textColor = getTextColor(bgColor);
+              td.innerHTML = `<span class="badge-tag" style="background-color: ${bgColor}; color: ${textColor};">${rawText}</span>`;
+            } else {
+              td.textContent = rawText;
+            }
+          } 
+          else {
+            td.textContent = rawText;
+          }
+
           tr.appendChild(td);
         }
         tbody.appendChild(tr);
@@ -714,28 +787,6 @@
       }
     }
 
-    // RENK HARİTASI
-    const DEFAULT_COLORS = {
-      'insanely high': '#b197fc',
-      'great': '#a29bfe',
-      'good': '#2ecc71',
-      'above average': '#81ecec',
-      'slightly above average': '#74b9ff',
-      'average': '#dfe6e9',
-      'slightly below average': '#ff7675',
-      'below average': '#e17055',
-      'bad': '#d63031',
-      'horrendous': '#8b0000',
-      'rising': '#2ecc71',
-      'slowly rising': '#55efc4',
-      'stable': '#dfe6e9',
-      'slowly dropping': '#ff7675',
-      'dropping': '#d63031',
-      'hyped': '#f1c40f',
-      'unstable': '#74b9ff',
-      'collectors': '#a29bfe'
-    };
-
     // TERMS DATA HANDLER
     function handleTermsData(json) {
       const container = document.getElementById('terms-container');
@@ -751,7 +802,7 @@
 
           if (!color || !color.startsWith('#')) {
             const lowerTerm = term.toLowerCase();
-            color = DEFAULT_COLORS[lowerTerm] || '#e2e8f0';
+            color = COLOR_MAP[lowerTerm] || '#e2e8f0';
           }
 
           if (desc === 'SECTION_HEADER' || desc === '' || term.toLowerCase().includes('terms')) {
@@ -760,10 +811,11 @@
             header.textContent = term;
             container.appendChild(header);
           } else {
+            const textColor = getTextColor(color);
             const row = document.createElement('div');
             row.className = 'term-row';
             row.innerHTML = `
-              <div class="term-badge" style="background-color: ${color};">${term}</div>
+              <div class="term-badge" style="background-color: ${color}; color: ${textColor};">${term}</div>
               <div class="term-desc">${desc}</div>
             `;
             container.appendChild(row);
