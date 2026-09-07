@@ -21,6 +21,11 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
+    html, body {
+      width: 100%;
+      overflow-x: hidden; /* Sağa/sola kaymayı engeller */
+    }
+
     body {
       font-family: 'Montserrat', sans-serif;
       background-color: var(--page-bg);
@@ -30,32 +35,34 @@
       flex-direction: column;
     }
 
-    /* NAVBAR */
+    /* NAVBAR RESPONSIVE */
     .navbar {
       background-color: var(--navbar-bg);
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
+      display: flex;
+      justify-content: space-between;
       align-items: center;
-      padding: 0 5vw;
-      height: 70px;
+      padding: 10px 5vw;
+      min-height: 65px;
       position: sticky;
       top: 0;
       z-index: 1000;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      flex-wrap: wrap;
     }
 
     .nav-links {
       display: flex;
-      gap: 20px;
+      gap: 15px;
       list-style: none;
+      flex-wrap: wrap;
     }
 
     .nav-links a {
       color: #ffffff;
       text-decoration: none;
       font-weight: 600;
-      font-size: 0.95rem;
-      padding: 8px 4px;
+      font-size: 0.9rem;
+      padding: 6px 2px;
       transition: all 0.2s ease;
     }
 
@@ -65,7 +72,7 @@
 
     .nav-logo {
       font-family: 'Outfit', sans-serif;
-      font-size: 2.2rem;
+      font-size: 2rem;
       font-weight: 800;
       color: #ffffff;
       letter-spacing: 1px;
@@ -73,23 +80,16 @@
       text-align: center;
     }
 
-    .nav-social-wrap {
-      display: flex;
-      justify-content: flex-end;
-    }
-
     .nav-social {
       color: #ffffff;
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       transition: transform 0.2s ease;
       text-decoration: none;
     }
 
-    .nav-social:hover { transform: scale(1.15); }
-
     .main-container {
       flex: 1;
-      padding: 40px 5vw;
+      padding: 20px 4vw;
       max-width: 1400px;
       margin: 0 auto;
       width: 100%;
@@ -99,26 +99,27 @@
     .tab-content.active { display: block; }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
+      from { opacity: 0; transform: translateY(6px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
     .page-title {
       font-family: 'Bebas Neue', cursive;
-      font-size: 3.8rem;
+      font-size: 3.2rem;
       letter-spacing: 2px;
       color: #1e293b;
-      margin-bottom: 25px;
+      margin-bottom: 20px;
       text-transform: uppercase;
+      text-align: center;
     }
 
     /* SEARCH & BUTTONS */
-    #search-section { text-align: center; margin-bottom: 2rem; }
+    #search-section { text-align: center; margin-bottom: 1.5rem; }
     #search-box {
-      padding: 14px 24px;
-      width: 80%;
+      padding: 12px 20px;
+      width: 100%;
       max-width: 500px;
-      font-size: 1.05rem;
+      font-size: 1rem;
       border-radius: 35px;
       border: 2px solid rgba(255, 255, 255, 0.4);
       background: rgba(15, 23, 42, 0.85);
@@ -129,22 +130,26 @@
     }
 
     #search-box::placeholder { color: #94a3b8; }
-    #search-box:focus { border-color: #ffffff; box-shadow: 0 0 15px rgba(255, 255, 255, 0.5); }
 
-    #custom-button-group { text-align: center; margin: 1.5rem 0 2.5rem; }
+    #custom-button-group { 
+      display: flex; 
+      justify-content: center; 
+      gap: 10px; 
+      margin: 1rem 0 1.5rem; 
+      flex-wrap: wrap; 
+    }
+
     .custom-btn {
       font-family: 'Montserrat', sans-serif;
       background: rgba(15, 23, 42, 0.9);
       border: 2px solid var(--accent-yellow);
       color: #ffeaa7;
-      padding: 12px 28px;
-      margin: 8px;
-      border-radius: 12px;
-      font-size: 1rem;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 0.95rem;
       font-weight: 700;
       cursor: pointer;
       text-decoration: none;
-      display: inline-block;
       transition: all 0.3s ease;
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
@@ -152,19 +157,20 @@
     .custom-btn.active-subtab, .custom-btn:hover {
       background: var(--accent-yellow);
       color: #0f172a;
-      box-shadow: 0 0 16px var(--accent-yellow);
-      transform: translateY(-2px);
+      box-shadow: 0 0 14px var(--accent-yellow);
     }
 
     .sublist-tab { display: none; }
     .sublist-tab.active-sublist { display: block; }
 
-    /* VALUE LIST TABLE */
+    /* RESPONSIVE TABLES */
     .table-wrapper {
+      width: 100%;
       overflow-x: auto;
-      border-radius: 16px;
-      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
-      margin-bottom: 3rem;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 12px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+      margin-bottom: 2rem;
     }
 
     table {
@@ -172,85 +178,82 @@
       border-collapse: collapse;
       background: var(--table-dark);
       color: #f1f5f9;
-      min-width: 800px;
+      min-width: 700px; /* Mobilde tablo yapısını korur, taşmayı scroll yapar */
     }
 
     th {
-      padding: 1.2rem;
+      padding: 1rem 0.8rem;
       background: var(--table-header);
       color: #fdcb6e;
       font-weight: 700;
       text-transform: uppercase;
-      font-size: 0.9rem;
-      letter-spacing: 1px;
+      font-size: 0.85rem;
+      letter-spacing: 0.5px;
       border-bottom: 2px solid rgba(255,255,255,0.1);
       text-align: center;
     }
 
     td {
-      padding: 1.1rem 1rem;
+      padding: 0.9rem 0.8rem;
       text-align: center;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       color: #cbd5e1;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
     }
-
-    tr:hover td { background-color: rgba(255, 255, 255, 0.05); }
 
     .item-cell {
       font-weight: 800;
       color: #ffffff;
-      font-size: 1.05rem;
+      font-size: 1rem;
     }
 
     /* UPDATES TAB */
     .updates-wrapper {
       background: #000000;
       color: #ffffff;
-      padding: 30px 40px;
-      border-radius: 16px;
+      padding: 20px;
+      border-radius: 12px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     }
 
     .update-block {
-      margin-bottom: 35px;
+      margin-bottom: 25px;
       border-bottom: 1px solid #222;
-      padding-bottom: 25px;
+      padding-bottom: 15px;
     }
 
     .update-block:last-child { border-bottom: none; }
 
     .update-header-title {
-      font-size: 1.8rem;
+      font-size: 1.5rem;
       font-weight: 800;
       color: #ffffff;
-      margin-bottom: 15px;
-      letter-spacing: 1px;
+      margin-bottom: 10px;
     }
 
     .update-date-tag {
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       color: #888;
-      margin-bottom: 15px;
+      margin-bottom: 10px;
     }
 
     .update-content-text {
       white-space: pre-wrap;
-      font-size: 1.1rem;
-      line-height: 1.8;
+      font-size: 1rem;
+      line-height: 1.6;
       color: #e2e8f0;
       font-weight: 600;
     }
 
-    /* TERMS TAB STYLES */
+    /* TERMS TAB (RESPONSIVE GRID) */
     .terms-wrapper {
       background: #000000;
-      padding: 20px;
-      border-radius: 16px;
+      padding: 15px;
+      border-radius: 12px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.3);
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 8px;
     }
 
     .terms-section-title {
@@ -259,26 +262,26 @@
       font-family: 'Montserrat', sans-serif;
       font-style: italic;
       font-weight: 800;
-      font-size: 1.3rem;
-      padding: 14px 15px;
-      text-align: left;
+      font-size: 1.2rem;
+      padding: 10px 5px;
+      text-align: center;
       border-bottom: 2px solid #333;
-      margin-top: 15px;
+      margin-top: 10px;
     }
 
     .terms-section-title:first-child { margin-top: 0; }
 
     .term-row {
       display: grid;
-      grid-template-columns: 260px 1fr;
+      grid-template-columns: 240px 1fr;
       gap: 6px;
     }
 
     .term-badge {
-      padding: 12px 16px;
+      padding: 10px 12px;
       font-weight: 800;
       font-style: italic;
-      font-size: 1.1rem;
+      font-size: 1rem;
       text-align: center;
       color: #000000;
       display: flex;
@@ -290,100 +293,119 @@
     .term-desc {
       background: #ffffff;
       color: #000000;
-      padding: 12px 18px;
+      padding: 10px 14px;
       font-weight: 700;
       font-style: italic;
-      font-size: 1.05rem;
+      font-size: 0.95rem;
       display: flex;
       align-items: center;
       border-radius: 4px;
     }
 
-    /* LIST EDITORS TABLE */
+    /* EDITORS TABLE RESPONSIVE */
     .editors-table {
       width: 100%;
       border-collapse: collapse;
       background: #b0b0b0;
       color: #000000;
       font-weight: 700;
-      border: 4px solid #000;
+      border: 3px solid #000;
+      min-width: 600px;
     }
 
     .editors-table th {
       background: #000000;
       color: #ffffff;
-      font-size: 1.4rem;
-      padding: 22px;
+      font-size: 1.1rem;
+      padding: 14px;
       text-align: center;
-      border: 3px solid #000;
-      letter-spacing: 1px;
+      border: 2px solid #000;
     }
 
     .editors-table td {
       background: #c2c2c2;
       color: #000000;
-      border: 3px solid #555;
-      font-size: 1.35rem;
-      padding: 24px 18px;
+      border: 2px solid #555;
+      font-size: 1.05rem;
+      padding: 12px 8px;
       vertical-align: middle;
       text-align: center;
     }
 
     .editor-avatar {
-      width: 95px;
-      height: 95px;
-      border-radius: 12px;
+      width: 65px;
+      height: 65px;
+      border-radius: 10px;
       object-fit: cover;
       background: #333;
-      border: 3px solid #000;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      border: 2px solid #000;
     }
 
     .roblox-tag {
       color: #0056b3;
       text-decoration: underline;
       font-weight: 800;
-      font-size: 1.3rem;
+      font-size: 1.05rem;
     }
 
     .status-box {
       display: inline-block;
-      padding: 10px 20px;
-      border: 3px solid #000;
-      border-radius: 10px;
+      padding: 6px 12px;
+      border: 2px solid #000;
+      border-radius: 6px;
       text-align: center;
-      font-size: 1.1rem;
+      font-size: 0.9rem;
       font-weight: 800;
       text-transform: uppercase;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     }
 
-    .status-box.active {
-      background-color: #2ecc71;
-      color: #000000;
-    }
-
-    .status-box.inactive {
-      background-color: #e74c3c;
-      color: #ffffff;
-    }
+    .status-box.active { background-color: #2ecc71; color: #000000; }
+    .status-box.inactive { background-color: #e74c3c; color: #ffffff; }
 
     .info-card {
       background: #ffffff;
-      border-radius: 16px;
-      padding: 32px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
     }
 
-    .loading-text { text-align: center; padding: 40px; font-size: 1.1rem; color: #ffffff; }
+    .loading-text { text-align: center; padding: 30px; font-size: 1rem; color: #ffffff; }
 
+    /* MOBİL ÖZEL STİLLER (768px ve altı) */
     @media (max-width: 768px) {
-      .navbar { grid-template-columns: 1fr auto; padding: 0 15px; }
-      .nav-links { gap: 10px; }
-      .nav-links a { font-size: 0.8rem; }
-      .nav-social-wrap { display: none; }
-      .page-title { font-size: 2.8rem; }
-      .term-row { grid-template-columns: 1fr; }
+      .navbar {
+        flex-direction: column;
+        gap: 10px;
+        padding: 12px 15px;
+      }
+      
+      .nav-links {
+        justify-content: center;
+        gap: 12px;
+      }
+      
+      .nav-links a { font-size: 0.85rem; }
+      .page-title { font-size: 2.5rem; margin-bottom: 15px; }
+
+      /* Terms görünümünü mobilde dikey yap */
+      .term-row {
+        grid-template-columns: 1fr;
+        gap: 2px;
+        margin-bottom: 6px;
+      }
+
+      .term-badge {
+        padding: 8px 10px;
+        font-size: 0.95rem;
+      }
+
+      .term-desc {
+        padding: 8px 10px;
+        font-size: 0.88rem;
+      }
+
+      .terms-wrapper { padding: 10px; }
+      .editor-avatar { width: 50px; height: 50px; }
     }
   </style>
 </head>
@@ -391,6 +413,8 @@
 
   <!-- NAVBAR -->
   <nav class="navbar">
+    <a href="#" class="nav-logo">UBV</a>
+
     <ul class="nav-links">
       <li><a href="#" class="nav-link active" onclick="openTab(event, 'valuelists')">Value Lists</a></li>
       <li><a href="#" class="nav-link" onclick="openTab(event, 'updates')">Updates</a></li>
@@ -399,13 +423,9 @@
       <li><a href="#" class="nav-link" onclick="openTab(event, 'editors')">List Editors</a></li>
     </ul>
 
-    <a href="#" class="nav-logo">UBV</a>
-
-    <div class="nav-social-wrap">
-      <a href="https://discord.gg/ubv" target="_blank" class="nav-social" title="Discord Server">
-        <i class="fab fa-discord"></i>
-      </a>
-    </div>
+    <a href="https://discord.gg/ubv" target="_blank" class="nav-social" title="Discord Server">
+      <i class="fab fa-discord"></i>
+    </a>
   </nav>
 
   <!-- CONTAINER -->
@@ -438,7 +458,7 @@
               <th>DEMAND RANKING</th>
               <th>VALUE STATUS</th>
               <th>DEMAND STATUS</th>
-              <th>ITEM TYPE</th>
+              <th>ITEM QUALITY</th>
             </tr>
           </thead>
           <tbody id="normal-body"></tbody>
@@ -457,7 +477,7 @@
               <th>DEMAND RANKING</th>
               <th>VALUE STATUS</th>
               <th>DEMAND STATUS</th>
-              <th>ITEM TYPE</th>
+              <th>ITEM QUALITY</th>
             </tr>
           </thead>
           <tbody id="collectable-body"></tbody>
@@ -486,7 +506,7 @@
       <h1 class="page-title">ABOUT US</h1>
       <div class="info-card">
         <h2>About UBV</h2>
-        <p style="margin-top: 12px; line-height: 1.6; color: #475569;">
+        <p style="margin-top: 10px; line-height: 1.5; color: #475569; font-size: 0.95rem;">
           UBV is a dedicated platform providing live trading values, market analytics, average RAP metrics, and item showcases for the Roblox trading community.
         </p>
       </div>
@@ -499,7 +519,7 @@
         <table class="editors-table">
           <thead>
             <tr>
-              <th style="width: 140px;">Avatar</th>
+              <th style="width: 80px;">Avatar</th>
               <th>Username</th>
               <th>Role</th>
               <th>Roblox Profile</th>
@@ -631,7 +651,7 @@
       }
     }
 
-    // OTOMATİK RENK HARİTASI (Spreadsheet'te Hex kodu yazmasa bile bunları atar)
+    // OTOMATİK RENK HARİTASI
     const DEFAULT_COLORS = {
       'insanely high': '#b197fc',
       'great': '#a29bfe',
@@ -653,7 +673,7 @@
       'collectors': '#a29bfe'
     };
 
-    // TERMS DATA HANDLER (Geliştirilmiş)
+    // TERMS DATA HANDLER
     function handleTermsData(json) {
       const container = document.getElementById('terms-container');
       container.innerHTML = '';
@@ -666,13 +686,11 @@
           const desc = r.c[1] ? String(r.c[1].v).trim() : '';
           let color = r.c[2] ? String(r.c[2].v).trim() : '';
 
-          // Otomatik Renk Atama (C sütunu boşsa)
           if (!color || !color.startsWith('#')) {
             const lowerTerm = term.toLowerCase();
             color = DEFAULT_COLORS[lowerTerm] || '#e2e8f0';
           }
 
-          // Başlık Kontrolü (B sütunu boşsa VEYA 'SECTION_HEADER' ise başlık kabul et)
           if (desc === 'SECTION_HEADER' || desc === '' || term.toLowerCase().includes('terms')) {
             const header = document.createElement('div');
             header.className = 'terms-section-title';
