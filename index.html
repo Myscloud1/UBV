@@ -28,7 +28,7 @@
       flex-direction: column;
     }
 
-    /* NAVBAR - MASAÜSTÜ */
+    /* NAVBAR */
     .navbar {
       background-color: var(--navbar-bg);
       display: flex;
@@ -110,7 +110,6 @@
       width: 100%;
     }
 
-    /* TAB GEÇİŞ ANİMASYONLARI */
     .tab-content { 
       display: none; 
       opacity: 0;
@@ -135,7 +134,7 @@
       text-shadow: 2px 2px 0px rgba(255,255,255,0.2);
     }
 
-    /* ARAMA VE BUTONLAR */
+    /* SEARCH & BUTTONS */
     #search-section { text-align: center; margin-bottom: 1.5rem; }
     #search-box {
       padding: 14px 24px;
@@ -196,7 +195,7 @@
     .sublist-tab { display: none; }
     .sublist-tab.active-sublist { display: block; }
 
-    /* GÖRSELE UYGUN YENİ SİYAH TABLO STİLİ */
+    /* SİYAH TABLO VE RENKLİ HÜCRELER */
     .table-wrapper {
       width: 100%;
       border-radius: 12px;
@@ -240,14 +239,13 @@
 
     td:last-child { border-right: none; }
 
-    /* SÜTUN ÖZELLEŞTİRMELERİ */
+    /* DİNAMİK İTEM HÜCRESİ */
     .item-cell {
-      background-color: #d800ff !important;
-      color: #000000 !important;
       font-weight: 800;
       font-style: italic;
       font-size: 1rem;
-      text-shadow: none;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+      transition: background-color 0.3s ease;
     }
 
     .val-cell {
@@ -264,7 +262,6 @@
       background-color: #000000;
     }
 
-    /* BADGE (ETİKET) STİLLERİ */
     .badge-tag {
       display: inline-block;
       width: 95%;
@@ -353,7 +350,6 @@
       font-style: italic;
       font-size: 1.05rem;
       text-align: center;
-      color: #000000;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -440,7 +436,6 @@
 
     .loading-text { text-align: center; padding: 30px; font-size: 1.1rem; color: #ffffff; font-weight: 700; }
 
-    /* MOBİL ÖZEL STİLLER (768px VE ALTI) */
     @media (max-width: 768px) {
       html, body { overflow-x: hidden; }
 
@@ -529,7 +524,7 @@
               <th>DEMAND RANKING</th>
               <th>VALUE STATUS</th>
               <th>DEMAND STATUS</th>
-              <th>ITEM QUALITY</th>
+              <th>ITEM TYPE</th>
             </tr>
           </thead>
           <tbody id="normal-body"></tbody>
@@ -548,7 +543,7 @@
               <th>DEMAND RANKING</th>
               <th>VALUE STATUS</th>
               <th>DEMAND STATUS</th>
-              <th>ITEM QUALITY</th>
+              <th>ITEM TYPE</th>
             </tr>
           </thead>
           <tbody id="collectable-body"></tbody>
@@ -632,32 +627,24 @@
     let mainListData = [];
     let collectableListData = [];
 
-    // RENK HARİTASI (TERMS İLE BİREBİR UYUMLU)
-    const COLOR_MAP = {
-      'insanely high': '#b197fc',
-      'great': '#a29bfe',
-      'good': '#2ecc71',
-      'above average': '#81ecec',
-      'slightly above average': '#74b9ff',
-      'average': '#dfe6e9',
-      'slightly below average': '#ff7675',
-      'below average': '#e17055',
-      'bad': '#d63031',
-      'horrendous': '#8b0000',
-      'rising': '#2ecc71',
-      'slowly rising': '#55efc4',
-      'stable': '#f5f5f5',
-      'slowly dropping': '#ff7675',
-      'dropping': '#d63031',
-      'hyped': '#f1c40f',
-      'unstable': '#e74c3c',
-      'collectors': '#a29bfe'
+    // C SÜTUNUNDAN OTOMATİK DOLDURULACAK RENK SÖZLÜĞÜ (TERMS TAB'DAN GELİR)
+    let dynamicColorMap = {};
+
+    // RARITY / TYPE İÇİN VARSAYILAN ATAMALAR (H SÜTUNUNA VEYA RENK KODUNA GÖRE)
+    const RARITY_COLOR_FALLBACKS = {
+      'mythic': '#d800ff',
+      'legendary': '#f39c12',
+      'epic': '#9b59b6',
+      'rare': '#3498db',
+      'uncommon': '#2ecc71',
+      'common': '#95a5a6',
+      'godly': '#e74c3c'
     };
 
-    // Metnin açık veya koyu renkte olacağını bulan fonksiyon
     function getTextColor(bgColor) {
       if (!bgColor || bgColor === '#000000') return '#ffffff';
       const hex = bgColor.replace('#', '');
+      if (hex.length !== 6) return '#ffffff';
       const r = parseInt(hex.substr(0, 2), 16);
       const g = parseInt(hex.substr(2, 2), 16);
       const b = parseInt(hex.substr(4, 2), 16);
@@ -665,7 +652,6 @@
       return brightness > 145 ? '#000000' : '#ffffff';
     }
 
-    // MAIN LIST DATA
     function handleGoogleSheetData(json) {
       document.getElementById('loading').style.display = 'none';
       try {
@@ -702,7 +688,6 @@
       }
     }
 
-    // RENKLİ TABLO OLUŞTURUCU
     function renderTable(data, tbody) {
       if(!tbody) return;
       tbody.innerHTML = "";
@@ -710,32 +695,50 @@
         if (!row || row.length === 0 || !row[0]) return;
         const tr = document.createElement("tr");
 
+        // ITEM TYPE (H SÜTÜNU - index 7) ÜZERİNDEN RENK TESPİTİ
+        const itemTypeRaw = String(row[7] ?? '').trim();
+        const itemTypeLower = itemTypeRaw.toLowerCase();
+        
+        // Item Arka Plan Rengini Tespiti:
+        // 1. C sütunundan çekilen dinamik sözlük
+        // 2. Eğer HEX kodu yazıldıysa doğrudan HEX
+        // 3. Fallback Rarity haritası (mythic, legendary vb.)
+        let itemBgColor = '#d800ff'; // Varsayılan Mor
+        
+        if (itemTypeRaw.startsWith('#')) {
+          itemBgColor = itemTypeRaw;
+        } else if (dynamicColorMap[itemTypeLower]) {
+          itemBgColor = dynamicColorMap[itemTypeLower];
+        } else if (RARITY_COLOR_FALLBACKS[itemTypeLower]) {
+          itemBgColor = RARITY_COLOR_FALLBACKS[itemTypeLower];
+        }
+
         for (let idx = 0; idx < 8; idx++) {
           const td = document.createElement("td");
           const rawText = String(row[idx] ?? '-').trim();
           const lowerText = rawText.toLowerCase();
 
           if (idx === 0) {
-            // ITEM ISMI SÜTUNU (Görseldeki Pembe/Mor Stil)
+            // ITEM ISMI SÜTUNU (Dinamik Renk)
             td.className = "item-cell";
+            td.style.backgroundColor = itemBgColor;
+            td.style.color = getTextColor(itemBgColor);
             td.textContent = rawText;
           } 
           else if (idx === 1) {
-            // VALUE SÜTUNU
             td.className = "val-cell";
             td.textContent = rawText;
           } 
           else if (idx === 3) {
-            // DEMAND SCALE SÜTUNU
             td.className = "scale-cell";
             td.textContent = rawText;
           } 
           else if (idx === 4 || idx === 5 || idx === 6) {
-            // STATUS VE RANKING SÜTUNLARI (Renk Rozetleri/Badges)
-            if (COLOR_MAP[lowerText]) {
-              const bgColor = COLOR_MAP[lowerText];
-              const textColor = getTextColor(bgColor);
-              td.innerHTML = `<span class="badge-tag" style="background-color: ${bgColor}; color: ${textColor};">${rawText}</span>`;
+            // RANKING & STATUS SÜTUNLARI (C Sütunundaki HEX Kodlarına Göre)
+            const mappedColor = dynamicColorMap[lowerText];
+            if (mappedColor) {
+              const textColor = getTextColor(mappedColor);
+              td.innerHTML = `<span class="badge-tag" style="background-color: ${mappedColor}; color: ${textColor};">${rawText}</span>`;
             } else {
               td.textContent = rawText;
             }
@@ -787,7 +790,7 @@
       }
     }
 
-    // TERMS DATA HANDLER
+    // TERMS DATA HANDLER (C Sütunundaki Renk Kodlarını Çeker)
     function handleTermsData(json) {
       const container = document.getElementById('terms-container');
       container.innerHTML = '';
@@ -798,11 +801,13 @@
           
           const term = r.c[0] ? String(r.c[0].v).trim() : '';
           const desc = r.c[1] ? String(r.c[1].v).trim() : '';
-          let color = r.c[2] ? String(r.c[2].v).trim() : '';
+          
+          // DOĞRUDAN C SÜTUNUNDAN RENK KODU ALINIR
+          let color = r.c[2] ? String(r.c[2].v).trim() : '#e2e8f0';
 
-          if (!color || !color.startsWith('#')) {
-            const lowerTerm = term.toLowerCase();
-            color = COLOR_MAP[lowerTerm] || '#e2e8f0';
+          // SÖZLÜĞE YÜKLE
+          if (term) {
+            dynamicColorMap[term.toLowerCase()] = color;
           }
 
           if (desc === 'SECTION_HEADER' || desc === '' || term.toLowerCase().includes('terms')) {
@@ -821,6 +826,12 @@
             container.appendChild(row);
           }
         });
+
+        // Terms yüklendikten sonra ana listeyi güncelle
+        if (mainListData.length > 0) {
+          renderTable(mainListData, document.getElementById("normal-body"));
+          renderTable(collectableListData, document.getElementById("collectable-body"));
+        }
       } catch(e) {
         container.innerHTML = '<p class="loading-text">Failed to load terms.</p>';
       }
@@ -865,7 +876,11 @@
       } catch(e) { console.log("Error loading editors."); }
     }
 
-    // SCRIPT IMPORTS
+    // SCRIPT IMPORTS (Önce Terms çekilerek renk haritası oluşturulur)
+    const scriptTerms = document.createElement('script');
+    scriptTerms.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=Terms&headers=0&tqx=responseHandler:handleTermsData`;
+    document.body.appendChild(scriptTerms);
+
     const scriptMain = document.createElement('script');
     scriptMain.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?headers=0&tqx=responseHandler:handleGoogleSheetData`;
     document.body.appendChild(scriptMain);
@@ -873,10 +888,6 @@
     const scriptUpdates = document.createElement('script');
     scriptUpdates.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=Updates&headers=0&tqx=responseHandler:handleUpdatesData`;
     document.body.appendChild(scriptUpdates);
-
-    const scriptTerms = document.createElement('script');
-    scriptTerms.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=Terms&headers=0&tqx=responseHandler:handleTermsData`;
-    document.body.appendChild(scriptTerms);
 
     const scriptEditors = document.createElement('script');
     scriptEditors.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=Editors&headers=0&tqx=responseHandler:handleEditorsData`;
