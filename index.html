@@ -1,29 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>UBV — Terminal Value Index</title>
+  <title>UBV — Roblox Value Index</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=JetBrains+Mono:wght@600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
   <style>
     :root {
-      --bg-base: #090d16;
-      --bg-surface: #111827;
-      --bg-surface-hover: #1f293d;
-      --border: rgba(255, 255, 255, 0.08);
-      --border-focus: #3b82f6;
+      --bg-main: #0c0f1d;
+      --bg-card: #151a2e;
+      --bg-card-hover: #1c233d;
+      --border-color: #262f4c;
       
-      --text-main: #f3f4f6;
-      --text-muted: #9ca3af;
+      --accent-purple: #6366f1;
+      --accent-amber: #f59e0b;
+      --text-white: #ffffff;
+      --text-sub: #a5b4fc;
       
-      --accent: #3b82f6;
-      --accent-glow: rgba(59, 130, 246, 0.15);
       --font-mono: 'JetBrains Mono', monospace;
     }
 
@@ -31,325 +30,304 @@
 
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      background-color: var(--bg-base);
-      color: var(--text-main);
+      background-color: var(--bg-main);
+      color: var(--text-white);
       min-height: 100vh;
       display: flex;
     }
 
-    /* SIDEBAR NAVIGATION */
-    .sidebar {
-      width: 260px;
-      background: var(--bg-surface);
-      border-right: 1px solid var(--border);
+    /* SOL DİKEY MENU (TABLAR) */
+    .sidebar-nav {
+      width: 290px;
+      background: #111526;
+      border-right: 2px solid var(--border-color);
+      padding: 32px 20px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      padding: 24px 16px;
       position: fixed;
       height: 100vh;
-      z-index: 100;
+      z-index: 10;
     }
 
-    .brand-box {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 8px 12px;
-      margin-bottom: 32px;
-    }
-
-    .brand-icon {
-      width: 36px;
-      height: 36px;
-      background: var(--accent);
+    .brand-logo {
+      font-size: 1.6rem;
+      font-weight: 900;
       color: #fff;
       display: flex;
       align-items: center;
-      justify-content: center;
-      font-weight: 800;
-      border-radius: 8px;
-      font-size: 1.1rem;
+      gap: 12px;
+      margin-bottom: 40px;
+      letter-spacing: -0.5px;
     }
 
-    .brand-text {
-      font-size: 1.1rem;
-      font-weight: 800;
-      letter-spacing: -0.3px;
-    }
+    .brand-logo i { color: var(--accent-amber); font-size: 1.8rem; }
 
-    .nav-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+    .nav-tabs { display: flex; flex-direction: column; gap: 10px; }
 
-    .nav-btn {
+    .nav-tab-btn {
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 12px 16px;
-      color: var(--text-muted);
+      gap: 14px;
+      padding: 16px 20px;
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-sub);
+      font-size: 1.05rem;
+      font-weight: 700;
+      border-radius: 14px;
+      cursor: pointer;
       text-decoration: none;
-      font-weight: 600;
-      font-size: 0.92rem;
-      border-radius: 10px;
       transition: all 0.2s ease;
     }
 
-    .nav-btn:hover { color: var(--text-main); background: rgba(255, 255, 255, 0.04); }
-    .nav-btn.active {
+    .nav-tab-btn:hover { background: var(--bg-card); color: #fff; }
+    .nav-tab-btn.active {
+      background: var(--accent-purple);
       color: #fff;
-      background: var(--accent);
-      box-shadow: 0 4px 12px var(--accent-glow);
+      border-color: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
     }
 
-    .sidebar-footer { padding: 12px; border-top: 1px solid var(--border); }
     .discord-btn {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      width: 100%;
-      padding: 10px;
+      gap: 10px;
+      padding: 16px;
       background: #5865f2;
       color: #fff;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 0.88rem;
-      border-radius: 8px;
-      transition: opacity 0.2s;
-    }
-    .discord-btn:hover { opacity: 0.9; }
-
-    /* MAIN CONTAINER */
-    .main-wrapper {
-      margin-left: 260px;
-      flex: 1;
-      padding: 32px 40px;
-      max-width: 1500px;
-    }
-
-    /* TOP STATS BAR */
-    .stats-bar {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-      margin-bottom: 32px;
-    }
-
-    .stat-card {
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
-      padding: 18px 20px;
+      font-weight: 800;
+      font-size: 1rem;
       border-radius: 12px;
+      text-decoration: none;
+      transition: transform 0.2s;
+    }
+    .discord-btn:hover { transform: translateY(-2px); }
+
+    /* İÇERİK ALANI */
+    .content-area {
+      margin-left: 290px;
+      flex: 1;
+      padding: 40px;
+      max-width: 1400px;
     }
 
-    .stat-label { font-size: 0.78rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; }
-    .stat-value { font-size: 1.4rem; font-weight: 800; margin-top: 6px; font-family: var(--font-mono); }
-
-    /* CONTROLS */
+    /* ÜST ARAÇ ÇUBUĞU */
     .toolbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 16px;
-      margin-bottom: 24px;
+      gap: 20px;
+      margin-bottom: 30px;
       flex-wrap: wrap;
     }
 
-    .toggle-group {
+    .list-toggle {
       display: flex;
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
-      padding: 4px;
-      border-radius: 10px;
+      background: #111526;
+      padding: 6px;
+      border-radius: 14px;
+      border: 1px solid var(--border-color);
     }
 
     .sub-btn {
       background: transparent;
       border: none;
-      color: var(--text-muted);
-      padding: 8px 18px;
-      font-weight: 700;
-      font-size: 0.88rem;
-      border-radius: 7px;
+      color: var(--text-sub);
+      padding: 12px 24px;
+      font-weight: 800;
+      font-size: 1rem;
+      border-radius: 10px;
       cursor: pointer;
-      transition: all 0.2s;
     }
-    .sub-btn.active { background: rgba(255, 255, 255, 0.08); color: #fff; }
+    .sub-btn.active { background: var(--bg-card-hover); color: #fff; }
 
-    .search-box {
+    .search-input-box {
       position: relative;
       flex: 1;
-      max-width: 380px;
+      max-width: 450px;
     }
 
-    .search-input {
+    .search-input-box input {
       width: 100%;
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
-      padding: 10px 16px 10px 40px;
-      border-radius: 10px;
+      background: #111526;
+      border: 2px solid var(--border-color);
+      padding: 14px 20px 14px 48px;
+      border-radius: 14px;
       color: #fff;
-      font-size: 0.9rem;
+      font-size: 1.05rem;
+      font-weight: 600;
       outline: none;
     }
-    .search-input:focus { border-color: var(--border-focus); }
-    .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+    .search-input-box input:focus { border-color: var(--accent-purple); }
+    .search-input-box i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); font-size: 1.2rem; color: var(--text-sub); }
 
     .view-switch {
       display: flex;
-      gap: 4px;
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
-      padding: 4px;
-      border-radius: 10px;
+      gap: 6px;
+      background: #111526;
+      padding: 6px;
+      border-radius: 14px;
+      border: 1px solid var(--border-color);
     }
 
     .view-btn {
       background: transparent;
       border: none;
-      color: var(--text-muted);
-      width: 34px;
-      height: 34px;
-      border-radius: 6px;
+      color: var(--text-sub);
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      font-size: 1.2rem;
     }
-    .view-btn.active { background: var(--accent); color: #fff; }
+    .view-btn.active { background: var(--accent-purple); color: #fff; }
 
-    /* GRID VIEW ITEMS */
-    .items-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    /* LİSTE KARTLARI (YUKARDAN AŞAĞIYA) */
+    .vertical-list {
+      display: flex;
+      flex-direction: column;
       gap: 16px;
     }
 
-    .item-card {
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 20px;
+    .item-card-row {
+      background: var(--bg-card);
+      border: 2px solid var(--border-color);
+      border-radius: 16px;
+      padding: 24px 30px;
       display: flex;
-      flex-direction: column;
+      align-items: center;
       justify-content: space-between;
-      transition: transform 0.2s, border-color 0.2s;
+      gap: 20px;
+      transition: all 0.2s;
     }
 
-    .item-card:hover { transform: translateY(-3px); border-color: rgba(255, 255, 255, 0.2); }
-    .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
-    .card-title { font-weight: 800; font-size: 1.05rem; }
-    .card-type { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
+    .item-card-row:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--accent-purple);
+      transform: translateX(4px);
+    }
 
-    .card-body { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
-    .card-metric-label { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; }
-    .card-metric-val { font-size: 1.1rem; font-weight: 800; font-family: var(--font-mono); margin-top: 2px; }
+    .item-main-info { display: flex; flex-direction: column; gap: 6px; min-width: 220px; }
+    .item-title { font-size: 1.35rem; font-weight: 800; }
+    .item-type { font-size: 0.9rem; font-weight: 700; color: var(--text-sub); text-transform: uppercase; }
 
-    .card-footer { display: flex; gap: 6px; flex-wrap: wrap; padding-top: 12px; border-top: 1px solid var(--border); }
-    .badge { padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; }
+    .item-metrics { display: flex; gap: 40px; }
+    .metric-box { display: flex; flex-direction: column; gap: 4px; }
+    .metric-label { font-size: 0.8rem; font-weight: 800; color: var(--text-sub); text-transform: uppercase; }
+    .metric-val { font-size: 1.3rem; font-weight: 800; font-family: var(--font-mono); }
 
-    /* TABLE VIEW */
+    .item-badges { display: flex; gap: 10px; flex-wrap: wrap; }
+    
+    /* BUYUTULEN TAGLER */
+    .badge {
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* TABLO GÖRÜNÜMÜ */
     .table-container {
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
+      background: var(--bg-card);
+      border: 2px solid var(--border-color);
+      border-radius: 16px;
       overflow: hidden;
       display: none;
     }
 
     table { width: 100%; border-collapse: collapse; text-align: left; }
-    th { padding: 16px 20px; background: rgba(0, 0, 0, 0.2); color: var(--text-muted); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; border-bottom: 1px solid var(--border); }
-    td { padding: 16px 20px; border-bottom: 1px solid var(--border); font-size: 0.95rem; font-weight: 600; }
-    tr:last-child td { border-bottom: none; }
-    tr:hover td { background: var(--bg-surface-hover); }
+    th { padding: 20px; background: #111526; color: var(--text-sub); font-size: 0.85rem; font-weight: 800; text-transform: uppercase; border-bottom: 2px solid var(--border-color); }
+    td { padding: 20px; border-bottom: 1px solid var(--border-color); font-size: 1.05rem; font-weight: 700; }
+
+    /* PANELLER & YAZILAR */
+    .panel { background: var(--bg-card); border: 2px solid var(--border-color); border-radius: 16px; padding: 36px; }
+    .panel-title { font-size: 1.8rem; font-weight: 900; margin-bottom: 24px; color: #fff; }
+
+    /* UPDATES DÜZENİ (ALT ALTA READABLE) */
+    .updates-stack { display: flex; flex-direction: column; gap: 20px; }
+    .update-row {
+      background: #111526;
+      border: 1px solid var(--border-color);
+      border-left: 6px solid var(--accent-amber);
+      padding: 24px;
+      border-radius: 12px;
+    }
+    .update-header { display: flex; justify-content: space-between; margin-bottom: 12px; }
+    .update-title { font-size: 1.25rem; font-weight: 800; color: #fff; }
+    .update-date { font-size: 0.95rem; font-weight: 700; color: var(--accent-amber); }
+    .update-desc { font-size: 1.05rem; line-height: 1.6; color: #d1d5db; }
+
+    /* EDITORS VE TERİMLER */
+    .terms-stack { display: flex; flex-direction: column; gap: 12px; }
+    .term-item { display: flex; align-items: center; gap: 20px; padding: 18px; background: #111526; border-radius: 12px; font-size: 1.05rem; }
+
+    .avatar-img { width: 54px; height: 54px; border-radius: 50%; border: 2px solid var(--border-color); object-fit: cover; background: #000; }
 
     .tab-content { display: none; }
     .tab-content.active { display: block; }
 
-    /* PANELS */
-    .panel { background: var(--bg-surface); border: 1px solid var(--border); border-radius: 12px; padding: 32px; }
-    .panel-title { font-size: 1.4rem; font-weight: 800; margin-bottom: 24px; }
-
-    .update-item { padding: 20px; background: rgba(0, 0, 0, 0.2); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 12px; }
-    .term-card { display: flex; gap: 16px; align-items: center; padding: 16px; background: rgba(0, 0, 0, 0.2); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; }
-
-    .avatar-img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
-
-    @media (max-width: 900px) {
+    @media (max-width: 1024px) {
       body { flex-direction: column; }
-      .sidebar { width: 100%; height: auto; position: relative; border-right: none; border-bottom: 1px solid var(--border); }
-      .main-wrapper { margin-left: 0; padding: 20px; }
+      .sidebar-nav { width: 100%; height: auto; position: relative; border-right: none; border-bottom: 2px solid var(--border-color); }
+      .content-area { margin-left: 0; padding: 20px; }
+      .item-card-row { flex-direction: column; align-items: flex-start; }
+      .item-metrics { width: 100%; justify-content: space-between; }
     }
   </style>
 </head>
 <body>
 
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
+  <!-- SOL MENÜ PANERİ -->
+  <aside class="sidebar-nav">
     <div>
-      <div class="brand-box">
-        <div class="brand-icon">U</div>
-        <div class="brand-text">UBV Index</div>
+      <div class="brand-logo"><i class="fa-solid fa-layer-group"></i> UBV Index</div>
+      <div class="nav-tabs">
+        <button class="nav-tab-btn active" onclick="switchNav(event, 'valuelists')"><i class="fa-solid fa-list-check"></i> Market Values</button>
+        <button class="nav-tab-btn" onclick="switchNav(event, 'updates')"><i class="fa-solid fa-clock-rotate-left"></i> Updates</button>
+        <button class="nav-tab-btn" onclick="switchNav(event, 'terms')"><i class="fa-solid fa-book-bookmark"></i> Terminology</button>
+        <button class="nav-tab-btn" onclick="switchNav(event, 'editors')"><i class="fa-solid fa-user-shield"></i> Editors</button>
+        <button class="nav-tab-btn" onclick="switchNav(event, 'about')"><i class="fa-solid fa-circle-info"></i> About</button>
       </div>
-      <ul class="nav-list">
-        <li><a href="#" class="nav-btn active" onclick="switchNav(event, 'valuelists')"><i class="fa-solid fa-chart-simple"></i> Market Values</a></li>
-        <li><a href="#" class="nav-link nav-btn" onclick="switchNav(event, 'updates')"><i class="fa-solid fa-clock-rotate-left"></i> Updates</a></li>
-        <li><a href="#" class="nav-link nav-btn" onclick="switchNav(event, 'terms')"><i class="fa-solid fa-book"></i> Terminology</a></li>
-        <li><a href="#" class="nav-link nav-btn" onclick="switchNav(event, 'editors')"><i class="fa-solid fa-user-shield"></i> Editors</a></li>
-        <li><a href="#" class="nav-link nav-btn" onclick="switchNav(event, 'about')"><i class="fa-solid fa-circle-info"></i> About</a></li>
-      </ul>
     </div>
-    <div class="sidebar-footer">
-      <a href="https://discord.gg/ubv" target="_blank" class="discord-btn"><i class="fab fa-discord"></i> Discord</a>
-    </div>
+    <a href="https://discord.gg/ubv" target="_blank" class="discord-btn"><i class="fab fa-discord"></i> Join Discord</a>
   </aside>
 
-  <!-- MAIN CONTENT -->
-  <main class="main-wrapper">
-
-    <!-- TOP METRICS BAR -->
-    <div class="stats-bar">
-      <div class="stat-card">
-        <div class="stat-label">Tracked Items</div>
-        <div class="stat-value" id="stat-count">-</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Market Status</div>
-        <div class="stat-value" style="color:#10b981;">ACTIVE</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Data Sync</div>
-        <div class="stat-value" style="color:#3b82f6;">LIVE</div>
-      </div>
-    </div>
+  <!-- İÇERİK ALANI -->
+  <main class="content-area">
 
     <!-- VALUES TAB -->
     <div id="valuelists" class="tab-content active">
       <div class="toolbar">
-        <div class="toggle-group">
-          <button id="btn-main" class="sub-btn active" onclick="switchSubList('normal', 'btn-main')">Main Items</button>
+        <div class="list-toggle">
+          <button id="btn-main" class="sub-btn active" onclick="switchSubList('normal', 'btn-main')">Main List</button>
           <button id="btn-collect" class="sub-btn" onclick="switchSubList('collectable', 'btn-collect')">Collectors</button>
         </div>
 
-        <div class="search-box">
-          <i class="fa-solid fa-magnifying-glass search-icon"></i>
-          <input type="text" id="search-box" class="search-input" placeholder="Search by name, status, rank..." oninput="filterData()">
+        <div class="search-input-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="search-box" placeholder="Search item, status, rank..." oninput="filterData()">
         </div>
 
         <div class="view-switch">
-          <button class="view-btn active" id="btn-grid-view" onclick="setViewMode('grid')"><i class="fa-solid fa-border-all"></i></button>
-          <button class="view-btn" id="btn-table-view" onclick="setViewMode('table')"><i class="fa-solid fa-list"></i></button>
+          <button class="view-btn active" id="btn-list-view" title="List View" onclick="setViewMode('list')"><i class="fa-solid fa-bars"></i></button>
+          <button class="view-btn" id="btn-table-view" title="Table View" onclick="setViewMode('table')"><i class="fa-solid fa-table-cells"></i></button>
         </div>
       </div>
 
-      <!-- GRID VIEW CONTAINER -->
-      <div id="grid-container" class="items-grid"></div>
+      <!-- VARSAYILAN YUKARDAN AŞAĞIYA LİSTE GÖRÜNÜMÜ -->
+      <div id="list-container" class="vertical-list"></div>
 
-      <!-- TABLE VIEW CONTAINER -->
+      <!-- TABLO GÖRÜNÜMÜ -->
       <div id="table-container" class="table-container">
         <table>
           <thead>
             <tr>
-              <th>Item</th>
+              <th>Item Name</th>
               <th>Value</th>
               <th>Avg RAP</th>
               <th>Demand Scale</th>
@@ -364,23 +342,23 @@
       </div>
     </div>
 
-    <!-- UPDATES TAB -->
+    <!-- UPDATES TAB (ALT ALTA DETAYLI YAZILAR) -->
     <div id="updates" class="tab-content">
       <div class="panel">
         <h2 class="panel-title">Changelog & Updates</h2>
-        <div id="updates-container">Loading...</div>
+        <div id="updates-container" class="updates-stack">Loading updates...</div>
       </div>
     </div>
 
     <!-- TERMS TAB -->
     <div id="terms" class="tab-content">
       <div class="panel">
-        <h2 class="panel-title">Market Glossary</h2>
-        <div id="terms-container">Loading...</div>
+        <h2 class="panel-title">Market Glossary & Terms</h2>
+        <div id="terms-container" class="terms-stack">Loading terms...</div>
       </div>
     </div>
 
-    <!-- EDITORS TAB -->
+    <!-- EDITORS TAB (GERÇEK ROBLOX AVATARLARI) -->
     <div id="editors" class="tab-content">
       <div class="table-container" style="display:block;">
         <table>
@@ -401,9 +379,9 @@
     <!-- ABOUT TAB -->
     <div id="about" class="tab-content">
       <div class="panel">
-        <h2 class="panel-title">About UBV Platform</h2>
-        <p style="color: var(--text-muted); line-height: 1.7;">
-          UBV tracks real-time market valuations, RAP metrics, and item trends for Roblox collectibles. All data feeds are processed automatically via linked spreadsheet databases.
+        <h2 class="panel-title">About UBV Index</h2>
+        <p style="font-size: 1.15rem; line-height: 1.8; color: var(--text-sub);">
+          UBV tracks real-time market valuations, RAP metrics, and trading demands for Roblox items. Data feeds are parsed directly from centralized spreadsheets to maintain high accuracy and up-to-date valuations.
         </p>
       </div>
     </div>
@@ -419,12 +397,11 @@
     };
 
     let mainData = [], collectData = [], dynamicColorMap = {};
-    let activeSubList = 'normal', activeViewMode = 'grid';
+    let activeSubList = 'normal', activeViewMode = 'list';
 
     function switchNav(e, tabId) {
-      e.preventDefault();
       document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-      document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-tab-btn').forEach(el => el.classList.remove('active'));
       document.getElementById(tabId).classList.add('active');
       e.currentTarget.classList.add('active');
     }
@@ -438,9 +415,9 @@
 
     function setViewMode(mode) {
       activeViewMode = mode;
-      document.getElementById('btn-grid-view').classList.toggle('active', mode === 'grid');
+      document.getElementById('btn-list-view').classList.toggle('active', mode === 'list');
       document.getElementById('btn-table-view').classList.toggle('active', mode === 'table');
-      document.getElementById('grid-container').style.display = mode === 'grid' ? 'grid' : 'none';
+      document.getElementById('list-container').style.display = mode === 'list' ? 'flex' : 'none';
       document.getElementById('table-container').style.display = mode === 'table' ? 'block' : 'none';
     }
 
@@ -468,8 +445,8 @@
             if (desc !== 'SECTION_HEADER' && desc !== '' && !term.toLowerCase().includes('terms')) {
               const textColor = getTextColor(color);
               const card = document.createElement('div');
-              card.className = 'term-card';
-              card.innerHTML = `<span class="badge" style="background:${color}; color:${textColor};">${term}</span><span>${desc}</span>`;
+              card.className = 'term-item';
+              card.innerHTML = `<span class="badge" style="background:${color}; color:${textColor};">${term}</span><span style="color:#d1d5db;">${desc}</span>`;
               container.appendChild(card);
             }
           });
@@ -496,51 +473,53 @@
             if (isCollectable) collectData.push(row);
             else mainData.push(row);
           });
-
-          document.getElementById('stat-count').textContent = mainData.length + collectData.length;
           filterData();
         }
       });
     }
 
     function renderView(data) {
-      const grid = document.getElementById('grid-container');
+      const list = document.getElementById('list-container');
       const tableBody = document.getElementById('table-body');
-      grid.innerHTML = ''; tableBody.innerHTML = '';
+      list.innerHTML = ''; tableBody.innerHTML = '';
 
       data.forEach(row => {
         let name = row[0] ?? '-', val = row[1] ?? '-', rap = row[2] ?? '-';
         let demandScale = row[3] ?? '-', demandRank = row[4] ?? '-', valStatus = row[5] ?? '-', demStatus = row[6] ?? '-', type = row[7] ?? '-';
         let color = String(row[8] ?? '#fff').trim();
 
-        // GRID CARD RENDER
-        const card = document.createElement('div');
-        card.className = 'item-card';
-        card.innerHTML = `
-          <div>
-            <div class="card-header">
-              <span class="card-title" style="color:${color};">${name}</span>
-              <span class="card-type">${type}</span>
+        // YUKARDAN AŞAĞIYA GENİŞ KART RENDER
+        const itemRow = document.createElement('div');
+        itemRow.className = 'item-card-row';
+        itemRow.innerHTML = `
+          <div class="item-main-info">
+            <span class="item-title" style="color:${color};">${name}</span>
+            <span class="item-type">${type}</span>
+          </div>
+          <div class="item-metrics">
+            <div class="metric-box">
+              <span class="metric-label">VALUE</span>
+              <span class="metric-val" style="color:var(--accent-amber);">${val}</span>
             </div>
-            <div class="card-body">
-              <div><div class="card-metric-label">VALUE</div><div class="card-metric-val">${val}</div></div>
-              <div><div class="card-metric-label">AVG RAP</div><div class="card-metric-val" style="color:var(--text-muted);">${rap}</div></div>
+            <div class="metric-box">
+              <span class="metric-label">AVG RAP</span>
+              <span class="metric-val" style="color:var(--text-sub);">${rap}</span>
             </div>
           </div>
-          <div class="card-footer">
+          <div class="item-badges">
             ${createBadge(valStatus)}
             ${createBadge(demStatus)}
             ${createBadge(demandRank)}
           </div>
         `;
-        grid.appendChild(card);
+        list.appendChild(itemRow);
 
-        // TABLE ROW RENDER
+        // TABLO ROW RENDER
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td style="color:${color}; font-weight:800;">${name}</td>
-          <td style="font-family:var(--font-mono);">${val}</td>
-          <td style="font-family:var(--font-mono); color:var(--text-muted);">${rap}</td>
+          <td style="font-family:var(--font-mono); color:var(--accent-amber);">${val}</td>
+          <td style="font-family:var(--font-mono); color:var(--text-sub);">${rap}</td>
           <td>${demandScale}</td>
           <td>${createBadge(demandRank)}</td>
           <td>${createBadge(valStatus)}</td>
@@ -553,7 +532,7 @@
 
     function createBadge(text) {
       if(!text || text === '-') return '';
-      const color = dynamicColorMap[String(text).toLowerCase()] || '#374151';
+      const color = dynamicColorMap[String(text).toLowerCase()] || '#262f4c';
       const textColor = getTextColor(color);
       return `<span class="badge" style="background:${color}; color:${textColor};">${text}</span>`;
     }
@@ -574,8 +553,14 @@
           results.data.forEach(r => {
             if (!r || !r[0]) return;
             const div = document.createElement('div');
-            div.className = 'update-item';
-            div.innerHTML = `<div style="display:flex; justify-content:space-between; margin-bottom:8px;"><strong style="font-size:1.1rem;">${r[0]}</strong><span style="color:var(--text-muted); font-size:0.85rem;">${r[1]||''}</span></div><div style="color:var(--text-muted); font-size:0.95rem;">${r[2]||''}</div>`;
+            div.className = 'update-row';
+            div.innerHTML = `
+              <div class="update-header">
+                <span class="update-title">${r[0]}</span>
+                <span class="update-date">${r[1] || ''}</span>
+              </div>
+              <div class="update-desc">${r[2] || ''}</div>
+            `;
             container.appendChild(div);
           });
         }
@@ -591,15 +576,39 @@
           results.data.forEach(r => {
             if (!r || !r[1] || String(r[1]).toLowerCase() === 'username') return;
             const username = r[1], role = r[2] || 'Editor', profile = r[3], active = String(r[4]).toLowerCase() === 'active';
+            
+            // ROBLOX PROFIL RESMINI ID ILE ÇEKME
+            let avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=262f4c&color=fff`;
+            if (profile && profile.includes('users/')) {
+              const robloxId = profile.split('users/')[1].split('/')[0];
+              if (robloxId) {
+                avatarUrl = `https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${robloxId}&size=150x150&format=Png&isCircular=false`;
+              }
+            }
+
             const tr = document.createElement('tr');
             tr.innerHTML = `
-              <td><img src="https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=1f293d&color=fff" class="avatar-img"></td>
-              <td><strong>${username}</strong></td>
-              <td style="color:var(--text-muted);">${role}</td>
-              <td>${profile && profile !== '-' ? `<a href="${profile.startsWith('http')?profile:'https://'+profile}" target="_blank" style="color:var(--accent);">Profile <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.75rem;"></i></a>` : '-'}</td>
+              <td><img src="${avatarUrl}" id="img-${username}" class="avatar-img" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=262f4c&color=fff'"></td>
+              <td><strong style="font-size:1.1rem;">${username}</strong></td>
+              <td style="color:var(--text-sub);">${role}</td>
+              <td>${profile && profile !== '-' ? `<a href="${profile.startsWith('http')?profile:'https://'+profile}" target="_blank" style="color:var(--accent-purple); font-weight:800;">Profile <i class="fa-solid fa-arrow-up-right-from-square"></i></a>` : '-'}</td>
               <td><span style="color:${active?'#10b981':'#ef4444'}; font-weight:800;">● ${active?'Active':'Inactive'}</span></td>
             `;
             tbody.appendChild(tr);
+
+            // API ASENKRON AVATAR YÜKLEME
+            if (profile && profile.includes('users/')) {
+              const robloxId = profile.split('users/')[1].split('/')[0];
+              if (robloxId) {
+                fetch(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${robloxId}&size=150x150&format=Png&isCircular=false`)
+                  .then(res => res.json())
+                  .then(data => {
+                    if (data && data.data && data.data[0] && data.data[0].imageUrl) {
+                      document.getElementById(`img-${username}`).src = data.data[0].imageUrl;
+                    }
+                  }).catch(() => {});
+              }
+            }
           });
         }
       });
