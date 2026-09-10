@@ -5,93 +5,132 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>UBV - Ultimate Baller Values</title>
   
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;1,600;1,700;1,800&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
   <style>
     :root {
-      --navbar-bg: #0084d6;
-      --page-bg: #ff9f1c;
-      --text-dark: #1e293b;
-      --accent-yellow: #fdcb6e;
+      --bg-dark: #0b0f19;
+      --card-bg: #111827;
+      --card-border: #1f2937;
+      --navbar-bg: rgba(15, 23, 42, 0.85);
+      --accent-blue: #3b82f6;
+      --accent-cyan: #06b6d4;
+      --accent-yellow: #f59e0b;
+      --accent-glow: rgba(59, 130, 246, 0.35);
+      --text-main: #f8fafc;
+      --text-sub: #94a3b8;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: 'Montserrat', sans-serif;
-      background-color: var(--page-bg);
-      color: var(--text-dark);
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(59, 130, 246, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(6, 182, 212, 0.08) 0%, transparent 40%);
+      background-attachment: fixed;
+      color: var(--text-main);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
 
+    /* NAVBAR */
     .navbar {
-      background-color: var(--navbar-bg);
+      background: var(--navbar-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0 40px;
-      height: 70px;
+      padding: 0 50px;
+      height: 75px;
       position: sticky;
       top: 0;
       z-index: 1000;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 25px;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: #ffffff;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 0.95rem;
-      padding: 8px 4px;
-      position: relative;
-    }
-
-    .nav-links a::after {
-      content: '';
-      position: absolute;
-      width: 0;
-      height: 3px;
-      bottom: 0;
-      left: 0;
-      background-color: #ffffff;
-      transition: width 0.3s ease;
-      border-radius: 2px;
-    }
-
-    .nav-links a.active::after, .nav-links a:hover::after {
-      width: 100%;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     }
 
     .nav-logo {
       font-family: 'Outfit', sans-serif;
-      font-size: 2.2rem;
-      font-weight: 800;
-      color: #ffffff;
-      letter-spacing: 1px;
+      font-size: 2.4rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #06b6d4 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 1.5px;
       text-decoration: none;
+      transition: transform 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-logo:hover {
+      transform: scale(1.05);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 15px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-sub);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 10px 18px;
+      border-radius: 12px;
+      position: relative;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .nav-links a:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-links a.active {
+      color: #ffffff;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(6, 182, 212, 0.2));
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
     }
 
     .nav-social {
-      color: #ffffff;
-      font-size: 1.6rem;
+      color: var(--text-sub);
+      font-size: 1.5rem;
+      width: 45px;
+      height: 45px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       text-decoration: none;
     }
 
+    .nav-social:hover {
+      transform: translateY(-2px) scale(1.05);
+      color: #ffffff;
+      background: #5865F2;
+      border-color: #5865F2;
+      box-shadow: 0 0 20px rgba(88, 101, 242, 0.4);
+    }
+
+    /* MAIN CONTAINER */
     .main-container {
       flex: 1;
-      padding: 30px 20px;
-      max-width: 1350px;
+      padding: 40px 20px;
+      max-width: 1400px;
       margin: 0 auto;
       width: 100%;
     }
@@ -99,8 +138,8 @@
     .tab-content { 
       display: none; 
       opacity: 0;
-      transform: translateY(12px);
-      transition: opacity 0.4s ease, transform 0.4s ease;
+      transform: translateY(15px);
+      transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .tab-content.active { 
@@ -111,174 +150,387 @@
 
     .page-title {
       font-family: 'Bebas Neue', cursive;
-      font-size: 4rem;
-      letter-spacing: 2px;
-      color: #1e293b;
-      margin-bottom: 25px;
+      font-size: 4.5rem;
+      letter-spacing: 3px;
+      background: linear-gradient(180deg, #ffffff 30%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 30px;
       text-transform: uppercase;
       text-align: center;
+      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
     }
 
-    #search-section { text-align: center; margin-bottom: 1.5rem; }
+    /* SEARCH & BUTTONS */
+    #search-section { text-align: center; margin-bottom: 2rem; }
+    
     #search-box {
-      padding: 14px 24px;
+      padding: 16px 28px;
       width: 100%;
-      max-width: 520px;
+      max-width: 580px;
       font-size: 1rem;
-      border-radius: 35px;
-      border: 2px solid rgba(255, 255, 255, 0.5);
-      background: rgba(15, 23, 42, 0.88);
+      font-weight: 500;
+      border-radius: 50px;
+      border: 1px solid var(--card-border);
+      background: rgba(17, 24, 39, 0.8);
+      backdrop-filter: blur(10px);
       color: #ffffff;
       outline: none;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      transition: all 0.3s ease;
     }
+
+    #search-box:focus {
+      background: rgba(17, 24, 39, 0.95);
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 25px var(--accent-glow);
+      transform: translateY(-2px);
+    }
+
+    #search-box::placeholder { color: #64748b; }
 
     #custom-button-group { 
       display: flex; 
       justify-content: center; 
       gap: 15px; 
-      margin: 1rem 0 1.5rem; 
+      margin: 1.5rem 0 2rem; 
     }
 
     .custom-btn {
-      font-family: 'Montserrat', sans-serif;
-      background: rgba(15, 23, 42, 0.9);
-      border: 2px solid var(--accent-yellow);
-      color: #ffeaa7;
-      padding: 12px 26px;
-      border-radius: 12px;
+      font-family: 'Inter', sans-serif;
+      background: rgba(17, 24, 39, 0.7);
+      border: 1px solid var(--card-border);
+      color: var(--text-sub);
+      padding: 14px 32px;
+      border-radius: 14px;
       font-size: 0.95rem;
       font-weight: 700;
       cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    .custom-btn:hover {
+      color: #ffffff;
+      background: rgba(30, 41, 59, 0.8);
+      transform: translateY(-2px);
     }
 
     .custom-btn.active-subtab {
-      background: var(--accent-yellow);
-      color: #0f172a;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+      color: #ffffff;
+      border-color: transparent;
+      box-shadow: 0 0 20px var(--accent-glow);
     }
 
     .sublist-tab { display: none; }
     .sublist-tab.active-sublist { display: block; }
 
+    /* MODERN TABLES */
     .table-wrapper {
       width: 100%;
-      border-radius: 12px;
+      border-radius: 18px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
       margin-bottom: 2rem;
       overflow: hidden;
-      background: #000000;
-      border: 2px solid #000000;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      background: #000000;
+      background: transparent;
       color: #ffffff;
     }
 
     th {
-      padding: 1rem 0.6rem;
-      background: #000000;
-      color: #ffffff;
-      font-weight: 800;
+      padding: 1.2rem 1rem;
+      background: rgba(15, 23, 42, 0.95);
+      color: var(--text-sub);
+      font-weight: 700;
       text-transform: uppercase;
-      font-size: 0.9rem;
-      border-bottom: 2px solid #333333;
-      border-right: 1px solid #222222;
+      font-size: 0.82rem;
+      letter-spacing: 1px;
+      border-bottom: 1px solid var(--card-border);
       text-align: center;
     }
-
-    th:last-child { border-right: none; }
 
     td {
-      padding: 0.75rem 0.5rem;
+      padding: 1rem 0.8rem;
       text-align: center;
-      border-bottom: 1px solid #1a1a1a;
-      border-right: 1px solid #111111;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
       font-size: 0.95rem;
-      font-weight: 700;
+      font-weight: 600;
+      transition: background-color 0.2s ease;
     }
 
-    td:last-child { border-right: none; }
+    tr:hover td {
+      background-color: rgba(255, 255, 255, 0.02);
+    }
 
+    /* DİNAMİK İTEM HÜCRESİ & ROBUST STYLES */
     .item-cell {
       font-weight: 800;
-      font-style: italic;
       font-size: 1rem;
+      border-radius: 8px;
+      padding: 10px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+      transition: transform 0.2s ease;
     }
 
-    .val-cell { color: #ffffff; font-weight: 800; font-size: 1.05rem; }
-    .scale-cell { color: #b197fc; font-weight: 800; font-size: 1.1rem; }
+    .val-cell {
+      color: #38bdf8;
+      font-weight: 800;
+      font-size: 1.05rem;
+    }
+
+    .scale-cell {
+      color: #c084fc;
+      font-weight: 800;
+      font-size: 1.1rem;
+    }
 
     .badge-tag {
       display: inline-block;
-      width: 95%;
-      padding: 8px 4px;
-      border-radius: 4px;
+      width: 90%;
+      padding: 8px 10px;
+      border-radius: 8px;
       font-weight: 800;
-      font-style: italic;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+      letter-spacing: 0.5px;
     }
 
+    /* UPDATES TAB */
     .updates-wrapper {
-      background: #000000;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
       color: #ffffff;
-      padding: 30px;
-      border-radius: 14px;
+      padding: 35px;
+      border-radius: 18px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.4);
     }
 
     .update-block {
-      margin-bottom: 25px;
-      border-bottom: 1px solid #222;
-      padding-bottom: 20px;
+      margin-bottom: 30px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      padding-bottom: 25px;
     }
 
-    .update-header-title { font-size: 1.6rem; font-weight: 800; color: #ffffff; margin-bottom: 8px; }
-    .update-date-tag { font-size: 0.85rem; color: #888; margin-bottom: 12px; }
-    .update-content-text { white-space: pre-wrap; font-size: 1rem; line-height: 1.6; color: #e2e8f0; font-weight: 600; }
+    .update-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
 
+    .update-header-title {
+      font-size: 1.7rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ffffff, #94a3b8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+    }
+
+    .update-date-tag {
+      font-size: 0.85rem;
+      color: var(--accent-cyan);
+      font-weight: 600;
+      margin-bottom: 14px;
+    }
+
+    .update-content-text {
+      white-space: pre-wrap;
+      font-size: 1rem;
+      line-height: 1.7;
+      color: #cbd5e1;
+      font-weight: 500;
+    }
+
+    /* TERMS TAB */
     .terms-wrapper {
-      background: #000000;
-      padding: 20px;
-      border-radius: 14px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      padding: 30px;
+      border-radius: 18px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.4);
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
     }
 
     .terms-section-title {
-      background: #000000;
-      color: #ffffff;
-      font-style: italic;
+      color: var(--accent-blue);
+      font-family: 'Outfit', sans-serif;
       font-weight: 800;
-      font-size: 1.3rem;
-      padding: 12px 5px;
-      text-align: center;
-      border-bottom: 2px solid #333;
-      margin-top: 15px;
+      font-size: 1.4rem;
+      padding: 15px 0 5px;
+      border-bottom: 1px solid var(--card-border);
+      margin-top: 20px;
+      letter-spacing: 0.5px;
     }
 
-    .term-row { display: grid; grid-template-columns: 260px 1fr; gap: 8px; }
-    .term-badge { padding: 12px 15px; font-weight: 800; font-style: italic; font-size: 1.05rem; text-align: center; border-radius: 4px; }
-    .term-desc { background: #ffffff; color: #000000; padding: 12px 16px; font-weight: 700; font-style: italic; font-size: 1rem; border-radius: 4px; }
+    .terms-section-title:first-child { margin-top: 0; }
 
-    .editors-table { width: 100%; border-collapse: collapse; background: #b0b0b0; color: #000000; border: 3px solid #000; }
-    .editors-table th { background: #000000; color: #ffffff; font-size: 1.1rem; padding: 16px; border: 2px solid #000; }
-    .editors-table td { background: #c2c2c2; color: #000000; border: 2px solid #555; padding: 14px 10px; text-align: center; }
+    .term-row {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 12px;
+      align-items: center;
+    }
 
-    .editor-avatar { width: 70px; height: 70px; border-radius: 12px; object-fit: cover; background: #333; border: 2px solid #000; }
-    .roblox-tag { color: #0056b3; text-decoration: underline; font-weight: 800; }
-    .status-box { display: inline-block; padding: 6px 14px; border: 2px solid #000; border-radius: 6px; font-weight: 800; text-transform: uppercase; }
-    .status-box.active { background-color: #2ecc71; color: #000000; }
-    .status-box.inactive { background-color: #e74c3c; color: #ffffff; }
+    .term-badge {
+      padding: 12px 18px;
+      font-weight: 800;
+      font-size: 0.95rem;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
 
-    .loading-text { text-align: center; padding: 30px; font-size: 1.1rem; color: #ffffff; font-weight: 700; }
+    .term-desc {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      color: #e2e8f0;
+      padding: 14px 20px;
+      font-weight: 500;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      border-radius: 10px;
+      line-height: 1.5;
+    }
+
+    /* EDITORS TABLE */
+    .editors-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: transparent;
+    }
+
+    .editors-table th {
+      background: rgba(15, 23, 42, 0.95);
+      color: var(--text-sub);
+      font-size: 0.85rem;
+      padding: 16px;
+    }
+
+    .editors-table td {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 1rem;
+      padding: 16px;
+      vertical-align: middle;
+    }
+
+    .editor-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #1e293b;
+      border: 2px solid var(--accent-blue);
+      box-shadow: 0 0 12px rgba(59, 130, 246, 0.3);
+    }
+
+    .roblox-tag {
+      color: var(--accent-cyan);
+      text-decoration: none;
+      font-weight: 700;
+      transition: color 0.2s ease;
+    }
+
+    .roblox-tag:hover {
+      color: var(--accent-blue);
+      text-decoration: underline;
+    }
+
+    .status-box {
+      display: inline-block;
+      padding: 6px 16px;
+      border-radius: 20px;
+      text-align: center;
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+
+    .status-box.active { 
+      background: rgba(34, 197, 94, 0.15); 
+      color: #4ade80; 
+      border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+    
+    .status-box.inactive { 
+      background: rgba(239, 68, 68, 0.15); 
+      color: #f87171; 
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .info-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 40px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+    }
+
+    .loading-text { 
+      text-align: center; 
+      padding: 40px; 
+      font-size: 1.1rem; 
+      color: var(--text-sub); 
+      font-weight: 600; 
+    }
+
+    @media (max-width: 768px) {
+      html, body { overflow-x: hidden; }
+
+      .navbar {
+        flex-direction: column;
+        height: auto;
+        padding: 15px;
+        gap: 15px;
+      }
+
+      .nav-links {
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .nav-links a { font-size: 0.85rem; padding: 8px 12px; }
+      .page-title { font-size: 3rem; }
+
+      #custom-button-group { flex-wrap: wrap; }
+
+      .table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      table, .editors-table { min-width: 700px; }
+
+      .term-row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+        margin-bottom: 10px;
+      }
+
+      .term-badge { font-size: 0.9rem; padding: 10px; }
+      .term-desc { font-size: 0.9rem; padding: 12px; }
+    }
   </style>
 </head>
 <body>
 
+  <!-- NAVBAR -->
   <nav class="navbar">
-    <a href="#" class="nav-logo">UBV</a>
+    <a href="#" class="nav-logo">
+      <i class="fa-solid fa-gem"></i> UBV
+    </a>
+
     <ul class="nav-links">
       <li><a href="#" class="nav-link active" onclick="openTab(event, 'valuelists')">Value Lists</a></li>
       <li><a href="#" class="nav-link" onclick="openTab(event, 'updates')">Updates</a></li>
@@ -286,13 +538,19 @@
       <li><a href="#" class="nav-link" onclick="openTab(event, 'about')">About</a></li>
       <li><a href="#" class="nav-link" onclick="openTab(event, 'editors')">List Editors</a></li>
     </ul>
-    <a href="https://discord.gg/ubv" target="_blank" class="nav-social"><i class="fab fa-discord"></i></a>
+
+    <a href="https://discord.gg/ubv" target="_blank" class="nav-social" title="Discord Server">
+      <i class="fab fa-discord"></i>
+    </a>
   </nav>
 
+  <!-- MAIN CONTAINER -->
   <div class="main-container">
 
+    <!-- VALUE LISTS TAB -->
     <div id="valuelists" class="tab-content active">
       <h1 class="page-title">VALUE LISTS</h1>
+
       <div id="custom-button-group">
         <button id="btn-main" class="custom-btn active-subtab" onclick="switchListTab('normal-section', 'btn-main')">Main List</button>
         <button id="btn-collect" class="custom-btn" onclick="switchListTab('collectable-section', 'btn-collect')">Collectors List</button>
@@ -302,8 +560,9 @@
         <input type="text" id="search-box" placeholder="🔍 Search item name..." oninput="filterTable()">
       </div>
 
-      <div id="loading" class="loading-text">Loading items...</div>
+      <div id="loading" class="loading-text">Loading items from CSV...</div>
 
+      <!-- Main Items Table -->
       <div class="table-wrapper sublist-tab active-sublist" id="normal-section">
         <table>
           <thead>
@@ -322,6 +581,7 @@
         </table>
       </div>
 
+      <!-- Collectables Table -->
       <div class="table-wrapper sublist-tab" id="collectable-section">
         <table>
           <thead>
@@ -341,6 +601,7 @@
       </div>
     </div>
 
+    <!-- UPDATES TAB -->
     <div id="updates" class="tab-content">
       <h1 class="page-title">UPDATES</h1>
       <div class="updates-wrapper" id="updates-container">
@@ -348,6 +609,7 @@
       </div>
     </div>
 
+    <!-- TERMS TAB -->
     <div id="terms" class="tab-content">
       <h1 class="page-title">TERMS</h1>
       <div class="terms-wrapper" id="terms-container">
@@ -355,14 +617,18 @@
       </div>
     </div>
 
+    <!-- ABOUT TAB -->
     <div id="about" class="tab-content">
       <h1 class="page-title">ABOUT US</h1>
-      <div style="background: #fff; padding: 30px; border-radius: 14px;">
-        <h2>About UBV</h2>
-        <p style="margin-top: 10px; font-weight: 600;">UBV is a dedicated platform providing live trading values, market analytics, average RAP metrics, and item showcases for the Roblox trading community.</p>
+      <div class="info-card">
+        <h2 style="font-size: 2rem; margin-bottom: 12px; color: #ffffff;">About UBV</h2>
+        <p style="line-height: 1.7; color: #94a3b8; font-size: 1.05rem; font-weight: 500;">
+          UBV is a dedicated platform providing live trading values, market analytics, average RAP metrics, and item showcases for the Roblox trading community.
+        </p>
       </div>
     </div>
 
+    <!-- LIST EDITORS TAB -->
     <div id="editors" class="tab-content">
       <h1 class="page-title">LIST EDITORS</h1>
       <div class="table-wrapper">
@@ -384,6 +650,16 @@
   </div>
 
   <script>
+    // GOOGLE SHEETS CSV YAYINLAMA LİNKLERİ
+    const SHEET_ID = '1g-5-zj5fz1WfKhrPxMUzyAMmtbXOFf8ujufdd-yYKMo';
+    
+    const CSV_URLS = {
+      main: `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`,
+      terms: `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=1114090597`, // Terms GID'si ekleyebilirsiniz
+      updates: `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&sheet=Updates`,
+      editors: `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&sheet=Editors`
+    };
+
     function openTab(evt, tabName) {
       evt.preventDefault();
       const tabContents = document.getElementsByClassName("tab-content");
@@ -407,15 +683,46 @@
       filterTable();
     }
 
-    // GID PARAMETRELI YENI GOOGLE SHEETS CSV LINKLERI
-    const URL_ITEMS   = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR-iH2G2YVcW1PDsLcE4KfPiLhMpaUyzKC6o_E-1BWemF3GS7YYN8kBRpgOjmIDBsYnTqWayxBTlsrt/pub?gid=0&single=true&output=csv'; 
-    const URL_UPDATES = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR-iH2G2YVcW1PDsLcE4KfPiLhMpaUyzKC6o_E-1BWemF3GS7YYN8kBRpgOjmIDBsYnTqWayxBTlsrt/pub?gid=568303787&single=true&output=csv'; 
-    const URL_EDITORS = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR-iH2G2YVcW1PDsLcE4KfPiLhMpaUyzKC6o_E-1BWemF3GS7YYN8kBRpgOjmIDBsYnTqWayxBTlsrt/pub?gid=1456456561&single=true&output=csv'; 
-    const URL_TERMS   = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR-iH2G2YVcW1PDsLcE4KfPiLhMpaUyzKC6o_E-1BWemF3GS7YYN8kBRpgOjmIDBsYnTqWayxBTlsrt/pub?gid=517689974&single=true&output=csv'; 
-
     let mainListData = [];
     let collectableListData = [];
     let dynamicColorMap = {};
+
+    function parseCSV(text) {
+      let lines = [];
+      let row = [];
+      let inQuotes = false;
+      let currentVal = '';
+
+      for (let i = 0; i < text.length; i++) {
+        let char = text[i];
+        let nextChar = text[i + 1];
+
+        if (char === '"') {
+          if (inQuotes && nextChar === '"') {
+            currentVal += '"';
+            i++;
+          } else {
+            inQuotes = !inQuotes;
+          }
+        } else if (char === ',' && !inQuotes) {
+          row.push(currentVal.trim());
+          currentVal = '';
+        } else if ((char === '\r' || char === '\n') && !inQuotes) {
+          if (char === '\r' && nextChar === '\n') { i++; }
+          row.push(currentVal.trim());
+          lines.push(row);
+          row = [];
+          currentVal = '';
+        } else {
+          currentVal += char;
+        }
+      }
+      if (row.length > 0 || currentVal !== '') {
+        row.push(currentVal.trim());
+        lines.push(row);
+      }
+      return lines;
+    }
 
     function getTextColor(bgColor) {
       if (!bgColor || bgColor === '#000000') return '#ffffff';
@@ -428,50 +735,92 @@
       return brightness > 145 ? '#000000' : '#ffffff';
     }
 
-    function fetchCSV(url, callback) {
-      if (!url) return;
-      Papa.parse(url, {
-        download: true,
-        skipEmptyLines: true,
-        complete: function(results) { callback(results.data); },
-        error: function(err) { console.error("CSV Fetch Error:", err); }
-      });
+    async function loadTerms() {
+      try {
+        const res = await fetch(CSV_URLS.terms);
+        const dataText = await res.text();
+        const rows = parseCSV(dataText);
+        
+        const container = document.getElementById('terms-container');
+        container.innerHTML = '';
+
+        rows.forEach(r => {
+          if (!r || !r[0]) return;
+          const term = r[0] ? String(r[0]).trim() : '';
+          const desc = r[1] ? String(r[1]).trim() : '';
+          let color = r[2] ? String(r[2]).trim() : '#3b82f6';
+
+          if (term) {
+            dynamicColorMap[term.toLowerCase()] = color;
+          }
+
+          if (desc === 'SECTION_HEADER' || desc === '' || term.toLowerCase().includes('terms')) {
+            const header = document.createElement('div');
+            header.className = 'terms-section-title';
+            header.textContent = term;
+            container.appendChild(header);
+          } else {
+            const textColor = getTextColor(color);
+            const row = document.createElement('div');
+            row.className = 'term-row';
+            row.innerHTML = `
+              <div class="term-badge" style="background-color: ${color}; color: ${textColor};">${term}</div>
+              <div class="term-desc">${desc}</div>
+            `;
+            container.appendChild(row);
+          }
+        });
+      } catch (e) {
+        console.error("Terms load error:", e);
+      }
     }
 
-    function processItemsData(rows) {
-      document.getElementById('loading').style.display = 'none';
-      mainListData = [];
-      collectableListData = [];
-      let isCollectableSection = false;
+    async function loadMainData() {
+      try {
+        const res = await fetch(CSV_URLS.main);
+        const dataText = await res.text();
+        const rows = parseCSV(dataText);
 
-      rows.forEach(row => {
-        if (!row || row.length === 0 || !row[0]) return;
-        const firstCell = String(row[0]).trim().toLowerCase();
-        if (firstCell === 'item') return;
-        if (firstCell.includes("collectors") || firstCell.includes("collectable")) {
-          isCollectableSection = true;
-          return;
-        }
+        document.getElementById('loading').style.display = 'none';
+        
+        mainListData = [];
+        collectableListData = [];
+        let isCollectableSection = false;
 
-        if (isCollectableSection) {
-          collectableListData.push(row);
-        } else {
-          mainListData.push(row);
-        }
-      });
+        rows.forEach(row => {
+          if (!row || row.length === 0 || !row[0]) return;
+          const firstCell = String(row[0]).trim().toLowerCase();
+          if (firstCell === 'item') return;
+          if (firstCell.includes("collectors") || firstCell.includes("collectable")) {
+            isCollectableSection = true;
+            return;
+          }
 
-      renderTable(mainListData, document.getElementById("normal-body"));
-      renderTable(collectableListData, document.getElementById("collectable-body"));
+          if (isCollectableSection) {
+            collectableListData.push(row);
+          } else {
+            mainListData.push(row);
+          }
+        });
+
+        renderTable(mainListData, document.getElementById("normal-body"));
+        renderTable(collectableListData, document.getElementById("collectable-body"));
+      } catch(e) {
+        document.getElementById('loading').textContent = 'Error loading CSV data.';
+      }
     }
 
     function renderTable(data, tbody) {
-      if(!tbody) return;
+      if (!tbody) return;
       tbody.innerHTML = "";
       data.forEach(row => {
         if (!row || row.length === 0 || !row[0]) return;
         const tr = document.createElement("tr");
+
         let itemBgColor = String(row[8] ?? '').trim();
-        if (!itemBgColor.startsWith('#')) itemBgColor = '#d800ff';
+        if (!itemBgColor.startsWith('#')) {
+          itemBgColor = '#8b5cf6';
+        }
 
         for (let idx = 0; idx < 8; idx++) {
           const td = document.createElement("td");
@@ -483,13 +832,16 @@
             td.style.backgroundColor = itemBgColor;
             td.style.color = getTextColor(itemBgColor);
             td.textContent = rawText;
-          } else if (idx === 1) {
+          } 
+          else if (idx === 1) {
             td.className = "val-cell";
             td.textContent = rawText;
-          } else if (idx === 3) {
+          } 
+          else if (idx === 3) {
             td.className = "scale-cell";
             td.textContent = rawText;
-          } else if (idx === 4 || idx === 5 || idx === 6) {
+          } 
+          else if (idx === 4 || idx === 5 || idx === 6) {
             const mappedColor = dynamicColorMap[lowerText];
             if (mappedColor) {
               const textColor = getTextColor(mappedColor);
@@ -497,9 +849,11 @@
             } else {
               td.textContent = rawText;
             }
-          } else {
+          } 
+          else {
             td.textContent = rawText;
           }
+
           tr.appendChild(td);
         }
         tbody.appendChild(tr);
@@ -511,76 +865,90 @@
       const targetData = currentSubTab === 'normal-section' ? mainListData : collectableListData;
       const targetBody = currentSubTab === 'normal-section' ? document.getElementById("normal-body") : document.getElementById("collectable-body");
       
-      const filtered = targetData.filter(row => row.some(cell => String(cell).toLowerCase().includes(query)));
+      const filtered = targetData.filter(row => 
+        row.some(cell => String(cell).toLowerCase().includes(query))
+      );
       renderTable(filtered, targetBody);
     }
 
-    function processTermsData(rows) {
-      const container = document.getElementById('terms-container');
-      container.innerHTML = '';
-      rows.forEach(r => {
-        if (!r[0]) return;
-        const term = String(r[0]).trim();
-        const desc = r[1] ? String(r[1]).trim() : '';
-        let color = r[2] ? String(r[2]).trim() : '#e2e8f0';
+    async function loadUpdates() {
+      try {
+        const res = await fetch(CSV_URLS.updates);
+        const dataText = await res.text();
+        const rows = parseCSV(dataText);
 
-        if (term) dynamicColorMap[term.toLowerCase()] = color;
+        const container = document.getElementById('updates-container');
+        container.innerHTML = '';
 
-        if (desc === 'SECTION_HEADER' || desc === '' || term.toLowerCase().includes('terms')) {
-          const header = document.createElement('div');
-          header.className = 'terms-section-title';
-          header.textContent = term;
-          container.appendChild(header);
-        } else {
-          const textColor = getTextColor(color);
-          const row = document.createElement('div');
-          row.className = 'term-row';
-          row.innerHTML = `<div class="term-badge" style="background-color: ${color}; color: ${textColor};">${term}</div><div class="term-desc">${desc}</div>`;
-          container.appendChild(row);
-        }
-      });
-      if (mainListData.length > 0) {
-        renderTable(mainListData, document.getElementById("normal-body"));
-        renderTable(collectableListData, document.getElementById("collectable-body"));
+        rows.forEach(r => {
+          if (!r || !r[0]) return;
+          const title = r[0] ? r[0] : 'UPDATE';
+          const date = r[1] ? r[1] : '';
+          const content = r[2] ? r[2] : '';
+
+          const block = document.createElement('div');
+          block.className = 'update-block';
+          block.innerHTML = `
+            <div class="update-header-title">${title}</div>
+            ${date ? `<div class="update-date-tag">${date}</div>` : ''}
+            <div class="update-content-text">${content}</div>
+          `;
+          container.appendChild(block);
+        });
+      } catch(e) {
+        document.getElementById('updates-container').innerHTML = '<p class="loading-text">No updates found.</p>';
       }
     }
 
-    function processUpdatesData(rows) {
-      const container = document.getElementById('updates-container');
-      container.innerHTML = '';
-      rows.forEach(r => {
-        if (!r[0]) return;
-        const block = document.createElement('div');
-        block.className = 'update-block';
-        block.innerHTML = `<div class="update-header-title">${r[0]}</div>${r[1] ? `<div class="update-date-tag">${r[1]}</div>` : ''}<div class="update-content-text">${r[2] || ''}</div>`;
-        container.appendChild(block);
-      });
+    async function loadEditors() {
+      try {
+        const res = await fetch(CSV_URLS.editors);
+        const dataText = await res.text();
+        const rows = parseCSV(dataText);
+        const tbody = document.getElementById('editors-body');
+
+        if (!rows || rows.length === 0) return;
+        tbody.innerHTML = '';
+
+        rows.forEach(r => {
+          if (!r || !r[1]) return;
+          if (String(r[1]).toLowerCase() === 'username') return;
+
+          const avatarImg = r[0] ? r[0] : '';
+          const username = r[1] ? r[1] : '';
+          const role = r[2] ? r[2] : 'List Editor';
+          const profileUrl = r[3] ? r[3] : '#';
+          const status = r[4] ? String(r[4]) : 'Active';
+
+          const imgSrc = (avatarImg && String(avatarImg).startsWith('http')) 
+            ? avatarImg 
+            : `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=1e293b&color=fff`;
+
+          const isActive = status.toLowerCase().trim() === 'active';
+          const statusClass = isActive ? 'active' : 'inactive';
+          const statusText = isActive ? 'ACTIVE' : 'INACTIVE';
+
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><img src="${imgSrc}" class="editor-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=1e293b&color=fff'"></td>
+            <td style="font-weight:700;">${username}</td>
+            <td style="color: var(--text-sub);">${role}</td>
+            <td><a href="${profileUrl}" target="_blank" class="roblox-tag">@${username.toLowerCase()}</a></td>
+            <td><span class="status-box ${statusClass}">${statusText}</span></td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch(e) {
+        console.log("Error loading editors.");
+      }
     }
 
-    function processEditorsData(rows) {
-      const tbody = document.getElementById('editors-body');
-      tbody.innerHTML = '';
-      rows.forEach(r => {
-        if (!r[1] || String(r[1]).toLowerCase() === 'username') return;
-        const username = r[1];
-        const isActive = String(r[4] || 'active').toLowerCase().trim() === 'active';
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td><img src="${r[0] || 'https://ui-avatars.com/api/?name='+username}" class="editor-avatar"></td>
-          <td>${username}</td>
-          <td>${r[2] || 'List Editor'}</td>
-          <td><a href="${r[3] || '#'}" target="_blank" class="roblox-tag">@${username.toLowerCase()}</a></td>
-          <td><span class="status-box ${isActive ? 'active':'inactive'}">${isActive ? 'ACTIVE':'INACTIVE'}</span></td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    window.addEventListener('DOMContentLoaded', () => {
-      fetchCSV(URL_ITEMS, processItemsData);
-      fetchCSV(URL_TERMS, processTermsData);
-      fetchCSV(URL_UPDATES, processUpdatesData);
-      fetchCSV(URL_EDITORS, processEditorsData);
+    // SAYFA YÜKLENDİĞİNDE VERİLERİ SIRA İLE ÇEK
+    window.addEventListener('DOMContentLoaded', async () => {
+      await loadTerms();
+      await loadMainData();
+      loadUpdates();
+      loadEditors();
     });
   </script>
 </body>
