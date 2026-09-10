@@ -7,31 +7,37 @@
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
   <style>
     :root {
-      --bg-main: #0a0b0e;
-      --bg-surface: #12141a;
-      --bg-surface-hover: #181b24;
-      --border-color: #1f232e;
-      --border-color-light: #2a303f;
+      --bg-main: #08090c;
+      --bg-surface: rgba(18, 20, 29, 0.7);
+      --bg-card: #11141d;
+      --bg-card-hover: #161a26;
+      --border-color: rgba(255, 255, 255, 0.07);
+      --border-color-hover: rgba(255, 255, 255, 0.15);
       
-      --text-primary: #f3f4f6;
-      --text-secondary: #8b949e;
-      --text-muted: #4b5563;
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
 
       --accent-blue: #3b82f6;
-      --accent-cyan: #06b6d4;
+      --accent-indigo: #6366f1;
+      --accent-glow: rgba(59, 130, 246, 0.15);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Plus Jakarta Sans', sans-serif;
       background-color: var(--bg-main);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.05) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(99, 102, 241, 0.05) 0px, transparent 50%);
+      background-attachment: fixed;
       color: var(--text-primary);
       min-height: 100vh;
       display: flex;
@@ -41,13 +47,15 @@
 
     /* HEADER / NAVBAR */
     .topbar {
-      background: var(--bg-surface);
+      background: rgba(12, 14, 20, 0.8);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border-color);
-      height: 64px;
+      height: 70px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 32px;
+      padding: 0 40px;
       position: sticky;
       top: 0;
       z-index: 100;
@@ -61,57 +69,71 @@
     }
 
     .brand-logo {
-      background: #ffffff;
-      color: #000000;
+      background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+      color: #0f172a;
       font-family: 'Syne', sans-serif;
       font-weight: 800;
       font-size: 1.1rem;
-      padding: 4px 8px;
-      border-radius: 4px;
-      letter-spacing: -0.5px;
+      padding: 5px 10px;
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
     }
 
     .brand-title {
       font-family: 'Syne', sans-serif;
-      font-size: 1.1rem;
-      font-weight: 700;
+      font-size: 1.15rem;
+      font-weight: 800;
       color: var(--text-primary);
       letter-spacing: -0.3px;
     }
 
-    .nav-tabs { display: flex; gap: 4px; list-style: none; }
+    .nav-tabs { display: flex; gap: 6px; list-style: none; }
 
     .nav-link {
       color: var(--text-secondary);
       text-decoration: none;
-      font-size: 0.85rem;
+      font-size: 0.88rem;
       font-weight: 600;
-      padding: 8px 14px;
-      border-radius: 6px;
-      transition: all 0.15s ease;
+      padding: 9px 16px;
+      border-radius: 8px;
+      transition: all 0.2s ease;
     }
 
-    .nav-link:hover { color: var(--text-primary); background: rgba(255, 255, 255, 0.04); }
-    .nav-link.active { color: #ffffff; background: var(--border-color); }
+    .nav-link:hover { color: var(--text-primary); background: rgba(255, 255, 255, 0.05); }
+    .nav-link.active {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
 
     .social-link {
       color: var(--text-secondary);
-      font-size: 1.1rem;
-      transition: color 0.15s ease;
+      font-size: 1.2rem;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      transition: all 0.2s ease;
     }
-    .social-link:hover { color: #5865f2; }
+    .social-link:hover { color: #5865f2; background: rgba(88, 101, 242, 0.1); border-color: rgba(88, 101, 242, 0.3); }
 
     /* LAYOUT CONTAINER */
     .app-container {
       max-width: 1400px;
       width: 100%;
       margin: 0 auto;
-      padding: 32px 24px;
+      padding: 40px 24px;
       flex: 1;
     }
 
     .tab-content { display: none; }
-    .tab-content.active { display: block; }
+    .tab-content.active { display: block; animation: fadeIn 0.25s ease; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
     /* CONTROLS AREA */
     .view-header {
@@ -125,53 +147,55 @@
 
     .sub-toggle {
       display: flex;
-      background: var(--bg-surface);
+      background: rgba(18, 20, 29, 0.6);
       border: 1px solid var(--border-color);
-      padding: 3px;
-      border-radius: 8px;
+      padding: 4px;
+      border-radius: 10px;
     }
 
     .toggle-btn {
       background: transparent;
       border: none;
       color: var(--text-secondary);
-      padding: 8px 18px;
+      padding: 9px 20px;
       font-size: 0.85rem;
       font-weight: 600;
-      border-radius: 6px;
+      border-radius: 7px;
       cursor: pointer;
-      transition: all 0.15s ease;
+      transition: all 0.2s ease;
     }
 
     .toggle-btn:hover { color: var(--text-primary); }
     .toggle-btn.active {
-      background: var(--border-color-light);
+      background: var(--accent-blue);
       color: #ffffff;
+      box-shadow: 0 4px 14px rgba(59, 130, 246, 0.35);
     }
 
     .search-wrapper { position: relative; width: 320px; }
 
     .search-input {
       width: 100%;
-      background: var(--bg-surface);
+      background: var(--bg-card);
       border: 1px solid var(--border-color);
       color: var(--text-primary);
-      padding: 9px 14px 9px 36px;
-      border-radius: 8px;
+      padding: 10px 14px 10px 38px;
+      border-radius: 10px;
       font-size: 0.85rem;
       outline: none;
-      transition: border-color 0.15s ease;
+      transition: all 0.2s ease;
     }
 
-    .search-input:focus { border-color: var(--border-color-light); }
-    .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.8rem; }
+    .search-input:focus { border-color: var(--accent-blue); box-shadow: 0 0 0 3px var(--accent-glow); }
+    .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.85rem; }
 
     /* DATA TABLES */
     .data-table-container {
-      background: var(--bg-surface);
+      background: var(--bg-card);
       border: 1px solid var(--border-color);
-      border-radius: 10px;
+      border-radius: 14px;
       overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
     }
 
     .sublist-tab { display: none; }
@@ -180,96 +204,133 @@
     table { width: 100%; border-collapse: collapse; text-align: left; }
 
     th {
-      background: #0e1015;
+      background: #0d0f17;
       color: var(--text-secondary);
-      font-size: 0.72rem;
+      font-size: 0.73rem;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.6px;
-      padding: 14px 18px;
+      letter-spacing: 0.8px;
+      padding: 16px 20px;
       border-bottom: 1px solid var(--border-color);
     }
 
     td {
-      padding: 12px 18px;
+      padding: 14px 20px;
       border-bottom: 1px solid var(--border-color);
-      font-size: 0.875rem;
+      font-size: 0.88rem;
       font-weight: 500;
       color: #e2e8f0;
     }
 
     tr:last-child td { border-bottom: none; }
-    tr:hover td { background-color: var(--bg-surface-hover); }
+    tr { transition: background-color 0.15s ease; }
+    tr:hover td { background-color: var(--bg-card-hover); }
 
-    .item-name { font-weight: 700; font-size: 0.9rem; }
+    .item-name { font-weight: 700; font-size: 0.92rem; }
     .value-num { font-weight: 700; color: #ffffff; }
-    .rap-num { color: var(--text-secondary); }
+    .rap-num { color: var(--text-secondary); font-family: monospace; font-size: 0.9rem; }
 
     .status-badge {
       display: inline-block;
-      padding: 3px 8px;
-      border-radius: 4px;
+      padding: 4px 10px;
+      border-radius: 6px;
       font-size: 0.75rem;
       font-weight: 700;
-      text-transform: capitalize;
+      letter-spacing: 0.2px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+
+    /* EDITORS LINK BUTTON DÜZELTMESİ */
+    .profile-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      color: #60a5fa;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .profile-btn:hover {
+      background: var(--accent-blue);
+      color: #ffffff;
+      border-color: var(--accent-blue);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
     }
 
     /* CARD PANELS FOR UPDATES/ABOUT */
     .content-panel {
-      background: var(--bg-surface);
+      background: var(--bg-card);
       border: 1px solid var(--border-color);
-      border-radius: 10px;
-      padding: 24px;
+      border-radius: 14px;
+      padding: 32px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
     }
 
     .section-title {
       font-family: 'Syne', sans-serif;
-      font-size: 1.4rem;
-      font-weight: 700;
-      margin-bottom: 20px;
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 24px;
+      letter-spacing: -0.5px;
     }
 
     .update-item {
-      padding-bottom: 16px;
-      margin-bottom: 16px;
-      border-bottom: 1px solid var(--border-color);
+      padding: 18px;
+      margin-bottom: 12px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
     }
-    .update-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-    .update-head { display: flex; justify-content: space-between; margin-bottom: 6px; }
+    .update-head { display: flex; justify-content: space-between; margin-bottom: 8px; }
     .update-title { font-weight: 700; color: #fff; font-size: 0.95rem; }
-    .update-date { font-size: 0.8rem; color: var(--text-muted); }
-    .update-body { font-size: 0.875rem; color: var(--text-secondary); line-height: 1.5; }
+    .update-date { font-size: 0.8rem; color: var(--text-muted); font-weight: 500; }
+    .update-body { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; }
 
     /* TERMS GRID */
-    .terms-list { display: flex; flex-direction: column; gap: 8px; }
+    .terms-list { display: flex; flex-direction: column; gap: 10px; }
     .term-card {
       display: grid;
-      grid-template-columns: 200px 1fr;
-      gap: 16px;
+      grid-template-columns: 220px 1fr;
+      gap: 20px;
       align-items: center;
-      background: #0e1015;
-      padding: 10px 14px;
-      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.02);
+      padding: 14px 18px;
+      border-radius: 8px;
       border: 1px solid var(--border-color);
     }
 
     .term-name {
-      padding: 6px 10px;
-      border-radius: 4px;
+      padding: 6px 12px;
+      border-radius: 6px;
       font-size: 0.8rem;
       font-weight: 700;
       text-align: center;
+      letter-spacing: 0.3px;
     }
 
-    .term-text { font-size: 0.85rem; color: var(--text-secondary); }
+    .term-text { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.4; }
 
-    .loading-box { text-align: center; padding: 40px; color: var(--text-muted); font-size: 0.85rem; }
+    .loading-box { text-align: center; padding: 40px; color: var(--text-muted); font-size: 0.88rem; font-weight: 500; }
+
+    .avatar-img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--border-color);
+      object-fit: cover;
+    }
 
     @media (max-width: 768px) {
-      .topbar { padding: 0 16px; }
+      .topbar { padding: 0 20px; }
       .data-table-container { overflow-x: auto; }
-      table { min-width: 650px; }
-      .term-card { grid-template-columns: 1fr; }
+      table { min-width: 700px; }
+      .term-card { grid-template-columns: 1fr; gap: 8px; }
     }
   </style>
 </head>
@@ -287,7 +348,7 @@
       <li><a href="#" class="nav-link" onclick="openTab(event, 'about')">About</a></li>
       <li><a href="#" class="nav-link" onclick="openTab(event, 'editors')">Editors</a></li>
     </ul>
-    <a href="https://discord.gg/ubv" target="_blank" class="social-link"><i class="fab fa-discord"></i></a>
+    <a href="https://discord.gg/ubv" target="_blank" class="social-link" title="Discord Community"><i class="fab fa-discord"></i></a>
   </header>
 
   <main class="app-container">
@@ -302,11 +363,11 @@
 
         <div class="search-wrapper">
           <i class="fa-solid fa-magnifying-glass search-icon"></i>
-          <input type="text" id="search-box" class="search-input" placeholder="Search item..." oninput="filterTable()">
+          <input type="text" id="search-box" class="search-input" placeholder="Search item by name..." oninput="filterTable()">
         </div>
       </div>
 
-      <div id="loading" class="loading-box">Loading dataset...</div>
+      <div id="loading" class="loading-box"><i class="fa-solid fa-spinner fa-spin" style="margin-right:8px;"></i> Loading market dataset...</div>
 
       <div class="data-table-container sublist-tab active-sublist" id="normal-section">
         <table>
@@ -348,7 +409,7 @@
     <!-- UPDATES TAB -->
     <div id="updates" class="tab-content">
       <div class="content-panel">
-        <h2 class="section-title">Changelog</h2>
+        <h2 class="section-title">Market Updates & Changelog</h2>
         <div id="updates-container"><div class="loading-box">Loading updates...</div></div>
       </div>
     </div>
@@ -356,7 +417,7 @@
     <!-- TERMS TAB -->
     <div id="terms" class="tab-content">
       <div class="content-panel">
-        <h2 class="section-title">Market Glossary</h2>
+        <h2 class="section-title">Market Terminology</h2>
         <div class="terms-list" id="terms-container"><div class="loading-box">Loading terms...</div></div>
       </div>
     </div>
@@ -365,8 +426,8 @@
     <div id="about" class="tab-content">
       <div class="content-panel">
         <h2 class="section-title">About UBV</h2>
-        <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">
-          UBV tracks real-time item values, demand ratings, and RAP stats for the Roblox trading market.
+        <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7;">
+          UBV tracks real-time item values, demand ratings, and RAP stats for the Roblox trading market. All datasets are dynamically synced directly from official spreadsheet records.
         </p>
       </div>
     </div>
@@ -380,7 +441,7 @@
               <th>Avatar</th>
               <th>Username</th>
               <th>Role</th>
-              <th>Profile</th>
+              <th>Profile Link</th>
               <th>Status</th>
             </tr>
           </thead>
@@ -566,6 +627,7 @@
       });
     }
 
+    /* EDITORS SÜTUN DÜZELTMESİ (PROFILE LINKI DIREKT SPREADSHEET'TEN ÇEKILIR) */
     function loadEditors() {
       Papa.parse(CSV_URLS.editors, {
         download: true,
@@ -574,23 +636,34 @@
           tbody.innerHTML = '';
           results.data.forEach(r => {
             if (!r || !r[1] || String(r[1]).toLowerCase() === 'username') return;
-            const avatarImg = r[0] || '';
-            const username = r[1] || '';
-            const role = r[2] || 'Editor';
-            const profileUrl = r[3] || '#';
-            const isActive = String(r[4]).toLowerCase().trim() === 'active';
+            
+            const avatarImg = String(r[0] || '').trim();
+            const username = String(r[1] || '').trim();
+            const role = String(r[2] || 'Editor').trim();
+            const profileUrl = String(r[3] || '').trim(); // Spreadsheet'teki ham link
+            const isActive = String(r[4] || '').toLowerCase().trim() === 'active';
 
-            const imgSrc = (avatarImg && String(avatarImg).startsWith('http')) 
+            const imgSrc = (avatarImg && avatarImg.startsWith('http')) 
               ? avatarImg 
               : `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=1f232e&color=fff`;
 
+            // Profil linki varsa buton yap, yoksa fallback göster
+            let profileHtml = '-';
+            if (profileUrl && profileUrl !== '-') {
+              const href = profileUrl.startsWith('http') ? profileUrl : `https://${profileUrl}`;
+              profileHtml = `<a href="${href}" target="_blank" class="profile-btn"><i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.7rem;"></i> Profile</a>`;
+            }
+
             const tr = document.createElement('tr');
             tr.innerHTML = `
-              <td><img src="${imgSrc}" style="width:32px; height:32px; border-radius:50%;"></td>
-              <td><strong>${username}</strong></td>
-              <td style="color: var(--text-secondary);">${role}</td>
-              <td><a href="${profileUrl}" target="_blank" style="color:var(--accent-blue); text-decoration:none;">Profile</a></td>
-              <td><span style="color:${isActive ? '#22c55e' : '#ef4444'}; font-weight:700; font-size:0.8rem;">${isActive ? 'Active' : 'Inactive'}</span></td>
+              <td><img src="${imgSrc}" class="avatar-img"></td>
+              <td><strong style="color:#fff;">${username}</strong></td>
+              <td style="color: var(--text-secondary); font-size: 0.85rem;">${role}</td>
+              <td>${profileHtml}</td>
+              <td><span style="color:${isActive ? '#4ade80' : '#f87171'}; font-weight:700; font-size:0.8rem; display:inline-flex; align-items:center; gap:6px;">
+                <span style="width:6px; height:6px; border-radius:50%; background-color:${isActive ? '#4ade80' : '#f87171'};"></span>
+                ${isActive ? 'Active' : 'Inactive'}
+              </span></td>
             `;
             tbody.appendChild(tr);
           });
