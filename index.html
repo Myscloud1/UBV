@@ -8,6 +8,8 @@
   <!-- Fonts & Icons -->
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;1,600;1,700;1,800&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- PapaParse CSV Ayrıştırıcı -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
   <style>
     :root {
@@ -195,7 +197,7 @@
     .sublist-tab { display: none; }
     .sublist-tab.active-sublist { display: block; }
 
-    /* SİYAH TABLO VE RENKLİ HÜCRELER */
+    /* TABLOLAR */
     .table-wrapper {
       width: 100%;
       border-radius: 12px;
@@ -239,7 +241,6 @@
 
     td:last-child { border-right: none; }
 
-    /* DİNAMİK İTEM HÜCRESİ */
     .item-cell {
       font-weight: 800;
       font-style: italic;
@@ -600,6 +601,14 @@
   </div>
 
   <script>
+    // YENİ GİZLİ SPREADSHEET'İN CSV BAĞLANTILARI
+    const CSV_URLS = {
+      items: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR-iH2G2YVcW1PDsLcE4KfPiLhMpaUyzKC6o_E-1BWemF3GS7YYN8kBRpgOjmIDBsYnTqWayxBTlsrt/pub?gid=0&single=true&output=csv',
+      updates: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR-iH2G2YVcW1PDsLcE4KfPiLhMpaUyzKC6o_E-1BWemF3GS7YYN8kBRpgOjmIDBsYnTqWayxBTlsrt/pub?gid=568303787&single=true&output=csv',
+      terms: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR-iH2G2YVcW1PDsLcE4KfPiLhMpaUyzKC6o_E-1BWemF3GS7YYN8kBRpgOjmIDBsYnTqWayxBTlsrt/pub?gid=517689974&single=true&output=csv',
+      editors: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR-iH2G2YVcW1PDsLcE4KfPiLhMpaUyzKC6o_E-1BWemF3GS7YYN8kBRpgOjmIDBsYnTqWayxBTlsrt/pub?gid=1456456561&single=true&output=csv'
+    };
+
     function openTab(evt, tabName) {
       evt.preventDefault();
       const tabContents = document.getElementsByClassName("tab-content");
@@ -623,11 +632,8 @@
       filterTable();
     }
 
-    const SHEET_ID = '1g-5-zj5fz1WfKhrPxMUzyAMmtbXOFf8ujufdd-yYKMo';
     let mainListData = [];
     let collectableListData = [];
-
-    // C SÜTUNUNDAN OTOMATİK DOLDURULACAK RENK SÖZLÜĞÜ (TERMS TAB'DAN GELİR)
     let dynamicColorMap = {};
 
     function getTextColor(bgColor) {
@@ -641,40 +647,83 @@
       return brightness > 145 ? '#000000' : '#ffffff';
     }
 
-    function handleGoogleSheetData(json) {
-      document.getElementById('loading').style.display = 'none';
-      try {
-        const rawRows = json.table.rows;
-        const allData = rawRows.map(row => {
-          if (!row.c) return [];
-          return row.c.map(cell => cell ? (cell.v !== null ? cell.v : '') : '');
-        });
+    // 1. TERMS YÜKLE
+    function loadTerms() {
+      Papa.parse(CSV_URLS.terms, {
+        download: true,
+        complete: function(results) {
+          const container = document.getElementById('terms-container');
+          container.innerHTML = '';
+          const rows = results.data;
+          
+          rows.forEach(r => {
+            if (!r || !r[0]) return;
+            const term = String(r[0]).trim();
+            const desc = r[1] ? String(r[1]).trim() : '';
+            let color = r[2] ? String(r[2]).trim() : '#e2e8f0';
 
-        mainListData = [];
-        collectableListData = [];
-        let isCollectableSection = false;
+            if (term) {
+              dynamicColorMap[term.toLowerCase()] = color;
+            }
 
-        allData.forEach(row => {
-          if (!row || row.length === 0 || !row[0]) return;
-          const firstCell = String(row[0]).trim().toLowerCase();
-          if (firstCell === 'item') return;
-          if (firstCell.includes("collectors") || firstCell.includes("collectable")) {
-            isCollectableSection = true;
-            return;
-          }
+            if (desc === 'SECTION_HEADER' || desc === '' || term.toLowerCase().includes('terms')) {
+              const header = document.createElement('div');
+              header.className = 'terms-section-title';
+              header.textContent = term;
+              container.appendChild(header);
+            } else {
+              const textColor = getTextColor(color);
+              const row = document.createElement('div');
+              row.className = 'term-row';
+              row.innerHTML = `
+                <div class="term-badge" style="background-color: ${color}; color: ${textColor};">${term}</div>
+                <div class="term-desc">${desc}</div>
+              `;
+              container.appendChild(row);
+            }
+          });
 
-          if (isCollectableSection) {
-            collectableListData.push(row);
-          } else {
-            mainListData.push(row);
-          }
-        });
+          loadItems();
+        },
+        error: function() {
+          document.getElementById('terms-container').innerHTML = '<p class="loading-text">Failed to load terms.</p>';
+          loadItems();
+        }
+      });
+    }
 
-        renderTable(mainListData, document.getElementById("normal-body"));
-        renderTable(collectableListData, document.getElementById("collectable-body"));
-      } catch (err) {
-        console.error(err);
-      }
+    // 2. ITEMS YÜKLE
+    function loadItems() {
+      Papa.parse(CSV_URLS.items, {
+        download: true,
+        complete: function(results) {
+          document.getElementById('loading').style.display = 'none';
+          const rows = results.data;
+
+          mainListData = [];
+          collectableListData = [];
+          let isCollectableSection = false;
+
+          rows.forEach(row => {
+            if (!row || row.length === 0 || !row[0]) return;
+            const firstCell = String(row[0]).trim().toLowerCase();
+            if (firstCell === 'item') return;
+            if (firstCell.includes("collectors") || firstCell.includes("collectable")) {
+              isCollectableSection = true;
+              return;
+            }
+
+            if (isCollectableSection) {
+              collectableListData.push(row);
+            } else {
+              mainListData.push(row);
+            }
+          });
+
+          renderTable(mainListData, document.getElementById("normal-body"));
+          renderTable(collectableListData, document.getElementById("collectable-body"));
+        }
+      });
     }
 
     function renderTable(data, tbody) {
@@ -684,22 +733,17 @@
         if (!row || row.length === 0 || !row[0]) return;
         const tr = document.createElement("tr");
 
-        // ITEM RENK TESPİTİ (I SÜTUNU - INDEX 8)
         let itemBgColor = String(row[8] ?? '').trim();
-        
-        // Eğer I sütununda geçerli bir HEX kodu yoksa varsayılan mor atanır
         if (!itemBgColor.startsWith('#')) {
           itemBgColor = '#d800ff';
         }
 
-        // SADECE İLK 8 SÜTUN (A-H / INDEX 0-7) TABLOYA YAZDIRILIR. INDEX 8 (I SÜTÜNU) GİZLİ KALIR.
         for (let idx = 0; idx < 8; idx++) {
           const td = document.createElement("td");
           const rawText = String(row[idx] ?? '-').trim();
           const lowerText = rawText.toLowerCase();
 
           if (idx === 0) {
-            // ITEM ISMI SÜTUNU (I Sütunundaki HEX Koduyla Boyanır)
             td.className = "item-cell";
             td.style.backgroundColor = itemBgColor;
             td.style.color = getTextColor(itemBgColor);
@@ -714,7 +758,6 @@
             td.textContent = rawText;
           } 
           else if (idx === 4 || idx === 5 || idx === 6) {
-            // RANKING & STATUS SÜTUNLARI (Terms Tab'ından Çekilen Dinamik Renkler)
             const mappedColor = dynamicColorMap[lowerText];
             if (mappedColor) {
               const textColor = getTextColor(mappedColor);
@@ -744,134 +787,82 @@
       renderTable(filtered, targetBody);
     }
 
-    // UPDATES DATA
-    function handleUpdatesData(json) {
-      const container = document.getElementById('updates-container');
-      container.innerHTML = '';
-      try {
-        const rows = json.table.rows;
-        rows.forEach(r => {
-          if (!r.c || !r.c[0]) return;
-          const title = r.c[0] ? r.c[0].v : 'UPDATE';
-          const date = r.c[1] ? r.c[1].v : '';
-          const content = r.c[2] ? r.c[2].v : '';
-
-          const block = document.createElement('div');
-          block.className = 'update-block';
-          block.innerHTML = `
-            <div class="update-header-title">${title}</div>
-            ${date ? `<div class="update-date-tag">${date}</div>` : ''}
-            <div class="update-content-text">${content}</div>
-          `;
-          container.appendChild(block);
-        });
-      } catch(e) {
-        container.innerHTML = '<p class="loading-text">No updates found.</p>';
-      }
-    }
-
-    // TERMS DATA HANDLER (C Sütunundaki Renk Kodlarını Çeker)
-    function handleTermsData(json) {
-      const container = document.getElementById('terms-container');
-      container.innerHTML = '';
-      try {
-        const rows = json.table.rows;
-        rows.forEach(r => {
-          if (!r.c || !r.c[0]) return;
+    // 3. UPDATES YÜKLE
+    function loadUpdates() {
+      Papa.parse(CSV_URLS.updates, {
+        download: true,
+        complete: function(results) {
+          const container = document.getElementById('updates-container');
+          container.innerHTML = '';
+          const rows = results.data;
           
-          const term = r.c[0] ? String(r.c[0].v).trim() : '';
-          const desc = r.c[1] ? String(r.c[1].v).trim() : '';
-          
-          // DOĞRUDAN C SÜTUNUNDAN RENK KODU ALINIR
-          let color = r.c[2] ? String(r.c[2].v).trim() : '#e2e8f0';
+          rows.forEach(r => {
+            if (!r || !r[0]) return;
+            const title = r[0] ? r[0] : 'UPDATE';
+            const date = r[1] ? r[1] : '';
+            const content = r[2] ? r[2] : '';
 
-          // SÖZLÜĞE YÜKLE
-          if (term) {
-            dynamicColorMap[term.toLowerCase()] = color;
-          }
-
-          if (desc === 'SECTION_HEADER' || desc === '' || term.toLowerCase().includes('terms')) {
-            const header = document.createElement('div');
-            header.className = 'terms-section-title';
-            header.textContent = term;
-            container.appendChild(header);
-          } else {
-            const textColor = getTextColor(color);
-            const row = document.createElement('div');
-            row.className = 'term-row';
-            row.innerHTML = `
-              <div class="term-badge" style="background-color: ${color}; color: ${textColor};">${term}</div>
-              <div class="term-desc">${desc}</div>
+            const block = document.createElement('div');
+            block.className = 'update-block';
+            block.innerHTML = `
+              <div class="update-header-title">${title}</div>
+              ${date ? `<div class="update-date-tag">${date}</div>` : ''}
+              <div class="update-content-text">${content}</div>
             `;
-            container.appendChild(row);
-          }
-        });
-
-        // Terms yüklendikten sonra ana listeyi güncelle
-        if (mainListData.length > 0) {
-          renderTable(mainListData, document.getElementById("normal-body"));
-          renderTable(collectableListData, document.getElementById("collectable-body"));
+            container.appendChild(block);
+          });
         }
-      } catch(e) {
-        container.innerHTML = '<p class="loading-text">Failed to load terms.</p>';
-      }
+      });
     }
 
-    // LIST EDITORS DATA
-    function handleEditorsData(json) {
-      const tbody = document.getElementById('editors-body');
-      try {
-        const rows = json.table.rows;
-        if (!rows || rows.length === 0) return;
-        tbody.innerHTML = '';
+    // 4. EDITORS YÜKLE
+    function loadEditors() {
+      Papa.parse(CSV_URLS.editors, {
+        download: true,
+        complete: function(results) {
+          const tbody = document.getElementById('editors-body');
+          const rows = results.data;
+          if (!rows || rows.length === 0) return;
+          tbody.innerHTML = '';
 
-        rows.forEach(r => {
-          if (!r.c || !r.c[1]) return;
-          if (String(r.c[1].v).toLowerCase() === 'username') return;
+          rows.forEach(r => {
+            if (!r || !r[1]) return;
+            if (String(r[1]).toLowerCase() === 'username') return;
 
-          const avatarImg = r.c[0] ? r.c[0].v : '';
-          const username = r.c[1] ? r.c[1].v : '';
-          const role = r.c[2] ? r.c[2].v : 'List Editor';
-          const profileUrl = r.c[3] ? r.c[3].v : '#';
-          const status = r.c[4] ? String(r.c[4].v) : 'Active';
+            const avatarImg = r[0] ? r[0] : '';
+            const username = r[1] ? r[1] : '';
+            const role = r[2] ? r[2] : 'List Editor';
+            const profileUrl = r[3] ? r[3] : '#';
+            const status = r[4] ? String(r[4]) : 'Active';
 
-          const imgSrc = (avatarImg && String(avatarImg).startsWith('http')) 
-            ? avatarImg 
-            : `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=333&color=fff`;
+            const imgSrc = (avatarImg && String(avatarImg).startsWith('http')) 
+              ? avatarImg 
+              : `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=333&color=fff`;
 
-          const isActive = status.toLowerCase().trim() === 'active';
-          const statusClass = isActive ? 'active' : 'inactive';
-          const statusText = isActive ? 'ACTIVE' : 'INACTIVE';
+            const isActive = status.toLowerCase().trim() === 'active';
+            const statusClass = isActive ? 'active' : 'inactive';
+            const statusText = isActive ? 'ACTIVE' : 'INACTIVE';
 
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td><img src="${imgSrc}" class="editor-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=333&color=fff'"></td>
-            <td>${username}</td>
-            <td style="color: #333;">${role}</td>
-            <td><a href="${profileUrl}" target="_blank" class="roblox-tag">@${username.toLowerCase()}</a></td>
-            <td><span class="status-box ${statusClass}">${statusText}</span></td>
-          `;
-          tbody.appendChild(tr);
-        });
-      } catch(e) { console.log("Error loading editors."); }
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td><img src="${imgSrc}" class="editor-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=333&color=fff'"></td>
+              <td>${username}</td>
+              <td style="color: #333;">${role}</td>
+              <td><a href="${profileUrl}" target="_blank" class="roblox-tag">@${username.toLowerCase()}</a></td>
+              <td><span class="status-box ${statusClass}">${statusText}</span></td>
+            `;
+            tbody.appendChild(tr);
+          });
+        }
+      });
     }
 
-    // SCRIPT IMPORTS (Önce Terms çekilerek renk haritası oluşturulur)
-    const scriptTerms = document.createElement('script');
-    scriptTerms.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=Terms&headers=0&tqx=responseHandler:handleTermsData`;
-    document.body.appendChild(scriptTerms);
-
-    const scriptMain = document.createElement('script');
-    scriptMain.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?headers=0&tqx=responseHandler:handleGoogleSheetData`;
-    document.body.appendChild(scriptMain);
-
-    const scriptUpdates = document.createElement('script');
-    scriptUpdates.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=Updates&headers=0&tqx=responseHandler:handleUpdatesData`;
-    document.body.appendChild(scriptUpdates);
-
-    const scriptEditors = document.createElement('script');
-    scriptEditors.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=Editors&headers=0&tqx=responseHandler:handleEditorsData`;
-    document.body.appendChild(scriptEditors);
+    // SAYFA YÜKLENDİĞİNDE VERİLERİ ÇEK
+    document.addEventListener('DOMContentLoaded', () => {
+      loadTerms();
+      loadUpdates();
+      loadEditors();
+    });
   </script>
 </body>
 </html>
