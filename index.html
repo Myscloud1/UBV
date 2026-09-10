@@ -1,373 +1,647 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>UBV — Roblox Value Index</title>
+  <title>UBV - Ultimate Baller Values</title>
   
+  <!-- Modern Tipografi & İkonlar -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=JetBrains+Mono:wght@600;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
   <style>
     :root {
-      --bg-main: #0c0f1d;
-      --bg-card: #151a2e;
-      --bg-card-hover: #1c233d;
-      --border-color: #262f4c;
-      
-      --accent-purple: #6366f1;
-      --accent-amber: #f59e0b;
-      --text-white: #ffffff;
-      --text-sub: #a5b4fc;
-      
-      --font-mono: 'JetBrains Mono', monospace;
+      --bg-dark: #0a0d14;
+      --card-bg: rgba(18, 24, 38, 0.75);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --accent-cyan: #00f2fe;
+      --accent-blue: #4facfe;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --glass-glow: rgba(79, 172, 254, 0.15);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      background-color: var(--bg-main);
-      color: var(--text-white);
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(79, 172, 254, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(0, 242, 254, 0.08) 0px, transparent 50%);
+      background-attachment: fixed;
+      color: var(--text-main);
       min-height: 100vh;
       display: flex;
-    }
-
-    /* SOL DİKEY MENU (TABLAR) */
-    .sidebar-nav {
-      width: 290px;
-      background: #111526;
-      border-right: 2px solid var(--border-color);
-      padding: 32px 20px;
-      display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      position: fixed;
-      height: 100vh;
-      z-index: 10;
     }
 
-    .brand-logo {
-      font-size: 1.6rem;
+    /* NAVBAR */
+    .navbar {
+      background: rgba(10, 13, 20, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 50px;
+      height: 75px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      transition: all 0.3s ease;
+    }
+
+    .nav-logo {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.2rem;
       font-weight: 900;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 40px;
-      letter-spacing: -0.5px;
-    }
-
-    .brand-logo i { color: var(--accent-amber); font-size: 1.8rem; }
-
-    .nav-tabs { display: flex; flex-direction: column; gap: 10px; }
-
-    .nav-tab-btn {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 16px 20px;
-      background: transparent;
-      border: 1px solid transparent;
-      color: var(--text-sub);
-      font-size: 1.05rem;
-      font-weight: 700;
-      border-radius: 14px;
-      cursor: pointer;
+      background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 1.5px;
       text-decoration: none;
-      transition: all 0.2s ease;
+      transition: transform 0.3s ease, filter 0.3s ease;
     }
 
-    .nav-tab-btn:hover { background: var(--bg-card); color: #fff; }
-    .nav-tab-btn.active {
-      background: var(--accent-purple);
-      color: #fff;
-      border-color: rgba(255, 255, 255, 0.2);
-      box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+    .nav-logo:hover {
+      transform: scale(1.04);
+      filter: drop-shadow(0 0 10px rgba(0, 242, 254, 0.5));
     }
 
-    .discord-btn {
+    .nav-links {
+      display: flex;
+      gap: 12px;
+      list-style: none;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 6px;
+      border-radius: 14px;
+      border: 1px solid var(--card-border);
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 8px 18px;
+      border-radius: 10px;
+      transition: all 0.25s ease;
+      display: inline-block;
+    }
+
+    .nav-links a.active, .nav-links a:hover {
+      color: #ffffff;
+      background: linear-gradient(135deg, rgba(0, 242, 254, 0.2), rgba(79, 172, 254, 0.2));
+      border: 1px solid rgba(0, 242, 254, 0.3);
+      box-shadow: 0 0 12px rgba(0, 242, 254, 0.15);
+    }
+
+    .nav-social {
+      color: var(--text-muted);
+      font-size: 1.5rem;
+      transition: all 0.3s ease;
+      width: 42px;
+      height: 42px;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      padding: 16px;
-      background: #5865f2;
-      color: #fff;
-      font-weight: 800;
-      font-size: 1rem;
       border-radius: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
       text-decoration: none;
-      transition: transform 0.2s;
     }
-    .discord-btn:hover { transform: translateY(-2px); }
 
-    /* İÇERİK ALANI */
-    .content-area {
-      margin-left: 290px;
+    .nav-social:hover {
+      color: #5865F2;
+      background: rgba(88, 101, 242, 0.15);
+      border-color: rgba(88, 101, 242, 0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(88, 101, 242, 0.3);
+    }
+
+    /* MAIN CONTAINER */
+    .main-container {
       flex: 1;
-      padding: 40px;
+      padding: 40px 20px;
       max-width: 1400px;
-    }
-
-    /* ÜST ARAÇ ÇUBUĞU */
-    .toolbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 20px;
-      margin-bottom: 30px;
-      flex-wrap: wrap;
-    }
-
-    .list-toggle {
-      display: flex;
-      background: #111526;
-      padding: 6px;
-      border-radius: 14px;
-      border: 1px solid var(--border-color);
-    }
-
-    .sub-btn {
-      background: transparent;
-      border: none;
-      color: var(--text-sub);
-      padding: 12px 24px;
-      font-weight: 800;
-      font-size: 1rem;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-    .sub-btn.active { background: var(--bg-card-hover); color: #fff; }
-
-    .search-input-box {
-      position: relative;
-      flex: 1;
-      max-width: 450px;
-    }
-
-    .search-input-box input {
+      margin: 0 auto;
       width: 100%;
-      background: #111526;
-      border: 2px solid var(--border-color);
-      padding: 14px 20px 14px 48px;
-      border-radius: 14px;
-      color: #fff;
-      font-size: 1.05rem;
-      font-weight: 600;
+    }
+
+    .tab-content { 
+      display: none; 
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .tab-content.active { 
+      display: block; 
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .page-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 3.2rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-align: center;
+      margin-bottom: 30px;
+      text-transform: uppercase;
+      background: linear-gradient(180deg, #ffffff 30%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
+    }
+
+    /* SEARCH & BUTTONS */
+    #search-section { 
+      text-align: center; 
+      margin-bottom: 2rem; 
+    }
+
+    #search-box {
+      padding: 16px 28px;
+      width: 100%;
+      max-width: 580px;
+      font-size: 1rem;
+      font-weight: 500;
+      border-radius: 16px;
+      border: 1px solid var(--card-border);
+      background: rgba(18, 24, 38, 0.8);
+      backdrop-filter: blur(10px);
+      color: #ffffff;
       outline: none;
-    }
-    .search-input-box input:focus { border-color: var(--accent-purple); }
-    .search-input-box i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); font-size: 1.2rem; color: var(--text-sub); }
-
-    .view-switch {
-      display: flex;
-      gap: 6px;
-      background: #111526;
-      padding: 6px;
-      border-radius: 14px;
-      border: 1px solid var(--border-color);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+      transition: all 0.3s ease;
     }
 
-    .view-btn {
-      background: transparent;
-      border: none;
-      color: var(--text-sub);
-      width: 44px;
-      height: 44px;
-      border-radius: 10px;
+    #search-box:focus {
+      background: rgba(22, 30, 49, 0.95);
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 25px rgba(0, 242, 254, 0.25);
+    }
+
+    #search-box::placeholder { color: #64748b; }
+
+    #custom-button-group { 
+      display: flex; 
+      justify-content: center; 
+      gap: 12px; 
+      margin: 1.5rem 0 2rem; 
+    }
+
+    .custom-btn {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 12px 28px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 700;
       cursor: pointer;
-      font-size: 1.2rem;
+      transition: all 0.25s ease;
     }
-    .view-btn.active { background: var(--accent-purple); color: #fff; }
 
-    /* LİSTE KARTLARI (YUKARDAN AŞAĞIYA) */
-    .vertical-list {
+    .custom-btn:hover {
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .custom-btn.active-subtab {
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+      color: #050811;
+      border-color: transparent;
+      font-weight: 800;
+      box-shadow: 0 4px 20px rgba(0, 242, 254, 0.35);
+    }
+
+    .sublist-tab { display: none; }
+    .sublist-tab.active-sublist { display: block; }
+
+    /* TABLE DESIGN */
+    .table-wrapper {
+      width: 100%;
+      border-radius: 18px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+      margin-bottom: 2rem;
+      overflow: hidden;
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--card-border);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      color: var(--text-main);
+    }
+
+    th {
+      padding: 1.2rem 0.8rem;
+      background: rgba(10, 13, 20, 0.6);
+      color: var(--text-muted);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.82rem;
+      letter-spacing: 1px;
+      border-bottom: 1px solid var(--card-border);
+      text-align: center;
+    }
+
+    td {
+      padding: 1rem 0.8rem;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      font-size: 0.95rem;
+      font-weight: 600;
+      vertical-align: middle;
+      transition: background 0.2s ease;
+    }
+
+    tbody tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    /* DYNAMIC ITEM CELL */
+    .item-cell {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+      letter-spacing: 0.3px;
+      padding: 12px 16px;
+      border-radius: 8px;
+      box-shadow: inset 0 0 12px rgba(0,0,0,0.25);
+    }
+
+    .val-cell {
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 1.05rem;
+    }
+
+    .scale-cell {
+      color: #a78bfa;
+      font-weight: 800;
+      font-size: 1.1rem;
+    }
+
+    /* BADGE TAGS */
+    .badge-tag {
+      display: inline-block;
+      min-width: 85%;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: 0.88rem;
+      letter-spacing: 0.3px;
+      text-align: center;
+      text-transform: uppercase;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    /* UPDATES TAB */
+    .updates-wrapper {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--card-border);
+      padding: 35px;
+      border-radius: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+    }
+
+    .update-block {
+      margin-bottom: 25px;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 25px;
+    }
+
+    .update-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+    .update-header-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 6px;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .update-date-tag {
+      font-size: 0.85rem;
+      color: var(--accent-cyan);
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .update-content-text {
+      white-space: pre-wrap;
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #cbd5e1;
+      font-weight: 500;
+    }
+
+    /* TERMS TAB */
+    .terms-wrapper {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--card-border);
+      padding: 25px;
+      border-radius: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.3);
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 12px;
     }
 
-    .item-card-row {
-      background: var(--bg-card);
-      border: 2px solid var(--border-color);
-      border-radius: 16px;
-      padding: 24px 30px;
+    .terms-section-title {
+      color: var(--accent-cyan);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 1.4rem;
+      padding: 16px 10px 8px;
+      text-align: left;
+      border-bottom: 1px solid var(--card-border);
+      margin-top: 15px;
+      letter-spacing: 0.5px;
+    }
+
+    .terms-section-title:first-child { margin-top: 0; }
+
+    .term-row {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .term-badge {
+      padding: 14px 18px;
+      font-weight: 800;
+      font-size: 0.95rem;
+      text-align: center;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-      transition: all 0.2s;
-    }
-
-    .item-card-row:hover {
-      background: var(--bg-card-hover);
-      border-color: var(--accent-purple);
-      transform: translateX(4px);
-    }
-
-    .item-main-info { display: flex; flex-direction: column; gap: 6px; min-width: 220px; }
-    .item-title { font-size: 1.35rem; font-weight: 800; }
-    .item-type { font-size: 0.9rem; font-weight: 700; color: var(--text-sub); text-transform: uppercase; }
-
-    .item-metrics { display: flex; gap: 40px; }
-    .metric-box { display: flex; flex-direction: column; gap: 4px; }
-    .metric-label { font-size: 0.8rem; font-weight: 800; color: var(--text-sub); text-transform: uppercase; }
-    .metric-val { font-size: 1.3rem; font-weight: 800; font-family: var(--font-mono); }
-
-    .item-badges { display: flex; gap: 10px; flex-wrap: wrap; }
-    
-    /* BUYUTULEN TAGLER */
-    .badge {
-      padding: 8px 16px;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      font-weight: 800;
-      display: inline-flex;
-      align-items: center;
       justify-content: center;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
 
-    /* TABLO GÖRÜNÜMÜ */
-    .table-container {
-      background: var(--bg-card);
-      border: 2px solid var(--border-color);
-      border-radius: 16px;
-      overflow: hidden;
-      display: none;
+    .term-desc {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      color: #e2e8f0;
+      padding: 14px 20px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      border-radius: 10px;
     }
 
-    table { width: 100%; border-collapse: collapse; text-align: left; }
-    th { padding: 20px; background: #111526; color: var(--text-sub); font-size: 0.85rem; font-weight: 800; text-transform: uppercase; border-bottom: 2px solid var(--border-color); }
-    td { padding: 20px; border-bottom: 1px solid var(--border-color); font-size: 1.05rem; font-weight: 700; }
-
-    /* PANELLER & YAZILAR */
-    .panel { background: var(--bg-card); border: 2px solid var(--border-color); border-radius: 16px; padding: 36px; }
-    .panel-title { font-size: 1.8rem; font-weight: 900; margin-bottom: 24px; color: #fff; }
-
-    /* UPDATES DÜZENİ (ALT ALTA READABLE) */
-    .updates-stack { display: flex; flex-direction: column; gap: 20px; }
-    .update-row {
-      background: #111526;
-      border: 1px solid var(--border-color);
-      border-left: 6px solid var(--accent-amber);
-      padding: 24px;
-      border-radius: 12px;
+    /* EDITORS TABLE */
+    .editors-table {
+      width: 100%;
+      border-collapse: collapse;
     }
-    .update-header { display: flex; justify-content: space-between; margin-bottom: 12px; }
-    .update-title { font-size: 1.25rem; font-weight: 800; color: #fff; }
-    .update-date { font-size: 0.95rem; font-weight: 700; color: var(--accent-amber); }
-    .update-desc { font-size: 1.05rem; line-height: 1.6; color: #d1d5db; }
 
-    /* EDITORS VE TERİMLER */
-    .terms-stack { display: flex; flex-direction: column; gap: 12px; }
-    .term-item { display: flex; align-items: center; gap: 20px; padding: 18px; background: #111526; border-radius: 12px; font-size: 1.05rem; }
+    .editors-table th {
+      background: rgba(10, 13, 20, 0.6);
+      color: var(--text-muted);
+      padding: 16px;
+      text-align: center;
+    }
 
-    .avatar-img { width: 54px; height: 54px; border-radius: 50%; border: 2px solid var(--border-color); object-fit: cover; background: #000; }
+    .editors-table td {
+      border-bottom: 1px solid var(--card-border);
+      font-size: 1rem;
+      padding: 16px 12px;
+      vertical-align: middle;
+      text-align: center;
+    }
 
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
+    .editor-avatar {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #1e293b;
+      border: 2px solid var(--accent-cyan);
+      box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
+    }
 
-    @media (max-width: 1024px) {
-      body { flex-direction: column; }
-      .sidebar-nav { width: 100%; height: auto; position: relative; border-right: none; border-bottom: 2px solid var(--border-color); }
-      .content-area { margin-left: 0; padding: 20px; }
-      .item-card-row { flex-direction: column; align-items: flex-start; }
-      .item-metrics { width: 100%; justify-content: space-between; }
+    .roblox-tag {
+      color: var(--accent-blue);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.95rem;
+      transition: color 0.2s ease;
+    }
+
+    .roblox-tag:hover {
+      color: var(--accent-cyan);
+      text-decoration: underline;
+    }
+
+    .status-box {
+      display: inline-block;
+      padding: 6px 16px;
+      border-radius: 20px;
+      text-align: center;
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .status-box.active { 
+      background: rgba(46, 204, 113, 0.15); 
+      color: #2ecc71; 
+      border: 1px solid rgba(46, 204, 113, 0.4);
+    }
+    .status-box.inactive { 
+      background: rgba(231, 76, 60, 0.15); 
+      color: #e74c3c; 
+      border: 1px solid rgba(231, 76, 60, 0.4);
+    }
+
+    .info-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+    }
+
+    .loading-text { 
+      text-align: center; 
+      padding: 40px; 
+      font-size: 1.1rem; 
+      color: var(--text-muted); 
+      font-weight: 600; 
+    }
+
+    /* RESPONSIVE DESIGN */
+    @media (max-width: 868px) {
+      .navbar {
+        flex-direction: column;
+        height: auto;
+        padding: 20px;
+        gap: 15px;
+      }
+
+      .nav-links {
+        gap: 6px;
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
+      }
+
+      .nav-links a { font-size: 0.8rem; padding: 6px 12px; }
+      .page-title { font-size: 2.2rem; }
+
+      #custom-button-group { flex-wrap: wrap; }
+
+      .table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      table, .editors-table { min-width: 750px; }
+
+      .term-row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+
+      .term-badge { font-size: 0.9rem; padding: 10px; }
+      .term-desc { font-size: 0.9rem; padding: 12px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- SOL MENÜ PANERİ -->
-  <aside class="sidebar-nav">
-    <div>
-      <div class="brand-logo"><i class="fa-solid fa-layer-group"></i> UBV Index</div>
-      <div class="nav-tabs">
-        <button class="nav-tab-btn active" onclick="switchNav(event, 'valuelists')"><i class="fa-solid fa-list-check"></i> Market Values</button>
-        <button class="nav-tab-btn" onclick="switchNav(event, 'updates')"><i class="fa-solid fa-clock-rotate-left"></i> Updates</button>
-        <button class="nav-tab-btn" onclick="switchNav(event, 'terms')"><i class="fa-solid fa-book-bookmark"></i> Terminology</button>
-        <button class="nav-tab-btn" onclick="switchNav(event, 'editors')"><i class="fa-solid fa-user-shield"></i> Editors</button>
-        <button class="nav-tab-btn" onclick="switchNav(event, 'about')"><i class="fa-solid fa-circle-info"></i> About</button>
-      </div>
-    </div>
-    <a href="https://discord.gg/ubv" target="_blank" class="discord-btn"><i class="fab fa-discord"></i> Join Discord</a>
-  </aside>
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="#" class="nav-logo">UBV</a>
 
-  <!-- İÇERİK ALANI -->
-  <main class="content-area">
+    <ul class="nav-links">
+      <li><a href="#" class="nav-link active" onclick="openTab(event, 'valuelists')">Value Lists</a></li>
+      <li><a href="#" class="nav-link" onclick="openTab(event, 'updates')">Updates</a></li>
+      <li><a href="#" class="nav-link" onclick="openTab(event, 'terms')">Terms</a></li>
+      <li><a href="#" class="nav-link" onclick="openTab(event, 'about')">About</a></li>
+      <li><a href="#" class="nav-link" onclick="openTab(event, 'editors')">List Editors</a></li>
+    </ul>
 
-    <!-- VALUES TAB -->
+    <a href="https://discord.gg/ubv" target="_blank" class="nav-social" title="Discord Server">
+      <i class="fab fa-discord"></i>
+    </a>
+  </nav>
+
+  <!-- MAIN CONTAINER -->
+  <div class="main-container">
+
+    <!-- VALUE LISTS TAB -->
     <div id="valuelists" class="tab-content active">
-      <div class="toolbar">
-        <div class="list-toggle">
-          <button id="btn-main" class="sub-btn active" onclick="switchSubList('normal', 'btn-main')">Main List</button>
-          <button id="btn-collect" class="sub-btn" onclick="switchSubList('collectable', 'btn-collect')">Collectors</button>
-        </div>
+      <h1 class="page-title">VALUE LISTS</h1>
 
-        <div class="search-input-box">
-          <i class="fa-solid fa-magnifying-glass"></i>
-          <input type="text" id="search-box" placeholder="Search item, status, rank..." oninput="filterData()">
-        </div>
-
-        <div class="view-switch">
-          <button class="view-btn active" id="btn-list-view" title="List View" onclick="setViewMode('list')"><i class="fa-solid fa-bars"></i></button>
-          <button class="view-btn" id="btn-table-view" title="Table View" onclick="setViewMode('table')"><i class="fa-solid fa-table-cells"></i></button>
-        </div>
+      <div id="custom-button-group">
+        <button id="btn-main" class="custom-btn active-subtab" onclick="switchListTab('normal-section', 'btn-main')">Main List</button>
+        <button id="btn-collect" class="custom-btn" onclick="switchListTab('collectable-section', 'btn-collect')">Collectors List</button>
       </div>
 
-      <!-- VARSAYILAN YUKARDAN AŞAĞIYA LİSTE GÖRÜNÜMÜ -->
-      <div id="list-container" class="vertical-list"></div>
+      <div id="search-section">
+        <input type="text" id="search-box" placeholder="🔍 Search item name..." oninput="filterTable()">
+      </div>
 
-      <!-- TABLO GÖRÜNÜMÜ -->
-      <div id="table-container" class="table-container">
+      <div id="loading" class="loading-text">Loading items...</div>
+
+      <!-- Main Items Table -->
+      <div class="table-wrapper sublist-tab active-sublist" id="normal-section">
         <table>
           <thead>
             <tr>
-              <th>Item Name</th>
-              <th>Value</th>
-              <th>Avg RAP</th>
-              <th>Demand Scale</th>
-              <th>Demand Rank</th>
-              <th>Value Status</th>
-              <th>Demand Status</th>
-              <th>Type</th>
+              <th>ITEM</th>
+              <th>VALUE</th>
+              <th>AVERAGE RAP</th>
+              <th>DEMAND SCALE</th>
+              <th>DEMAND RANKING</th>
+              <th>VALUE STATUS</th>
+              <th>DEMAND STATUS</th>
+              <th>ITEM TYPE</th>
             </tr>
           </thead>
-          <tbody id="table-body"></tbody>
+          <tbody id="normal-body"></tbody>
+        </table>
+      </div>
+
+      <!-- Collectables Table -->
+      <div class="table-wrapper sublist-tab" id="collectable-section">
+        <table>
+          <thead>
+            <tr>
+              <th>ITEM</th>
+              <th>VALUE</th>
+              <th>AVERAGE RAP</th>
+              <th>DEMAND SCALE</th>
+              <th>DEMAND RANKING</th>
+              <th>VALUE STATUS</th>
+              <th>DEMAND STATUS</th>
+              <th>ITEM TYPE</th>
+            </tr>
+          </thead>
+          <tbody id="collectable-body"></tbody>
         </table>
       </div>
     </div>
 
-    <!-- UPDATES TAB (ALT ALTA DETAYLI YAZILAR) -->
+    <!-- UPDATES TAB -->
     <div id="updates" class="tab-content">
-      <div class="panel">
-        <h2 class="panel-title">Changelog & Updates</h2>
-        <div id="updates-container" class="updates-stack">Loading updates...</div>
+      <h1 class="page-title">UPDATES</h1>
+      <div class="updates-wrapper" id="updates-container">
+        <div class="loading-text">Loading updates...</div>
       </div>
     </div>
 
     <!-- TERMS TAB -->
     <div id="terms" class="tab-content">
-      <div class="panel">
-        <h2 class="panel-title">Market Glossary & Terms</h2>
-        <div id="terms-container" class="terms-stack">Loading terms...</div>
+      <h1 class="page-title">TERMS</h1>
+      <div class="terms-wrapper" id="terms-container">
+        <div class="loading-text">Loading terms...</div>
       </div>
     </div>
 
-    <!-- EDITORS TAB (GERÇEK ROBLOX AVATARLARI) -->
+    <!-- ABOUT TAB -->
+    <div id="about" class="tab-content">
+      <h1 class="page-title">ABOUT US</h1>
+      <div class="info-card">
+        <h2 style="font-size: 1.8rem; margin-bottom: 12px; font-family: 'Outfit', sans-serif;">About UBV</h2>
+        <p style="line-height: 1.7; color: #94a3b8; font-size: 1.05rem; font-weight: 500;">
+          UBV is a dedicated platform providing live trading values, market analytics, average RAP metrics, and item showcases for the Roblox trading community.
+        </p>
+      </div>
+    </div>
+
+    <!-- LIST EDITORS TAB -->
     <div id="editors" class="tab-content">
-      <div class="table-container" style="display:block;">
-        <table>
+      <h1 class="page-title">LIST EDITORS</h1>
+      <div class="table-wrapper">
+        <table class="editors-table">
           <thead>
             <tr>
-              <th>Avatar</th>
+              <th style="width: 100px;">Avatar</th>
               <th>Username</th>
               <th>Role</th>
-              <th>Profile</th>
+              <th>Roblox Profile</th>
               <th>Status</th>
             </tr>
           </thead>
@@ -376,249 +650,281 @@
       </div>
     </div>
 
-    <!-- ABOUT TAB -->
-    <div id="about" class="tab-content">
-      <div class="panel">
-        <h2 class="panel-title">About UBV Index</h2>
-        <p style="font-size: 1.15rem; line-height: 1.8; color: var(--text-sub);">
-          UBV tracks real-time market valuations, RAP metrics, and trading demands for Roblox items. Data feeds are parsed directly from centralized spreadsheets to maintain high accuracy and up-to-date valuations.
-        </p>
-      </div>
-    </div>
-
-  </main>
+  </div>
 
   <script>
-    const CSV_URLS = {
-      items: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR-iH2G2YVcW1PDsLcE4KfPiLhMpaUyzKC6o_E-1BWemF3GS7YYN8kBRpgOjmIDBsYnTqWayxBTlsrt/pub?gid=0&single=true&output=csv',
-      updates: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR-iH2G2YVcW1PDsLcE4KfPiLhMpaUyzKC6o_E-1BWemF3GS7YYN8kBRpgOjmIDBsYnTqWayxBTlsrt/pub?gid=568303787&single=true&output=csv',
-      terms: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR-iH2G2YVcW1PDsLcE4KfPiLhMpaUyzKC6o_E-1BWemF3GS7YYN8kBRpgOjmIDBsYnTqWayxBTlsrt/pub?gid=517689974&single=true&output=csv',
-      editors: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR-iH2G2YVcW1PDsLcE4KfPiLhMpaUyzKC6o_E-1BWemF3GS7YYN8kBRpgOjmIDBsYnTqWayxBTlsrt/pub?gid=1456456561&single=true&output=csv'
-    };
-
-    let mainData = [], collectData = [], dynamicColorMap = {};
-    let activeSubList = 'normal', activeViewMode = 'list';
-
-    function switchNav(e, tabId) {
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-      document.querySelectorAll('.nav-tab-btn').forEach(el => el.classList.remove('active'));
-      document.getElementById(tabId).classList.add('active');
-      e.currentTarget.classList.add('active');
+    function openTab(evt, tabName) {
+      evt.preventDefault();
+      const tabContents = document.getElementsByClassName("tab-content");
+      for (let i = 0; i < tabContents.length; i++) tabContents[i].classList.remove("active");
+      const navLinks = document.getElementsByClassName("nav-link");
+      for (let i = 0; i < navLinks.length; i++) navLinks[i].classList.remove("active");
+      document.getElementById(tabName).classList.add("active");
+      evt.currentTarget.classList.add("active");
     }
 
-    function switchSubList(type, btnId) {
-      activeSubList = type;
-      document.querySelectorAll('.sub-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById(btnId).classList.add('active');
-      filterData();
+    let currentSubTab = 'normal-section';
+
+    function switchListTab(targetId, btnId) {
+      currentSubTab = targetId;
+      const subtabs = document.getElementsByClassName("sublist-tab");
+      for (let i = 0; i < subtabs.length; i++) subtabs[i].classList.remove("active-sublist");
+      const btns = document.getElementsByClassName("custom-btn");
+      for (let i = 0; i < btns.length; i++) btns[i].classList.remove("active-subtab");
+      document.getElementById(targetId).classList.add("active-sublist");
+      document.getElementById(btnId).classList.add("active-subtab");
+      filterTable();
     }
 
-    function setViewMode(mode) {
-      activeViewMode = mode;
-      document.getElementById('btn-list-view').classList.toggle('active', mode === 'list');
-      document.getElementById('btn-table-view').classList.toggle('active', mode === 'table');
-      document.getElementById('list-container').style.display = mode === 'list' ? 'flex' : 'none';
-      document.getElementById('table-container').style.display = mode === 'table' ? 'block' : 'none';
-    }
+    const SHEET_ID = '1g-5-zj5fz1WfKhrPxMUzyAMmtbXOFf8ujufdd-yYKMo';
+    let mainListData = [];
+    let collectableListData = [];
+
+    // C SÜTUNUNDAN OTOMATİK DOLDURULACAK RENK SÖZLÜĞÜ (TERMS TAB'DAN GELİR)
+    let dynamicColorMap = {};
 
     function getTextColor(bgColor) {
       if (!bgColor || bgColor === '#000000') return '#ffffff';
       const hex = bgColor.replace('#', '');
       if (hex.length !== 6) return '#ffffff';
-      const r = parseInt(hex.substr(0, 2), 16), g = parseInt(hex.substr(2, 2), 16), b = parseInt(hex.substr(4, 2), 16);
-      return ((r * 299 + g * 587 + b * 114) / 1000) > 140 ? '#000000' : '#ffffff';
+      const r = parseInt(hex.substr(0, 2), 16);
+      const g = parseInt(hex.substr(2, 2), 16);
+      const b = parseInt(hex.substr(4, 2), 16);
+      const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+      return brightness > 145 ? '#000000' : '#ffffff';
     }
 
-    function loadTerms() {
-      Papa.parse(CSV_URLS.terms, {
-        download: true,
-        complete: function(results) {
-          const container = document.getElementById('terms-container');
-          container.innerHTML = '';
-          results.data.forEach(r => {
-            if (!r || !r[0]) return;
-            const term = String(r[0]).trim();
-            const desc = r[1] ? String(r[1]).trim() : '';
-            let color = r[2] ? String(r[2]).trim() : '#1e293b';
-            if (term) dynamicColorMap[term.toLowerCase()] = color;
+    function handleGoogleSheetData(json) {
+      document.getElementById('loading').style.display = 'none';
+      try {
+        const rawRows = json.table.rows;
+        const allData = rawRows.map(row => {
+          if (!row.c) return [];
+          return row.c.map(cell => cell ? (cell.v !== null ? cell.v : '') : '');
+        });
 
-            if (desc !== 'SECTION_HEADER' && desc !== '' && !term.toLowerCase().includes('terms')) {
-              const textColor = getTextColor(color);
-              const card = document.createElement('div');
-              card.className = 'term-item';
-              card.innerHTML = `<span class="badge" style="background:${color}; color:${textColor};">${term}</span><span style="color:#d1d5db;">${desc}</span>`;
-              container.appendChild(card);
-            }
-          });
-          loadItems();
-        }
-      });
+        mainListData = [];
+        collectableListData = [];
+        let isCollectableSection = false;
+
+        allData.forEach(row => {
+          if (!row || row.length === 0 || !row[0]) return;
+          const firstCell = String(row[0]).trim().toLowerCase();
+          if (firstCell === 'item') return;
+          if (firstCell.includes("collectors") || firstCell.includes("collectable")) {
+            isCollectableSection = true;
+            return;
+          }
+
+          if (isCollectableSection) {
+            collectableListData.push(row);
+          } else {
+            mainListData.push(row);
+          }
+        });
+
+        renderTable(mainListData, document.getElementById("normal-body"));
+        renderTable(collectableListData, document.getElementById("collectable-body"));
+      } catch (err) {
+        console.error(err);
+      }
     }
 
-    function loadItems() {
-      Papa.parse(CSV_URLS.items, {
-        download: true,
-        complete: function(results) {
-          mainData = []; collectData = [];
-          let isCollectable = false;
-
-          results.data.forEach(row => {
-            if (!row || !row[0]) return;
-            const firstCell = String(row[0]).trim().toLowerCase();
-            if (firstCell === 'item') return;
-            if (firstCell.includes("collectors") || firstCell.includes("collectable")) {
-              isCollectable = true;
-              return;
-            }
-            if (isCollectable) collectData.push(row);
-            else mainData.push(row);
-          });
-          filterData();
-        }
-      });
-    }
-
-    function renderView(data) {
-      const list = document.getElementById('list-container');
-      const tableBody = document.getElementById('table-body');
-      list.innerHTML = ''; tableBody.innerHTML = '';
-
+    function renderTable(data, tbody) {
+      if(!tbody) return;
+      tbody.innerHTML = "";
       data.forEach(row => {
-        let name = row[0] ?? '-', val = row[1] ?? '-', rap = row[2] ?? '-';
-        let demandScale = row[3] ?? '-', demandRank = row[4] ?? '-', valStatus = row[5] ?? '-', demStatus = row[6] ?? '-', type = row[7] ?? '-';
-        let color = String(row[8] ?? '#fff').trim();
+        if (!row || row.length === 0 || !row[0]) return;
+        const tr = document.createElement("tr");
 
-        // YUKARDAN AŞAĞIYA GENİŞ KART RENDER
-        const itemRow = document.createElement('div');
-        itemRow.className = 'item-card-row';
-        itemRow.innerHTML = `
-          <div class="item-main-info">
-            <span class="item-title" style="color:${color};">${name}</span>
-            <span class="item-type">${type}</span>
-          </div>
-          <div class="item-metrics">
-            <div class="metric-box">
-              <span class="metric-label">VALUE</span>
-              <span class="metric-val" style="color:var(--accent-amber);">${val}</span>
-            </div>
-            <div class="metric-box">
-              <span class="metric-label">AVG RAP</span>
-              <span class="metric-val" style="color:var(--text-sub);">${rap}</span>
-            </div>
-          </div>
-          <div class="item-badges">
-            ${createBadge(valStatus)}
-            ${createBadge(demStatus)}
-            ${createBadge(demandRank)}
-          </div>
-        `;
-        list.appendChild(itemRow);
-
-        // TABLO ROW RENDER
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td style="color:${color}; font-weight:800;">${name}</td>
-          <td style="font-family:var(--font-mono); color:var(--accent-amber);">${val}</td>
-          <td style="font-family:var(--font-mono); color:var(--text-sub);">${rap}</td>
-          <td>${demandScale}</td>
-          <td>${createBadge(demandRank)}</td>
-          <td>${createBadge(valStatus)}</td>
-          <td>${createBadge(demStatus)}</td>
-          <td>${type}</td>
-        `;
-        tableBody.appendChild(tr);
-      });
-    }
-
-    function createBadge(text) {
-      if(!text || text === '-') return '';
-      const color = dynamicColorMap[String(text).toLowerCase()] || '#262f4c';
-      const textColor = getTextColor(color);
-      return `<span class="badge" style="background:${color}; color:${textColor};">${text}</span>`;
-    }
-
-    function filterData() {
-      const query = document.getElementById('search-box').value.toLowerCase().trim();
-      const targetData = activeSubList === 'normal' ? mainData : collectData;
-      const filtered = targetData.filter(row => row.some(cell => String(cell).toLowerCase().includes(query)));
-      renderView(filtered);
-    }
-
-    function loadUpdates() {
-      Papa.parse(CSV_URLS.updates, {
-        download: true,
-        complete: function(results) {
-          const container = document.getElementById('updates-container');
-          container.innerHTML = '';
-          results.data.forEach(r => {
-            if (!r || !r[0]) return;
-            const div = document.createElement('div');
-            div.className = 'update-row';
-            div.innerHTML = `
-              <div class="update-header">
-                <span class="update-title">${r[0]}</span>
-                <span class="update-date">${r[1] || ''}</span>
-              </div>
-              <div class="update-desc">${r[2] || ''}</div>
-            `;
-            container.appendChild(div);
-          });
+        // ITEM RENK TESPİTİ (I SÜTUNU - INDEX 8)
+        let itemBgColor = String(row[8] ?? '').trim();
+        
+        // Eğer I sütununda geçerli bir HEX kodu yoksa varsayılan mor atanır
+        if (!itemBgColor.startsWith('#')) {
+          itemBgColor = '#8b5cf6';
         }
-      });
-    }
 
-    function loadEditors() {
-      Papa.parse(CSV_URLS.editors, {
-        download: true,
-        complete: function(results) {
-          const tbody = document.getElementById('editors-body');
-          tbody.innerHTML = '';
-          results.data.forEach(r => {
-            if (!r || !r[1] || String(r[1]).toLowerCase() === 'username') return;
-            const username = r[1], role = r[2] || 'Editor', profile = r[3], active = String(r[4]).toLowerCase() === 'active';
-            
-            // ROBLOX PROFIL RESMINI ID ILE ÇEKME
-            let avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=262f4c&color=fff`;
-            if (profile && profile.includes('users/')) {
-              const robloxId = profile.split('users/')[1].split('/')[0];
-              if (robloxId) {
-                avatarUrl = `https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${robloxId}&size=150x150&format=Png&isCircular=false`;
-              }
+        // SADECE İLK 8 SÜTUN (A-H / INDEX 0-7) TABLOYA YAZDIRILIR. INDEX 8 (I SÜTÜNU) GİZLİ KALIR.
+        for (let idx = 0; idx < 8; idx++) {
+          const td = document.createElement("td");
+          const rawText = String(row[idx] ?? '-').trim();
+          const lowerText = rawText.toLowerCase();
+
+          if (idx === 0) {
+            // ITEM ISMI SÜTUNU (I Sütunundaki HEX Koduyla Boyanır)
+            td.className = "item-cell";
+            td.style.backgroundColor = itemBgColor;
+            td.style.color = getTextColor(itemBgColor);
+            td.textContent = rawText;
+          } 
+          else if (idx === 1) {
+            td.className = "val-cell";
+            td.textContent = rawText;
+          } 
+          else if (idx === 3) {
+            td.className = "scale-cell";
+            td.textContent = rawText;
+          } 
+          else if (idx === 4 || idx === 5 || idx === 6) {
+            // RANKING & STATUS SÜTUNLARI (Terms Tab'ından Çekilen Dinamik Renkler)
+            const mappedColor = dynamicColorMap[lowerText];
+            if (mappedColor) {
+              const textColor = getTextColor(mappedColor);
+              td.innerHTML = `<span class="badge-tag" style="background-color: ${mappedColor}; color: ${textColor};">${rawText}</span>`;
+            } else {
+              td.textContent = rawText;
             }
+          } 
+          else {
+            td.textContent = rawText;
+          }
 
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-              <td><img src="${avatarUrl}" id="img-${username}" class="avatar-img" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=262f4c&color=fff'"></td>
-              <td><strong style="font-size:1.1rem;">${username}</strong></td>
-              <td style="color:var(--text-sub);">${role}</td>
-              <td>${profile && profile !== '-' ? `<a href="${profile.startsWith('http')?profile:'https://'+profile}" target="_blank" style="color:var(--accent-purple); font-weight:800;">Profile <i class="fa-solid fa-arrow-up-right-from-square"></i></a>` : '-'}</td>
-              <td><span style="color:${active?'#10b981':'#ef4444'}; font-weight:800;">● ${active?'Active':'Inactive'}</span></td>
-            `;
-            tbody.appendChild(tr);
-
-            // API ASENKRON AVATAR YÜKLEME
-            if (profile && profile.includes('users/')) {
-              const robloxId = profile.split('users/')[1].split('/')[0];
-              if (robloxId) {
-                fetch(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${robloxId}&size=150x150&format=Png&isCircular=false`)
-                  .then(res => res.json())
-                  .then(data => {
-                    if (data && data.data && data.data[0] && data.data[0].imageUrl) {
-                      document.getElementById(`img-${username}`).src = data.data[0].imageUrl;
-                    }
-                  }).catch(() => {});
-              }
-            }
-          });
+          tr.appendChild(td);
         }
+        tbody.appendChild(tr);
       });
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      loadTerms();
-      loadUpdates();
-      loadEditors();
-    });
+    function filterTable() {
+      const query = document.getElementById("search-box").value.toLowerCase().trim();
+      const targetData = currentSubTab === 'normal-section' ? mainListData : collectableListData;
+      const targetBody = currentSubTab === 'normal-section' ? document.getElementById("normal-body") : document.getElementById("collectable-body");
+      
+      const filtered = targetData.filter(row => 
+        row.some(cell => String(cell).toLowerCase().includes(query))
+      );
+      renderTable(filtered, targetBody);
+    }
+
+    // UPDATES DATA
+    function handleUpdatesData(json) {
+      const container = document.getElementById('updates-container');
+      container.innerHTML = '';
+      try {
+        const rows = json.table.rows;
+        rows.forEach(r => {
+          if (!r.c || !r.c[0]) return;
+          const title = r.c[0] ? r.c[0].v : 'UPDATE';
+          const date = r.c[1] ? r.c[1].v : '';
+          const content = r.c[2] ? r.c[2].v : '';
+
+          const block = document.createElement('div');
+          block.className = 'update-block';
+          block.innerHTML = `
+            <div class="update-header-title">${title}</div>
+            ${date ? `<div class="update-date-tag">${date}</div>` : ''}
+            <div class="update-content-text">${content}</div>
+          `;
+          container.appendChild(block);
+        });
+      } catch(e) {
+        container.innerHTML = '<p class="loading-text">No updates found.</p>';
+      }
+    }
+
+    // TERMS DATA HANDLER (C Sütunundaki Renk Kodlarını Çeker)
+    function handleTermsData(json) {
+      const container = document.getElementById('terms-container');
+      container.innerHTML = '';
+      try {
+        const rows = json.table.rows;
+        rows.forEach(r => {
+          if (!r.c || !r.c[0]) return;
+          
+          const term = r.c[0] ? String(r.c[0].v).trim() : '';
+          const desc = r.c[1] ? String(r.c[1].v).trim() : '';
+          
+          // DOĞRUDAN C SÜTUNUNDAN RENK KODU ALINIR
+          let color = r.c[2] ? String(r.c[2].v).trim() : '#e2e8f0';
+
+          // SÖZLÜĞE YÜKLE
+          if (term) {
+            dynamicColorMap[term.toLowerCase()] = color;
+          }
+
+          if (desc === 'SECTION_HEADER' || desc === '' || term.toLowerCase().includes('terms')) {
+            const header = document.createElement('div');
+            header.className = 'terms-section-title';
+            header.textContent = term;
+            container.appendChild(header);
+          } else {
+            const textColor = getTextColor(color);
+            const row = document.createElement('div');
+            row.className = 'term-row';
+            row.innerHTML = `
+              <div class="term-badge" style="background-color: ${color}; color: ${textColor};">${term}</div>
+              <div class="term-desc">${desc}</div>
+            `;
+            container.appendChild(row);
+          }
+        });
+
+        // Terms yüklendikten sonra ana listeyi güncelle
+        if (mainListData.length > 0) {
+          renderTable(mainListData, document.getElementById("normal-body"));
+          renderTable(collectableListData, document.getElementById("collectable-body"));
+        }
+      } catch(e) {
+        container.innerHTML = '<p class="loading-text">Failed to load terms.</p>';
+      }
+    }
+
+    // LIST EDITORS DATA
+    function handleEditorsData(json) {
+      const tbody = document.getElementById('editors-body');
+      try {
+        const rows = json.table.rows;
+        if (!rows || rows.length === 0) return;
+        tbody.innerHTML = '';
+
+        rows.forEach(r => {
+          if (!r.c || !r.c[1]) return;
+          if (String(r.c[1].v).toLowerCase() === 'username') return;
+
+          const avatarImg = r.c[0] ? r.c[0].v : '';
+          const username = r.c[1] ? r.c[1].v : '';
+          const role = r.c[2] ? r.c[2].v : 'List Editor';
+          const profileUrl = r.c[3] ? r.c[3].v : '#';
+          const status = r.c[4] ? String(r.c[4].v) : 'Active';
+
+          const imgSrc = (avatarImg && String(avatarImg).startsWith('http')) 
+            ? avatarImg 
+            : `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=0d1117&color=00f2fe`;
+
+          const isActive = status.toLowerCase().trim() === 'active';
+          const statusClass = isActive ? 'active' : 'inactive';
+          const statusText = isActive ? 'ACTIVE' : 'INACTIVE';
+
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><img src="${imgSrc}" class="editor-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=0d1117&color=00f2fe'"></td>
+            <td style="font-weight: 700;">${username}</td>
+            <td style="color: var(--text-muted);">${role}</td>
+            <td><a href="${profileUrl}" target="_blank" class="roblox-tag">@${username.toLowerCase()}</a></td>
+            <td><span class="status-box ${statusClass}">${statusText}</span></td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch(e) { console.log("Error loading editors."); }
+    }
+
+    // SCRIPT IMPORTS (Önce Terms çekilerek renk haritası oluşturulur)
+    const scriptTerms = document.createElement('script');
+    scriptTerms.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=Terms&headers=0&tqx=responseHandler:handleTermsData`;
+    document.body.appendChild(scriptTerms);
+
+    const scriptMain = document.createElement('script');
+    scriptMain.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?headers=0&tqx=responseHandler:handleGoogleSheetData`;
+    document.body.appendChild(scriptMain);
+
+    const scriptUpdates = document.createElement('script');
+    scriptUpdates.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=Updates&headers=0&tqx=responseHandler:handleUpdatesData`;
+    document.body.appendChild(scriptUpdates);
+
+    const scriptEditors = document.createElement('script');
+    scriptEditors.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=Editors&headers=0&tqx=responseHandler:handleEditorsData`;
+    document.body.appendChild(scriptEditors);
   </script>
 </body>
 </html>
