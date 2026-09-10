@@ -7,17 +7,16 @@
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
     :root {
       --bg-dark: #07090e;
-      --card-bg: rgba(15, 21, 32, 0.75);
+      --card-bg: rgba(15, 21, 32, 0.8);
       --card-border: rgba(255, 255, 255, 0.08);
-      --accent-glow: rgba(147, 51, 234, 0.3);
       --accent-primary: #38bdf8;
-      --accent-neon: #a855f7;
+      --accent-purple: #a855f7;
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
       --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
@@ -37,25 +36,25 @@
       position: relative;
     }
 
-    /* CANLI VE HAREKETLİ RENKLİ ARKA PLAN IŞIĞI */
+    /* AKICI ARKA PLAN IŞIĞI */
     body::before {
       content: '';
       position: absolute;
-      top: -150px;
+      top: -100px;
       left: 50%;
       transform: translateX(-50%);
-      width: 900px;
-      height: 450px;
-      background: radial-gradient(circle, rgba(168, 85, 247, 0.18) 0%, rgba(56, 189, 248, 0.12) 40%, rgba(0,0,0,0) 75%);
-      filter: blur(90px);
+      width: 1000px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(56, 189, 248, 0.08) 50%, rgba(0,0,0,0) 80%);
+      filter: blur(80px);
       z-index: -1;
       pointer-events: none;
-      animation: pulseAura 8s ease-in-out infinite alternate;
+      animation: pulseAura 6s ease-in-out infinite alternate;
     }
 
     @keyframes pulseAura {
-      0% { transform: translateX(-50%) scale(1); opacity: 0.8; }
-      100% { transform: translateX(-50%) scale(1.15); opacity: 1; }
+      0% { transform: translateX(-50%) scale(1); opacity: 0.7; }
+      100% { transform: translateX(-50%) scale(1.08); opacity: 1; }
     }
 
     /* NAVBAR */
@@ -75,27 +74,27 @@
       transition: all 0.3s var(--ease-smooth);
     }
 
-    /* YENİ LOGO BÖLÜMÜ */
     .nav-logo-container {
       display: flex;
       align-items: center;
+      gap: 12px;
       text-decoration: none;
     }
 
     .nav-logo-img {
-      height: 48px;
-      width: 48px;
+      height: 50px;
+      width: 50px;
       object-fit: cover;
       border-radius: 12px;
-      border: 1px solid rgba(168, 85, 247, 0.4);
-      box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
       transition: all 0.3s var(--ease-smooth);
     }
 
     .nav-logo-container:hover .nav-logo-img {
-      transform: scale(1.08) rotate(-2deg);
-      box-shadow: 0 0 25px rgba(56, 189, 248, 0.6);
-      border-color: var(--accent-primary);
+      transform: scale(1.06) translateY(-2px);
+      border-color: var(--accent-purple);
+      box-shadow: 0 6px 20px rgba(168, 85, 247, 0.4);
     }
 
     .nav-links {
@@ -115,13 +114,13 @@
       font-size: 0.95rem;
       padding: 10px 20px;
       border-radius: 10px;
-      transition: all 0.3s var(--ease-smooth);
+      transition: all 0.25s var(--ease-smooth);
     }
 
     .nav-links a.active, .nav-links a:hover {
       color: #ffffff;
       background: rgba(255, 255, 255, 0.08);
-      box-shadow: 0 4px 15px rgba(168, 85, 247, 0.2);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
 
     .nav-social {
@@ -143,8 +142,8 @@
       color: #ffffff;
       background: #5865F2;
       border-color: #5865F2;
-      transform: translateY(-3px) scale(1.05);
-      box-shadow: 0 6px 20px rgba(88, 101, 242, 0.5);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(88, 101, 242, 0.4);
     }
 
     /* MAIN CONTAINER */
@@ -159,8 +158,8 @@
     .tab-content { 
       display: none; 
       opacity: 0;
-      transform: translateY(16px);
-      transition: opacity 0.4s var(--ease-smooth), transform 0.4s var(--ease-smooth);
+      transform: translateY(12px);
+      transition: opacity 0.35s var(--ease-smooth), transform 0.35s var(--ease-smooth);
     }
 
     .tab-content.active { 
@@ -170,18 +169,16 @@
     }
 
     .page-title {
-      font-family: 'Inter', sans-serif;
-      font-size: 3.2rem;
+      font-size: 3rem;
       font-weight: 800;
-      letter-spacing: -1.5px;
+      letter-spacing: -1.2px;
       text-align: center;
       margin-bottom: 32px;
       color: #ffffff;
-      text-shadow: 0 0 35px rgba(168, 85, 247, 0.2);
     }
 
     /* SEARCH & CONTROLS */
-    #search-section { text-align: center; margin-bottom: 2rem; position: relative; }
+    #search-section { text-align: center; margin-bottom: 2rem; }
 
     .search-wrapper {
       position: relative;
@@ -200,8 +197,7 @@
       background: rgba(15, 21, 32, 0.9);
       color: #ffffff;
       outline: none;
-      transition: all 0.35s var(--ease-smooth);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      transition: all 0.3s var(--ease-smooth);
     }
 
     .search-icon {
@@ -216,11 +212,11 @@
     }
 
     #search-box:focus {
-      border-color: var(--accent-neon);
-      box-shadow: 0 0 25px rgba(168, 85, 247, 0.35);
+      border-color: var(--accent-purple);
+      box-shadow: 0 0 20px rgba(168, 85, 247, 0.25);
     }
 
-    #search-box:focus + .search-icon { color: var(--accent-neon); }
+    #search-box:focus + .search-icon { color: var(--accent-purple); }
 
     #custom-button-group { 
       display: flex; 
@@ -245,28 +241,28 @@
       color: #ffffff;
       background: rgba(255, 255, 255, 0.08);
       transform: translateY(-2px);
-      box-shadow: 0 4px 15px rgba(168, 85, 247, 0.2);
     }
 
     .custom-btn.active-subtab {
       background: #ffffff;
       color: #000000;
       border-color: #ffffff;
-      box-shadow: 0 0 25px rgba(255, 255, 255, 0.35);
+      box-shadow: 0 4px 20px rgba(255, 255, 255, 0.2);
     }
 
     .sublist-tab { display: none; }
     .sublist-tab.active-sublist { display: block; }
 
-    /* TABLO DÜZENİ & MOBİL UYUMLULUK */
+    /* TABLOLAR */
     .table-wrapper {
       width: 100%;
       border-radius: 18px;
       overflow-x: auto;
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
       backdrop-filter: blur(12px);
+      -webkit-overflow-scrolling: touch;
     }
 
     table {
@@ -297,27 +293,19 @@
       font-size: 1rem;
       font-weight: 700;
       vertical-align: middle;
-      transition: background-color 0.25s ease, transform 0.25s ease;
+      transition: background-color 0.2s ease;
     }
 
     tbody tr {
       transition: all 0.25s var(--ease-smooth);
-      animation: fadeInRow 0.4s var(--ease-smooth) forwards;
     }
 
     tbody tr:hover {
       background-color: rgba(255, 255, 255, 0.04);
-      transform: scale(1.002);
-    }
-
-    @keyframes fadeInRow {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
     }
 
     /* ITEM CELL */
     .item-cell {
-      font-family: 'Inter', sans-serif;
       font-weight: 800;
       font-size: 1.05rem;
       height: 100%;
@@ -326,31 +314,18 @@
       justify-content: center;
       padding: 0 16px;
       margin: 0 !important;
-      border-radius: 0 !important;
-      box-shadow: inset 0 0 12px rgba(0,0,0,0.15);
       transition: filter 0.25s ease, transform 0.25s ease;
     }
 
     tbody tr:hover .item-cell {
       filter: brightness(1.15);
+      transform: scale(1.01);
     }
 
-    .val-cell {
-      color: #ffffff;
-      padding: 0 10px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      font-size: 1.05rem;
-      letter-spacing: -0.2px;
-    }
+    .val-cell { color: #ffffff; font-size: 1.05rem; }
+    .scale-cell { color: #c084fc; font-size: 1.02rem; }
 
-    .scale-cell {
-      color: #c084fc;
-      font-size: 1.02rem;
-    }
-
-    /* ROBUST TAG / BADGE SİSTEMİ */
+    /* BADGE TAGS */
     .badge-container {
       display: flex;
       align-items: center;
@@ -382,31 +357,30 @@
     }
 
     .badge-tag:hover {
-      transform: translateY(-3px) scale(1.05);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+      transform: translateY(-2px) scale(1.04);
       filter: brightness(1.1);
     }
 
-    /* BÜYÜTÜLMÜŞ LIST EDITORS SAYFASI */
+    /* LIST EDITORS TABLOSU VE FOTOĞRAFLARI */
     .editors-table td {
-      height: 90px;
-      font-size: 1.1rem;
+      height: 100px !important;
+      font-size: 1.15rem;
     }
 
     .editor-avatar {
-      width: 64px;
-      height: 64px;
+      width: 72px;
+      height: 72px;
       border-radius: 50%;
       object-fit: cover;
-      border: 2px solid var(--card-border);
-      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+      border: 3px solid var(--card-border);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.5);
       transition: all 0.3s var(--ease-smooth);
     }
 
     .editor-avatar:hover {
       transform: scale(1.12) rotate(3deg);
-      border-color: var(--accent-neon);
-      box-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+      border-color: var(--accent-purple);
+      box-shadow: 0 0 25px rgba(168, 85, 247, 0.5);
     }
 
     /* TERMS & UPDATES TAB */
@@ -420,7 +394,6 @@
 
     .terms-section-title {
       color: var(--accent-primary);
-      font-family: 'Inter', sans-serif;
       font-weight: 800;
       font-size: 1.6rem;
       padding: 20px 0 10px;
@@ -446,6 +419,7 @@
       border-radius: 12px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
+      color: #000000 !important;
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
 
@@ -468,38 +442,18 @@
 
     .update-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
 
-    .update-header-title {
-      font-size: 1.75rem;
-      font-weight: 800;
-      color: #ffffff;
-      font-family: 'Inter', sans-serif;
-    }
-
-    .update-date-tag {
-      font-size: 0.95rem;
-      color: var(--accent-primary);
-      font-weight: 700;
-      margin: 6px 0 14px;
-    }
-
-    .update-content-text {
-      white-space: pre-wrap;
-      font-size: 1.05rem;
-      line-height: 1.6;
-      color: #cbd5e1;
-    }
-
+    .update-header-title { font-size: 1.75rem; font-weight: 800; color: #ffffff; }
+    .update-date-tag { font-size: 0.95rem; color: var(--accent-primary); font-weight: 700; margin: 6px 0 14px; }
+    .update-content-text { white-space: pre-wrap; font-size: 1.05rem; line-height: 1.6; color: #cbd5e1; }
     .loading-text { text-align: center; padding: 60px; color: var(--text-muted); font-size: 1.2rem; }
 
     /* MOBİL MEDYA SORGULARI */
     @media (max-width: 768px) {
       .navbar {
-        padding: 0 20px;
+        padding: 14px 20px;
         height: auto;
         flex-direction: column;
         gap: 12px;
-        padding-top: 14px;
-        padding-bottom: 14px;
       }
 
       .nav-links {
@@ -509,22 +463,15 @@
       }
 
       .nav-links a {
-        padding: 8px 14px;
+        padding: 8px 12px;
         font-size: 0.85rem;
         white-space: nowrap;
       }
 
       .nav-social { display: none; }
-
       .page-title { font-size: 2.2rem; }
-
-      .term-row {
-        grid-template-columns: 1fr;
-        gap: 10px;
-      }
-
+      .term-row { grid-template-columns: 1fr; gap: 10px; }
       .main-container { padding: 20px 12px; }
-
       .terms-wrapper, .updates-wrapper { padding: 20px; }
     }
   </style>
@@ -534,7 +481,6 @@
   <!-- NAVBAR -->
   <nav class="navbar">
     <a href="#" class="nav-logo-container">
-      <!-- Görselinizi bu klasöre logo.png adıyla koyabilir ya da buraya URL yazabilirsiniz -->
       <img src="logo.png" alt="UBV Logo" class="nav-logo-img" onerror="this.src='https://ui-avatars.com/api/?name=UBV&background=7c3aed&color=fff&size=128'">
     </a>
     <ul class="nav-links">
@@ -561,12 +507,12 @@
 
       <div id="search-section">
         <div class="search-wrapper">
-          <input type="text" id="search-box" placeholder="Search item name..." oninput="filterTable()">
+          <input type="text" id="search-box" placeholder="Search item name..." oninput="handleSearchInput()">
           <i class="fa-solid fa-magnifying-glass search-icon"></i>
         </div>
       </div>
 
-      <div id="loading" class="loading-text">Loading values...</div>
+      <div id="loading" class="loading-text">Loading live values...</div>
 
       <!-- Main Items Table -->
       <div class="table-wrapper sublist-tab active-sublist" id="normal-section">
@@ -627,7 +573,7 @@
     <div id="about" class="tab-content">
       <h1 class="page-title">ABOUT US</h1>
       <div class="updates-wrapper">
-        <h2 style="font-size: 1.8rem; margin-bottom: 12px; font-family: 'Inter', sans-serif;">About UBV</h2>
+        <h2 style="font-size: 1.8rem; margin-bottom: 12px;">About UBV</h2>
         <p style="line-height: 1.7; color: #cbd5e1; font-size: 1.05rem;">
           UBV provides live trading values, market analytics, average RAP metrics, and item showcases for the trading community.
         </p>
@@ -641,7 +587,7 @@
         <table class="editors-table">
           <thead>
             <tr>
-              <th style="width: 110px;">Avatar</th>
+              <th style="width: 120px;">Avatar</th>
               <th>Username</th>
               <th>Role</th>
               <th>Roblox Profile</th>
@@ -685,14 +631,14 @@
     let dynamicColorMap = {};
 
     function getTextColor(bgColor) {
-      if (!bgColor || bgColor === '#000000') return '#ffffff';
+      if (!bgColor || !bgColor.startsWith('#')) return '#ffffff';
       const hex = bgColor.replace('#', '');
       if (hex.length !== 6) return '#ffffff';
       const r = parseInt(hex.substr(0, 2), 16);
       const g = parseInt(hex.substr(2, 2), 16);
       const b = parseInt(hex.substr(4, 2), 16);
       const brightness = (r * 299 + g * 587 + b * 114) / 1000;
-      return brightness > 145 ? '#000000' : '#ffffff';
+      return brightness > 150 ? '#000000' : '#ffffff';
     }
 
     function handleGoogleSheetData(json) {
@@ -734,11 +680,16 @@
     function renderTable(data, tbody) {
       if(!tbody) return;
       tbody.innerHTML = "";
+      const fragment = document.createDocumentFragment();
+
       data.forEach(row => {
         if (!row || row.length === 0 || !row[0]) return;
         const tr = document.createElement("tr");
 
+        /* I SÜTUNUNDAN (ROW[8]) RENK OKUMA */
         let itemBgColor = String(row[8] ?? '').trim();
+        
+        // Eğer I sütununda # ile başlayan HEX renk kodu verilmediyse varsayılan bir renk atar
         if (!itemBgColor.startsWith('#')) {
           itemBgColor = '#6366f1';
         }
@@ -767,8 +718,7 @@
           else if (idx === 4 || idx === 5 || idx === 6) {
             const mappedColor = dynamicColorMap[lowerText];
             if (mappedColor) {
-              const textColor = getTextColor(mappedColor);
-              td.innerHTML = `<div class="badge-container"><span class="badge-tag" style="background-color: ${mappedColor}; color: ${textColor};" title="${rawText}">${rawText}</span></div>`;
+              td.innerHTML = `<div class="badge-container"><span class="badge-tag" style="background-color: ${mappedColor}; color: #000000;" title="${rawText}">${rawText}</span></div>`;
             } else {
               td.textContent = rawText;
             }
@@ -779,8 +729,18 @@
 
           tr.appendChild(td);
         }
-        tbody.appendChild(tr);
+        fragment.appendChild(tr);
       });
+
+      tbody.appendChild(fragment);
+    }
+
+    let searchTimeout = null;
+    function handleSearchInput() {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        filterTable();
+      }, 100);
     }
 
     function filterTable() {
@@ -788,6 +748,11 @@
       const targetData = currentSubTab === 'normal-section' ? mainListData : collectableListData;
       const targetBody = currentSubTab === 'normal-section' ? document.getElementById("normal-body") : document.getElementById("collectable-body");
       
+      if (!query) {
+        renderTable(targetData, targetBody);
+        return;
+      }
+
       const filtered = targetData.filter(row => 
         row.some(cell => String(cell).toLowerCase().includes(query))
       );
@@ -815,11 +780,10 @@
             header.textContent = term;
             container.appendChild(header);
           } else {
-            const textColor = getTextColor(color);
             const row = document.createElement('div');
             row.className = 'term-row';
             row.innerHTML = `
-              <div class="term-badge" style="background-color: ${color}; color: ${textColor};">${term}</div>
+              <div class="term-badge" style="background-color: ${color};">${term}</div>
               <div class="term-desc">${desc}</div>
             `;
             container.appendChild(row);
@@ -884,10 +848,10 @@
           const tr = document.createElement('tr');
           tr.innerHTML = `
             <td><img src="${imgSrc}" class="editor-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=151521&color=a855f7&size=128'"></td>
-            <td style="font-weight: 800; font-size: 1.15rem;">${username}</td>
+            <td style="font-weight: 800; font-size: 1.2rem;">${username}</td>
             <td style="color: var(--text-muted); font-weight: 600;">${role}</td>
             <td><a href="${profileUrl}" target="_blank" style="color: var(--accent-primary); text-decoration:none; font-weight: 700;">@${username.toLowerCase()}</a></td>
-            <td><span style="display:inline-block; padding:8px 20px; border-radius:30px; font-size:0.8rem; font-weight:800; background:${isActive ? 'rgba(34,197,94,0.15)' : 'rgba(239,68,68,0.15)'}; color:${isActive ? '#4ade80' : '#f87171'}; border:1px solid ${isActive ? 'rgba(34,197,94,0.3)' : 'rgba(239,68,68,0.3)'};">${isActive ? 'ACTIVE' : 'INACTIVE'}</span></td>
+            <td><span style="display:inline-block; padding:6px 18px; border-radius:30px; font-size:0.8rem; font-weight:800; background:${isActive ? 'rgba(34,197,94,0.15)' : 'rgba(239,68,68,0.15)'}; color:${isActive ? '#4ade80' : '#f87171'}; border:1px solid ${isActive ? 'rgba(34,197,94,0.3)' : 'rgba(239,68,68,0.3)'};">${isActive ? 'ACTIVE' : 'INACTIVE'}</span></td>
           `;
           tbody.appendChild(tr);
         });
