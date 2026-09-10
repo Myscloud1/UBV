@@ -3,409 +3,349 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>UBV — Ultimate Baller Values</title>
+  <title>UBV — Terminal Value Index</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
   <style>
     :root {
-      --bg-black: #030712;
-      --card-bg: rgba(15, 23, 42, 0.7);
-      --card-border: rgba(255, 255, 255, 0.08);
-      --card-hover-border: rgba(168, 85, 247, 0.5);
+      --bg-base: #090d16;
+      --bg-surface: #111827;
+      --bg-surface-hover: #1f293d;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-focus: #3b82f6;
       
-      --text-main: #f8fafc;
-      --text-sub: #94a3b8;
-      --text-muted: #64748b;
-
-      --neon-purple: #a855f7;
-      --neon-blue: #3b82f6;
-      --neon-cyan: #06b6d4;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      
+      --accent: #3b82f6;
+      --accent-glow: rgba(59, 130, 246, 0.15);
+      --font-mono: 'JetBrains Mono', monospace;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: 'Inter', sans-serif;
-      background-color: var(--bg-black);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg-base);
       color: var(--text-main);
       min-height: 100vh;
       display: flex;
-      flex-direction: column;
-      overflow-x: hidden;
-      position: relative;
     }
 
-    /* NEON BACKGROUND GLOWS */
-    .glow-1 {
-      position: fixed;
-      top: -150px;
-      left: 10%;
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(circle, rgba(168, 85, 247, 0.18) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .glow-2 {
-      position: fixed;
-      bottom: -150px;
-      right: 10%;
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    /* NAVBAR */
-    .topbar {
-      background: rgba(3, 7, 18, 0.8);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      border-bottom: 1px solid var(--card-border);
-      height: 76px;
+    /* SIDEBAR NAVIGATION */
+    .sidebar {
+      width: 260px;
+      background: var(--bg-surface);
+      border-right: 1px solid var(--border);
       display: flex;
-      align-items: center;
+      flex-direction: column;
       justify-content: space-between;
-      padding: 0 48px;
-      position: sticky;
-      top: 0;
+      padding: 24px 16px;
+      position: fixed;
+      height: 100vh;
       z-index: 100;
     }
 
-    .brand {
+    .brand-box {
       display: flex;
       align-items: center;
-      gap: 14px;
-      text-decoration: none;
+      gap: 12px;
+      padding: 8px 12px;
+      margin-bottom: 32px;
     }
 
-    .brand-logo {
-      background: linear-gradient(135deg, var(--neon-purple), var(--neon-blue));
-      color: #ffffff;
-      font-weight: 900;
-      font-size: 1.25rem;
-      padding: 8px 16px;
-      border-radius: 12px;
-      box-shadow: 0 0 25px rgba(168, 85, 247, 0.5);
-      letter-spacing: -0.5px;
-    }
-
-    .brand-title {
-      font-size: 1.35rem;
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--accent);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-weight: 800;
-      color: var(--text-main);
-      letter-spacing: -0.5px;
+      border-radius: 8px;
+      font-size: 1.1rem;
     }
 
-    .nav-tabs { display: flex; gap: 8px; list-style: none; }
+    .brand-text {
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+    }
 
-    .nav-link {
-      color: var(--text-sub);
+    .nav-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      color: var(--text-muted);
       text-decoration: none;
-      font-size: 0.95rem;
       font-weight: 600;
-      padding: 10px 20px;
-      border-radius: 12px;
-      transition: all 0.25s ease;
-      border: 1px solid transparent;
+      font-size: 0.92rem;
+      border-radius: 10px;
+      transition: all 0.2s ease;
     }
 
-    .nav-link:hover { color: #fff; background: rgba(255, 255, 255, 0.05); }
-    .nav-link.active {
-      color: #ffffff;
-      background: rgba(168, 85, 247, 0.12);
-      border-color: rgba(168, 85, 247, 0.4);
-      box-shadow: 0 0 20px rgba(168, 85, 247, 0.25);
+    .nav-btn:hover { color: var(--text-main); background: rgba(255, 255, 255, 0.04); }
+    .nav-btn.active {
+      color: #fff;
+      background: var(--accent);
+      box-shadow: 0 4px 12px var(--accent-glow);
     }
 
-    .social-link {
-      color: var(--text-sub);
-      font-size: 1.25rem;
-      padding: 10px 14px;
-      border-radius: 12px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid var(--card-border);
-      transition: all 0.25s ease;
-    }
-    .social-link:hover { color: #ffffff; background: #5865f2; border-color: #5865f2; box-shadow: 0 0 20px rgba(88, 101, 242, 0.5); }
-
-    /* LAYOUT */
-    .app-container {
-      max-width: 1400px;
+    .sidebar-footer { padding: 12px; border-top: 1px solid var(--border); }
+    .discord-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
       width: 100%;
-      margin: 0 auto;
-      padding: 40px 24px;
+      padding: 10px;
+      background: #5865f2;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.88rem;
+      border-radius: 8px;
+      transition: opacity 0.2s;
+    }
+    .discord-btn:hover { opacity: 0.9; }
+
+    /* MAIN CONTAINER */
+    .main-wrapper {
+      margin-left: 260px;
       flex: 1;
-      position: relative;
-      z-index: 1;
+      padding: 32px 40px;
+      max-width: 1500px;
     }
 
-    .tab-content { display: none; }
-    .tab-content.active { display: block; animation: scaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
-
-    @keyframes scaleUp {
-      from { opacity: 0; transform: scale(0.98); }
-      to { opacity: 1; transform: scale(1); }
+    /* TOP STATS BAR */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
     }
+
+    .stat-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      padding: 18px 20px;
+      border-radius: 12px;
+    }
+
+    .stat-label { font-size: 0.78rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; }
+    .stat-value { font-size: 1.4rem; font-weight: 800; margin-top: 6px; font-family: var(--font-mono); }
 
     /* CONTROLS */
-    .view-header {
+    .toolbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 24px;
       gap: 16px;
+      margin-bottom: 24px;
       flex-wrap: wrap;
     }
 
-    .sub-toggle {
+    .toggle-group {
       display: flex;
-      background: rgba(15, 23, 42, 0.8);
-      border: 1px solid var(--card-border);
-      padding: 5px;
-      border-radius: 14px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      padding: 4px;
+      border-radius: 10px;
     }
 
-    .toggle-btn {
+    .sub-btn {
       background: transparent;
       border: none;
-      color: var(--text-sub);
-      padding: 10px 24px;
-      font-size: 0.95rem;
+      color: var(--text-muted);
+      padding: 8px 18px;
       font-weight: 700;
-      border-radius: 10px;
+      font-size: 0.88rem;
+      border-radius: 7px;
       cursor: pointer;
-      transition: all 0.25s ease;
+      transition: all 0.2s;
     }
+    .sub-btn.active { background: rgba(255, 255, 255, 0.08); color: #fff; }
 
-    .toggle-btn:hover { color: #fff; }
-    .toggle-btn.active {
-      background: linear-gradient(135deg, var(--neon-purple), var(--neon-blue));
-      color: #ffffff;
-      box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+    .search-box {
+      position: relative;
+      flex: 1;
+      max-width: 380px;
     }
-
-    .search-wrapper { position: relative; width: 340px; }
 
     .search-input {
       width: 100%;
-      background: var(--card-bg);
-      backdrop-filter: blur(16px);
-      border: 1px solid var(--card-border);
-      color: var(--text-main);
-      padding: 12px 16px 12px 44px;
-      border-radius: 14px;
-      font-size: 0.95rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      padding: 10px 16px 10px 40px;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 0.9rem;
       outline: none;
-      transition: all 0.25s ease;
+    }
+    .search-input:focus { border-color: var(--border-focus); }
+    .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+
+    .view-switch {
+      display: flex;
+      gap: 4px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      padding: 4px;
+      border-radius: 10px;
     }
 
-    .search-input:focus { border-color: var(--neon-purple); box-shadow: 0 0 20px rgba(168, 85, 247, 0.3); }
-    .search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.95rem; }
+    .view-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      width: 34px;
+      height: 34px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .view-btn.active { background: var(--accent); color: #fff; }
 
-    /* TABLES */
-    .data-table-container {
-      background: var(--card-bg);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--card-border);
-      border-radius: 20px;
+    /* GRID VIEW ITEMS */
+    .items-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .item-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .item-card:hover { transform: translateY(-3px); border-color: rgba(255, 255, 255, 0.2); }
+    .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+    .card-title { font-weight: 800; font-size: 1.05rem; }
+    .card-type { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
+
+    .card-body { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+    .card-metric-label { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; }
+    .card-metric-val { font-size: 1.1rem; font-weight: 800; font-family: var(--font-mono); margin-top: 2px; }
+
+    .card-footer { display: flex; gap: 6px; flex-wrap: wrap; padding-top: 12px; border-top: 1px solid var(--border); }
+    .badge { padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; }
+
+    /* TABLE VIEW */
+    .table-container {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
       overflow: hidden;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
-      transition: border-color 0.3s ease;
+      display: none;
     }
-
-    .sublist-tab { display: none; }
-    .sublist-tab.active-sublist { display: block; }
 
     table { width: 100%; border-collapse: collapse; text-align: left; }
-
-    th {
-      background: rgba(3, 7, 18, 0.8);
-      color: var(--text-sub);
-      font-size: 0.78rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 1.2px;
-      padding: 20px 24px;
-      border-bottom: 1px solid var(--card-border);
-    }
-
-    td {
-      padding: 18px 24px;
-      border-bottom: 1px solid var(--card-border);
-      font-size: 1rem;
-      font-weight: 600;
-      color: #f1f5f9;
-    }
-
+    th { padding: 16px 20px; background: rgba(0, 0, 0, 0.2); color: var(--text-muted); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; border-bottom: 1px solid var(--border); }
+    td { padding: 16px 20px; border-bottom: 1px solid var(--border); font-size: 0.95rem; font-weight: 600; }
     tr:last-child td { border-bottom: none; }
-    tr { transition: background-color 0.2s ease, transform 0.15s ease; }
-    tr:hover td { background-color: rgba(255, 255, 255, 0.03); }
+    tr:hover td { background: var(--bg-surface-hover); }
 
-    .item-name { font-weight: 800; font-size: 1.08rem; }
-    .value-num { font-weight: 800; color: #ffffff; font-size: 1.05rem; }
-    .rap-num { color: var(--text-sub); font-size: 0.98rem; }
-
-    /* BADGES */
-    .status-badge {
-      display: inline-block;
-      padding: 6px 14px;
-      border-radius: 8px;
-      font-size: 0.82rem;
-      font-weight: 800;
-      letter-spacing: 0.4px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
-    }
-
-    /* EDITORS LINK */
-    .editor-profile-link {
-      color: #c084fc;
-      font-weight: 700;
-      font-size: 1rem;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      transition: all 0.2s ease;
-    }
-
-    .editor-profile-link:hover {
-      color: #ffffff;
-      text-shadow: 0 0 12px rgba(192, 132, 252, 0.9);
-      transform: translateX(3px);
-    }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
 
     /* PANELS */
-    .content-panel {
-      background: var(--card-bg);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--card-border);
-      border-radius: 20px;
-      padding: 40px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
-    }
+    .panel { background: var(--bg-surface); border: 1px solid var(--border); border-radius: 12px; padding: 32px; }
+    .panel-title { font-size: 1.4rem; font-weight: 800; margin-bottom: 24px; }
 
-    .section-title {
-      font-size: 1.8rem;
-      font-weight: 900;
-      margin-bottom: 32px;
-      letter-spacing: -0.5px;
-      background: linear-gradient(135deg, #ffffff, #a855f7);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
+    .update-item { padding: 20px; background: rgba(0, 0, 0, 0.2); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 12px; }
+    .term-card { display: flex; gap: 16px; align-items: center; padding: 16px; background: rgba(0, 0, 0, 0.2); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; }
 
-    .update-item {
-      padding: 24px;
-      margin-bottom: 16px;
-      background: rgba(255, 255, 255, 0.015);
-      border: 1px solid var(--card-border);
-      border-radius: 14px;
-      transition: all 0.2s ease;
-    }
+    .avatar-img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
 
-    .update-item:hover { border-color: var(--card-hover-border); }
-    .update-head { display: flex; justify-content: space-between; margin-bottom: 12px; }
-    .update-title { font-weight: 800; color: #fff; font-size: 1.15rem; }
-    .update-date { font-size: 0.9rem; color: var(--text-muted); font-weight: 600; }
-
-    .update-body {
-      font-size: 0.98rem;
-      color: var(--text-sub);
-      line-height: 1.7;
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
-
-    /* TERMS GRID */
-    .terms-list { display: flex; flex-direction: column; gap: 12px; }
-    .term-card {
-      display: grid;
-      grid-template-columns: 220px 1fr;
-      gap: 24px;
-      align-items: center;
-      background: rgba(255, 255, 255, 0.015);
-      padding: 18px 24px;
-      border-radius: 14px;
-      border: 1px solid var(--card-border);
-    }
-
-    .term-name {
-      padding: 8px 14px;
-      border-radius: 8px;
-      font-size: 0.88rem;
-      font-weight: 800;
-      text-align: center;
-    }
-
-    .term-text { font-size: 0.98rem; color: var(--text-sub); line-height: 1.6; }
-
-    .loading-box { text-align: center; padding: 60px; color: var(--text-muted); font-size: 1rem; font-weight: 600; }
-
-    .avatar-img {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      border: 2px solid var(--card-border);
-      object-fit: cover;
-    }
-
-    @media (max-width: 768px) {
-      .topbar { padding: 0 20px; }
-      .data-table-container { overflow-x: auto; }
-      table { min-width: 750px; }
-      .term-card { grid-template-columns: 1fr; gap: 12px; }
+    @media (max-width: 900px) {
+      body { flex-direction: column; }
+      .sidebar { width: 100%; height: auto; position: relative; border-right: none; border-bottom: 1px solid var(--border); }
+      .main-wrapper { margin-left: 0; padding: 20px; }
     }
   </style>
 </head>
 <body>
 
-  <div class="glow-1"></div>
-  <div class="glow-2"></div>
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div>
+      <div class="brand-box">
+        <div class="brand-icon">U</div>
+        <div class="brand-text">UBV Index</div>
+      </div>
+      <ul class="nav-list">
+        <li><a href="#" class="nav-btn active" onclick="switchNav(event, 'valuelists')"><i class="fa-solid fa-chart-simple"></i> Market Values</a></li>
+        <li><a href="#" class="nav-link nav-btn" onclick="switchNav(event, 'updates')"><i class="fa-solid fa-clock-rotate-left"></i> Updates</a></li>
+        <li><a href="#" class="nav-link nav-btn" onclick="switchNav(event, 'terms')"><i class="fa-solid fa-book"></i> Terminology</a></li>
+        <li><a href="#" class="nav-link nav-btn" onclick="switchNav(event, 'editors')"><i class="fa-solid fa-user-shield"></i> Editors</a></li>
+        <li><a href="#" class="nav-link nav-btn" onclick="switchNav(event, 'about')"><i class="fa-solid fa-circle-info"></i> About</a></li>
+      </ul>
+    </div>
+    <div class="sidebar-footer">
+      <a href="https://discord.gg/ubv" target="_blank" class="discord-btn"><i class="fab fa-discord"></i> Discord</a>
+    </div>
+  </aside>
 
-  <header class="topbar">
-    <a href="#" class="brand">
-      <span class="brand-logo">UBV</span>
-      <span class="brand-title">Value Index</span>
-    </a>
-    <ul class="nav-tabs">
-      <li><a href="#" class="nav-link active" onclick="openTab(event, 'valuelists')">Values</a></li>
-      <li><a href="#" class="nav-link" onclick="openTab(event, 'updates')">Updates</a></li>
-      <li><a href="#" class="nav-link" onclick="openTab(event, 'terms')">Terms</a></li>
-      <li><a href="#" class="nav-link" onclick="openTab(event, 'about')">About</a></li>
-      <li><a href="#" class="nav-link" onclick="openTab(event, 'editors')">Editors</a></li>
-    </ul>
-    <a href="https://discord.gg/ubv" target="_blank" class="social-link" title="Discord Community"><i class="fab fa-discord"></i></a>
-  </header>
+  <!-- MAIN CONTENT -->
+  <main class="main-wrapper">
 
-  <main class="app-container">
+    <!-- TOP METRICS BAR -->
+    <div class="stats-bar">
+      <div class="stat-card">
+        <div class="stat-label">Tracked Items</div>
+        <div class="stat-value" id="stat-count">-</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Market Status</div>
+        <div class="stat-value" style="color:#10b981;">ACTIVE</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Data Sync</div>
+        <div class="stat-value" style="color:#3b82f6;">LIVE</div>
+      </div>
+    </div>
 
     <!-- VALUES TAB -->
     <div id="valuelists" class="tab-content active">
-      <div class="view-header">
-        <div class="sub-toggle">
-          <button id="btn-main" class="toggle-btn active" onclick="switchListTab('normal-section', 'btn-main')">Main Items</button>
-          <button id="btn-collect" class="toggle-btn" onclick="switchListTab('collectable-section', 'btn-collect')">Collectors</button>
+      <div class="toolbar">
+        <div class="toggle-group">
+          <button id="btn-main" class="sub-btn active" onclick="switchSubList('normal', 'btn-main')">Main Items</button>
+          <button id="btn-collect" class="sub-btn" onclick="switchSubList('collectable', 'btn-collect')">Collectors</button>
         </div>
 
-        <div class="search-wrapper">
+        <div class="search-box">
           <i class="fa-solid fa-magnifying-glass search-icon"></i>
-          <input type="text" id="search-box" class="search-input" placeholder="Search item by name..." oninput="filterTable()">
+          <input type="text" id="search-box" class="search-input" placeholder="Search by name, status, rank..." oninput="filterData()">
+        </div>
+
+        <div class="view-switch">
+          <button class="view-btn active" id="btn-grid-view" onclick="setViewMode('grid')"><i class="fa-solid fa-border-all"></i></button>
+          <button class="view-btn" id="btn-table-view" onclick="setViewMode('table')"><i class="fa-solid fa-list"></i></button>
         </div>
       </div>
 
-      <div id="loading" class="loading-box"><i class="fa-solid fa-spinner fa-spin" style="margin-right:8px;"></i> Loading market dataset...</div>
+      <!-- GRID VIEW CONTAINER -->
+      <div id="grid-container" class="items-grid"></div>
 
-      <div class="data-table-container sublist-tab active-sublist" id="normal-section">
+      <!-- TABLE VIEW CONTAINER -->
+      <div id="table-container" class="table-container">
         <table>
           <thead>
             <tr>
@@ -419,70 +359,52 @@
               <th>Type</th>
             </tr>
           </thead>
-          <tbody id="normal-body"></tbody>
-        </table>
-      </div>
-
-      <div class="data-table-container sublist-tab" id="collectable-section">
-        <table>
-          <thead>
-            <tr>
-              <th>Item</th>
-              <th>Value</th>
-              <th>Avg RAP</th>
-              <th>Demand Scale</th>
-              <th>Demand Rank</th>
-              <th>Value Status</th>
-              <th>Demand Status</th>
-              <th>Type</th>
-            </tr>
-          </thead>
-          <tbody id="collectable-body"></tbody>
+          <tbody id="table-body"></tbody>
         </table>
       </div>
     </div>
 
     <!-- UPDATES TAB -->
     <div id="updates" class="tab-content">
-      <div class="content-panel">
-        <h2 class="section-title">Market Updates & Changelog</h2>
-        <div id="updates-container"><div class="loading-box">Loading updates...</div></div>
+      <div class="panel">
+        <h2 class="panel-title">Changelog & Updates</h2>
+        <div id="updates-container">Loading...</div>
       </div>
     </div>
 
     <!-- TERMS TAB -->
     <div id="terms" class="tab-content">
-      <div class="content-panel">
-        <h2 class="section-title">Market Terminology</h2>
-        <div class="terms-list" id="terms-container"><div class="loading-box">Loading terms...</div></div>
-      </div>
-    </div>
-
-    <!-- ABOUT TAB -->
-    <div id="about" class="tab-content">
-      <div class="content-panel">
-        <h2 class="section-title">About UBV</h2>
-        <p style="color: var(--text-sub); font-size: 1.05rem; line-height: 1.8;">
-          UBV tracks real-time item values, demand ratings, and RAP stats for the Roblox trading market. All datasets are dynamically synced directly from official spreadsheet records.
-        </p>
+      <div class="panel">
+        <h2 class="panel-title">Market Glossary</h2>
+        <div id="terms-container">Loading...</div>
       </div>
     </div>
 
     <!-- EDITORS TAB -->
     <div id="editors" class="tab-content">
-      <div class="data-table-container">
+      <div class="table-container" style="display:block;">
         <table>
           <thead>
             <tr>
               <th>Avatar</th>
               <th>Username</th>
               <th>Role</th>
-              <th>Roblox Profile</th>
+              <th>Profile</th>
               <th>Status</th>
             </tr>
           </thead>
           <tbody id="editors-body"></tbody>
         </table>
+      </div>
+    </div>
+
+    <!-- ABOUT TAB -->
+    <div id="about" class="tab-content">
+      <div class="panel">
+        <h2 class="panel-title">About UBV Platform</h2>
+        <p style="color: var(--text-muted); line-height: 1.7;">
+          UBV tracks real-time market valuations, RAP metrics, and item trends for Roblox collectibles. All data feeds are processed automatically via linked spreadsheet databases.
+        </p>
       </div>
     </div>
 
@@ -496,32 +418,31 @@
       editors: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR-iH2G2YVcW1PDsLcE4KfPiLhMpaUyzKC6o_E-1BWemF3GS7YYN8kBRpgOjmIDBsYnTqWayxBTlsrt/pub?gid=1456456561&single=true&output=csv'
     };
 
-    function formatNumber(val) {
-      if (!val) return '-';
-      let str = String(val).replace(',', '.');
-      let num = parseFloat(str);
-      return isNaN(num) ? val : num.toString();
+    let mainData = [], collectData = [], dynamicColorMap = {};
+    let activeSubList = 'normal', activeViewMode = 'grid';
+
+    function switchNav(e, tabId) {
+      e.preventDefault();
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      e.currentTarget.classList.add('active');
     }
 
-    function openTab(evt, tabName) {
-      evt.preventDefault();
-      document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active"));
-      document.querySelectorAll(".nav-link").forEach(el => el.classList.remove("active"));
-      document.getElementById(tabName).classList.add("active");
-      evt.currentTarget.classList.add("active");
+    function switchSubList(type, btnId) {
+      activeSubList = type;
+      document.querySelectorAll('.sub-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(btnId).classList.add('active');
+      filterData();
     }
 
-    let currentSubTab = 'normal-section';
-    function switchListTab(targetId, btnId) {
-      currentSubTab = targetId;
-      document.querySelectorAll(".sublist-tab").forEach(el => el.classList.remove("active-sublist"));
-      document.querySelectorAll(".toggle-btn").forEach(el => el.classList.remove("active"));
-      document.getElementById(targetId).classList.add("active-sublist");
-      document.getElementById(btnId).classList.add("active");
-      filterTable();
+    function setViewMode(mode) {
+      activeViewMode = mode;
+      document.getElementById('btn-grid-view').classList.toggle('active', mode === 'grid');
+      document.getElementById('btn-table-view').classList.toggle('active', mode === 'table');
+      document.getElementById('grid-container').style.display = mode === 'grid' ? 'grid' : 'none';
+      document.getElementById('table-container').style.display = mode === 'table' ? 'block' : 'none';
     }
-
-    let mainListData = [], collectableListData = [], dynamicColorMap = {};
 
     function getTextColor(bgColor) {
       if (!bgColor || bgColor === '#000000') return '#ffffff';
@@ -548,16 +469,12 @@
               const textColor = getTextColor(color);
               const card = document.createElement('div');
               card.className = 'term-card';
-              card.innerHTML = `
-                <div class="term-name" style="background-color: ${color}; color: ${textColor};">${term}</div>
-                <div class="term-text">${desc}</div>
-              `;
+              card.innerHTML = `<span class="badge" style="background:${color}; color:${textColor};">${term}</span><span>${desc}</span>`;
               container.appendChild(card);
             }
           });
           loadItems();
-        },
-        error: function() { loadItems(); }
+        }
       });
     }
 
@@ -565,8 +482,7 @@
       Papa.parse(CSV_URLS.items, {
         download: true,
         complete: function(results) {
-          document.getElementById('loading').style.display = 'none';
-          mainListData = []; collectableListData = [];
+          mainData = []; collectData = [];
           let isCollectable = false;
 
           results.data.forEach(row => {
@@ -577,67 +493,76 @@
               isCollectable = true;
               return;
             }
-            if (isCollectable) collectableListData.push(row);
-            else mainListData.push(row);
+            if (isCollectable) collectData.push(row);
+            else mainData.push(row);
           });
 
-          renderTable(mainListData, document.getElementById("normal-body"));
-          renderTable(collectableListData, document.getElementById("collectable-body"));
+          document.getElementById('stat-count').textContent = mainData.length + collectData.length;
+          filterData();
         }
       });
     }
 
-    function renderTable(data, tbody) {
-      if(!tbody) return;
-      tbody.innerHTML = "";
+    function renderView(data) {
+      const grid = document.getElementById('grid-container');
+      const tableBody = document.getElementById('table-body');
+      grid.innerHTML = ''; tableBody.innerHTML = '';
+
       data.forEach(row => {
-        if (!row || !row[0]) return;
-        const tr = document.createElement("tr");
+        let name = row[0] ?? '-', val = row[1] ?? '-', rap = row[2] ?? '-';
+        let demandScale = row[3] ?? '-', demandRank = row[4] ?? '-', valStatus = row[5] ?? '-', demStatus = row[6] ?? '-', type = row[7] ?? '-';
+        let color = String(row[8] ?? '#fff').trim();
 
-        let itemColor = String(row[8] ?? '').trim();
-        if (!itemColor.startsWith('#')) itemColor = '#ffffff';
+        // GRID CARD RENDER
+        const card = document.createElement('div');
+        card.className = 'item-card';
+        card.innerHTML = `
+          <div>
+            <div class="card-header">
+              <span class="card-title" style="color:${color};">${name}</span>
+              <span class="card-type">${type}</span>
+            </div>
+            <div class="card-body">
+              <div><div class="card-metric-label">VALUE</div><div class="card-metric-val">${val}</div></div>
+              <div><div class="card-metric-label">AVG RAP</div><div class="card-metric-val" style="color:var(--text-muted);">${rap}</div></div>
+            </div>
+          </div>
+          <div class="card-footer">
+            ${createBadge(valStatus)}
+            ${createBadge(demStatus)}
+            ${createBadge(demandRank)}
+          </div>
+        `;
+        grid.appendChild(card);
 
-        for (let idx = 0; idx < 8; idx++) {
-          const td = document.createElement("td");
-          let rawText = String(row[idx] ?? '-').trim();
-          const lowerText = rawText.toLowerCase();
-
-          if (idx === 0) {
-            td.className = "item-name";
-            td.style.color = itemColor;
-            td.textContent = rawText;
-          } else if (idx === 1) {
-            td.className = "value-num";
-            td.textContent = rawText;
-          } else if (idx === 2) {
-            td.className = "rap-num";
-            td.textContent = formatNumber(rawText);
-          } else if (idx >= 4 && idx <= 6) {
-            const mappedColor = dynamicColorMap[lowerText];
-            if (mappedColor) {
-              const textColor = getTextColor(mappedColor);
-              td.innerHTML = `<span class="status-badge" style="background-color: ${mappedColor}; color: ${textColor};">${rawText}</span>`;
-            } else {
-              td.textContent = rawText;
-            }
-          } else {
-            td.textContent = rawText;
-          }
-          tr.appendChild(td);
-        }
-        tbody.appendChild(tr);
+        // TABLE ROW RENDER
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="color:${color}; font-weight:800;">${name}</td>
+          <td style="font-family:var(--font-mono);">${val}</td>
+          <td style="font-family:var(--font-mono); color:var(--text-muted);">${rap}</td>
+          <td>${demandScale}</td>
+          <td>${createBadge(demandRank)}</td>
+          <td>${createBadge(valStatus)}</td>
+          <td>${createBadge(demStatus)}</td>
+          <td>${type}</td>
+        `;
+        tableBody.appendChild(tr);
       });
     }
 
-    function filterTable() {
-      const query = document.getElementById("search-box").value.toLowerCase().trim();
-      const targetData = currentSubTab === 'normal-section' ? mainListData : collectableListData;
-      const targetBody = currentSubTab === 'normal-section' ? document.getElementById("normal-body") : document.getElementById("collectable-body");
-      
-      const filtered = targetData.filter(row => 
-        row.some(cell => String(cell).toLowerCase().includes(query))
-      );
-      renderTable(filtered, targetBody);
+    function createBadge(text) {
+      if(!text || text === '-') return '';
+      const color = dynamicColorMap[String(text).toLowerCase()] || '#374151';
+      const textColor = getTextColor(color);
+      return `<span class="badge" style="background:${color}; color:${textColor};">${text}</span>`;
+    }
+
+    function filterData() {
+      const query = document.getElementById('search-box').value.toLowerCase().trim();
+      const targetData = activeSubList === 'normal' ? mainData : collectData;
+      const filtered = targetData.filter(row => row.some(cell => String(cell).toLowerCase().includes(query)));
+      renderView(filtered);
     }
 
     function loadUpdates() {
@@ -648,16 +573,10 @@
           container.innerHTML = '';
           results.data.forEach(r => {
             if (!r || !r[0]) return;
-            const item = document.createElement('div');
-            item.className = 'update-item';
-            item.innerHTML = `
-              <div class="update-head">
-                <span class="update-title">${r[0]}</span>
-                <span class="update-date">${r[1] || ''}</span>
-              </div>
-              <div class="update-body">${r[2] || ''}</div>
-            `;
-            container.appendChild(item);
+            const div = document.createElement('div');
+            div.className = 'update-item';
+            div.innerHTML = `<div style="display:flex; justify-content:space-between; margin-bottom:8px;"><strong style="font-size:1.1rem;">${r[0]}</strong><span style="color:var(--text-muted); font-size:0.85rem;">${r[1]||''}</span></div><div style="color:var(--text-muted); font-size:0.95rem;">${r[2]||''}</div>`;
+            container.appendChild(div);
           });
         }
       });
@@ -671,35 +590,14 @@
           tbody.innerHTML = '';
           results.data.forEach(r => {
             if (!r || !r[1] || String(r[1]).toLowerCase() === 'username') return;
-            
-            const avatarImg = String(r[0] || '').trim();
-            const username = String(r[1] || '').trim();
-            const role = String(r[2] || 'Editor').trim();
-            const profileUrl = String(r[3] || '').trim();
-            const isActive = String(r[4] || '').toLowerCase().trim() === 'active';
-
-            const imgSrc = (avatarImg && avatarImg.startsWith('http')) 
-              ? avatarImg 
-              : `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=0f172a&color=fff`;
-
-            let profileLinkHtml = `<span style="color:#ffffff;">${username}</span>`;
-            if (profileUrl && profileUrl !== '-') {
-              const href = profileUrl.startsWith('http') ? profileUrl : `https://${profileUrl}`;
-              profileLinkHtml = `<a href="${href}" target="_blank" class="editor-profile-link">${username} <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.75rem;"></i></a>`;
-            }
-
+            const username = r[1], role = r[2] || 'Editor', profile = r[3], active = String(r[4]).toLowerCase() === 'active';
             const tr = document.createElement('tr');
             tr.innerHTML = `
-              <td><img src="${imgSrc}" class="avatar-img"></td>
-              <td><strong style="color:#fff; font-size: 1.05rem;">${username}</strong></td>
-              <td style="color: var(--text-sub); font-size: 0.95rem;">${role}</td>
-              <td>${profileLinkHtml}</td>
-              <td>
-                <span style="color:${isActive ? '#34d399' : '#f87171'}; font-weight:800; font-size:0.9rem; display:inline-flex; align-items:center; gap:8px;">
-                  <span style="width:8px; height:8px; border-radius:50%; background-color:${isActive ? '#34d399' : '#f87171'}; box-shadow: 0 0 10px ${isActive ? 'rgba(52, 211, 153, 0.8)' : 'rgba(248, 113, 113, 0.8)'};"></span>
-                  ${isActive ? 'Active' : 'Inactive'}
-                </span>
-              </td>
+              <td><img src="https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=1f293d&color=fff" class="avatar-img"></td>
+              <td><strong>${username}</strong></td>
+              <td style="color:var(--text-muted);">${role}</td>
+              <td>${profile && profile !== '-' ? `<a href="${profile.startsWith('http')?profile:'https://'+profile}" target="_blank" style="color:var(--accent);">Profile <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.75rem;"></i></a>` : '-'}</td>
+              <td><span style="color:${active?'#10b981':'#ef4444'}; font-weight:800;">● ${active?'Active':'Inactive'}</span></td>
             `;
             tbody.appendChild(tr);
           });
