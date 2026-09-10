@@ -521,8 +521,8 @@
             <tr>
               <th style="width: 14%;">ITEM</th>
               <th style="width: 15%;">VALUE</th>
-              <th style="width: 10%;">AVERAGE RAP</th>
               <th style="width: 13%;">DEMAND SCALE</th>
+              <th style="width: 10%;">AVERAGE RAP</th>
               <th style="width: 14%;">DEMAND RANKING</th>
               <th style="width: 12%;">VALUE STATUS</th>
               <th style="width: 13%;">DEMAND STATUS</th>
@@ -540,8 +540,8 @@
             <tr>
               <th style="width: 14%;">ITEM</th>
               <th style="width: 15%;">VALUE</th>
-              <th style="width: 10%;">AVERAGE RAP</th>
               <th style="width: 13%;">DEMAND SCALE</th>
+              <th style="width: 10%;">AVERAGE RAP</th>
               <th style="width: 14%;">DEMAND RANKING</th>
               <th style="width: 12%;">VALUE STATUS</th>
               <th style="width: 13%;">DEMAND STATUS</th>
@@ -678,7 +678,7 @@
     }
 
     function renderTable(data, tbody) {
-      if(!tbody) return;
+      if (!tbody) return;
       tbody.innerHTML = "";
       const fragment = document.createDocumentFragment();
 
@@ -686,14 +686,15 @@
         if (!row || row.length === 0 || !row[0]) return;
         const tr = document.createElement("tr");
 
-        /* I SÜTUNUNDAN (ROW[8]) RENK OKUMA */
+        /* I SÜTUNUNDAN (ROW[8]) RENK KODUNU OKUMA */
         let itemBgColor = String(row[8] ?? '').trim();
-        
-        // Eğer I sütununda # ile başlayan HEX renk kodu verilmediyse varsayılan bir renk atar
+
+        // Eğer I sütununda renk koda başlanmamışsa veya boşsa varsayılan mor renge düşer
         if (!itemBgColor.startsWith('#')) {
           itemBgColor = '#6366f1';
         }
 
+        // Tablodaki ilk 8 sütunu (A-H) döngüyle ekrana basıyoruz
         for (let idx = 0; idx < 8; idx++) {
           const td = document.createElement("td");
           const rawText = String(row[idx] ?? '-').trim();
@@ -711,7 +712,7 @@
             td.className = "val-cell";
             td.textContent = rawText;
           } 
-          else if (idx === 3) {
+          else if (idx === 2) {
             td.className = "scale-cell";
             td.textContent = rawText;
           } 
