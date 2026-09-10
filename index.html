@@ -3,384 +3,341 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>UBV - Ultimate Baller Values</title>
+  <title>UBV — Ultimate Baller Values</title>
   
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;1,600;1,700;1,800&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
   <style>
     :root {
-      --navbar-bg: #0b0f19;
-      --page-bg: #121824;
-      --card-bg: rgba(20, 26, 40, 0.85);
-      --text-dark: #f8fafc;
-      --accent-purple: #d800ff;
-      --accent-glow: rgba(216, 0, 255, 0.35);
+      --bg-main: #0a0b0e;
+      --bg-surface: #12141a;
+      --bg-surface-hover: #181b24;
+      --border-color: #1f232e;
+      --border-color-light: #2a303f;
+      
+      --text-primary: #f3f4f6;
+      --text-secondary: #8b949e;
+      --text-muted: #4b5563;
+
+      --accent-blue: #3b82f6;
+      --accent-cyan: #06b6d4;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: 'Montserrat', sans-serif;
-      background-color: var(--page-bg);
-      background-image: radial-gradient(circle at 50% 0%, #1e1b4b 0%, #121824 70%);
-      color: var(--text-dark);
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-primary);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* NAVBAR */
-    .navbar {
-      background-color: rgba(11, 15, 25, 0.9);
-      backdrop-filter: blur(12px);
+    /* HEADER / NAVBAR */
+    .topbar {
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border-color);
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .brand-logo {
+      background: #ffffff;
+      color: #000000;
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.1rem;
+      padding: 4px 8px;
+      border-radius: 4px;
+      letter-spacing: -0.5px;
+    }
+
+    .brand-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.3px;
+    }
+
+    .nav-tabs { display: flex; gap: 4px; list-style: none; }
+
+    .nav-link {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 6px;
+      transition: all 0.15s ease;
+    }
+
+    .nav-link:hover { color: var(--text-primary); background: rgba(255, 255, 255, 0.04); }
+    .nav-link.active { color: #ffffff; background: var(--border-color); }
+
+    .social-link {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      transition: color 0.15s ease;
+    }
+    .social-link:hover { color: #5865f2; }
+
+    /* LAYOUT CONTAINER */
+    .app-container {
+      max-width: 1400px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 32px 24px;
+      flex: 1;
+    }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* CONTROLS AREA */
+    .view-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0 40px;
-      height: 75px;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: 0 4px 25px rgba(0, 0, 0, 0.4);
+      margin-bottom: 24px;
+      gap: 16px;
+      flex-wrap: wrap;
     }
 
-    .nav-links { display: flex; gap: 25px; list-style: none; }
-
-    .nav-links a {
-      color: #94a3b8;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 0.95rem;
-      padding: 8px 4px;
-      position: relative;
-      transition: all 0.3s ease;
+    .sub-toggle {
+      display: flex;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      padding: 3px;
+      border-radius: 8px;
     }
 
-    .nav-links a::after {
-      content: '';
-      position: absolute;
-      width: 0;
-      height: 3px;
-      bottom: 0;
-      left: 0;
-      background-color: var(--accent-purple);
-      transition: width 0.3s ease;
-      border-radius: 2px;
-      box-shadow: 0 0 10px var(--accent-purple);
-    }
-
-    .nav-links a.active, .nav-links a:hover { color: #ffffff; }
-    .nav-links a.active::after, .nav-links a:hover::after { width: 100%; }
-
-    .nav-logo {
-      font-family: 'Outfit', sans-serif;
-      font-size: 2.2rem;
-      font-weight: 800;
-      color: #ffffff;
-      letter-spacing: 1px;
-      text-decoration: none;
-      text-shadow: 0 0 15px var(--accent-purple);
-      transition: transform 0.3s ease;
-    }
-
-    .nav-logo:hover { transform: scale(1.05); }
-
-    .nav-social {
-      color: #ffffff;
-      font-size: 1.6rem;
-      transition: transform 0.3s ease, color 0.3s ease;
-      text-decoration: none;
-    }
-
-    .nav-social:hover {
-      transform: scale(1.2) rotate(8deg);
-      color: #5865f2;
-    }
-
-    /* MAIN CONTAINER */
-    .main-container {
-      flex: 1;
-      padding: 40px 20px;
-      max-width: 1350px;
-      margin: 0 auto;
-      width: 100%;
-    }
-
-    .tab-content { 
-      display: none; 
-      opacity: 0;
-      transform: translateY(12px);
-      transition: opacity 0.4s ease, transform 0.4s ease;
-    }
-
-    .tab-content.active { 
-      display: block; 
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .page-title {
-      font-family: 'Bebas Neue', cursive;
-      font-size: 4.5rem;
-      letter-spacing: 3px;
-      color: #ffffff;
-      margin-bottom: 25px;
-      text-transform: uppercase;
-      text-align: center;
-      text-shadow: 0 0 20px rgba(216, 0, 255, 0.4);
-    }
-
-    /* SEARCH & BUTTONS */
-    #search-section { text-align: center; margin-bottom: 2rem; }
-    #search-box {
-      padding: 16px 28px;
-      width: 100%;
-      max-width: 550px;
-      font-size: 1rem;
-      border-radius: 35px;
-      border: 2px solid rgba(255, 255, 255, 0.1);
-      background: rgba(15, 23, 42, 0.7);
-      backdrop-filter: blur(10px);
-      color: #ffffff;
-      outline: none;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-      transition: all 0.3s ease;
-    }
-
-    #search-box:focus {
-      border-color: var(--accent-purple);
-      box-shadow: 0 0 25px var(--accent-glow);
-      transform: scale(1.02);
-    }
-
-    #custom-button-group { 
-      display: flex; 
-      justify-content: center; 
-      gap: 15px; 
-      margin: 1rem 0 2rem; 
-    }
-
-    .custom-btn {
-      font-family: 'Montserrat', sans-serif;
-      background: rgba(15, 23, 42, 0.8);
-      border: 2px solid rgba(255, 255, 255, 0.1);
-      color: #94a3b8;
-      padding: 12px 28px;
-      border-radius: 14px;
-      font-size: 0.95rem;
-      font-weight: 700;
+    .toggle-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      padding: 8px 18px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: 6px;
       cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transition: all 0.15s ease;
     }
 
-    .custom-btn:hover {
+    .toggle-btn:hover { color: var(--text-primary); }
+    .toggle-btn.active {
+      background: var(--border-color-light);
       color: #ffffff;
-      border-color: var(--accent-purple);
-      transform: translateY(-2px);
     }
 
-    .custom-btn.active-subtab {
-      background: var(--accent-purple);
-      color: #ffffff;
-      border-color: var(--accent-purple);
-      box-shadow: 0 0 20px var(--accent-glow);
+    .search-wrapper { position: relative; width: 320px; }
+
+    .search-input {
+      width: 100%;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 9px 14px 9px 36px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      outline: none;
+      transition: border-color 0.15s ease;
+    }
+
+    .search-input:focus { border-color: var(--border-color-light); }
+    .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.8rem; }
+
+    /* DATA TABLES */
+    .data-table-container {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      overflow: hidden;
     }
 
     .sublist-tab { display: none; }
     .sublist-tab.active-sublist { display: block; }
 
-    /* TABLOLAR */
-    .table-wrapper {
-      width: 100%;
-      border-radius: 16px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
-      margin-bottom: 2rem;
-      overflow: hidden;
-      background: #000000;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    table { width: 100%; border-collapse: collapse; background: #000000; color: #ffffff; }
+    table { width: 100%; border-collapse: collapse; text-align: left; }
 
     th {
-      padding: 1.2rem 0.8rem;
-      background: #050505;
-      color: #ffffff;
-      font-weight: 800;
+      background: #0e1015;
+      color: var(--text-secondary);
+      font-size: 0.72rem;
+      font-weight: 700;
       text-transform: uppercase;
-      font-size: 0.9rem;
-      letter-spacing: 1px;
-      border-bottom: 2px solid #222222;
-      text-align: center;
+      letter-spacing: 0.6px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border-color);
     }
 
     td {
-      padding: 0.85rem 0.6rem;
-      text-align: center;
-      border-bottom: 1px solid #141414;
-      font-size: 0.95rem;
-      font-weight: 700;
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #e2e8f0;
     }
 
-    tr:hover td { background-color: rgba(255, 255, 255, 0.02); }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background-color: var(--bg-surface-hover); }
 
-    .item-cell {
-      font-weight: 800;
-      font-style: italic;
-      font-size: 1.05rem;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-    }
+    .item-name { font-weight: 700; font-size: 0.9rem; }
+    .value-num { font-weight: 700; color: #ffffff; }
+    .rap-num { color: var(--text-secondary); }
 
-    .val-cell { color: #ffffff; font-weight: 800; font-size: 1.1rem; }
-    .scale-cell { color: #b197fc; font-weight: 800; font-size: 1.1rem; }
-
-    .badge-tag {
+    .status-badge {
       display: inline-block;
-      width: 90%;
-      padding: 7px 10px;
-      border-radius: 8px;
-      font-weight: 800;
-      font-style: italic;
-      font-size: 0.85rem;
-      text-align: center;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: capitalize;
     }
 
-    /* UPDATES TAB */
-    .updates-wrapper {
-      background: #000000;
-      color: #ffffff;
-      padding: 35px;
-      border-radius: 16px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+    /* CARD PANELS FOR UPDATES/ABOUT */
+    .content-panel {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 24px;
     }
 
-    .update-block {
-      margin-bottom: 25px;
-      border-bottom: 1px solid #1a1a1a;
-      padding-bottom: 20px;
-    }
-
-    .update-block:last-child { border-bottom: none; }
-    .update-header-title { font-size: 1.6rem; font-weight: 800; color: #ffffff; margin-bottom: 8px; }
-    .update-date-tag { font-size: 0.85rem; color: #64748b; margin-bottom: 12px; }
-    .update-content-text { font-size: 1rem; line-height: 1.6; color: #cbd5e1; font-weight: 600; }
-
-    /* TERMS TAB */
-    .terms-wrapper {
-      background: #000000;
-      padding: 25px;
-      border-radius: 16px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .terms-section-title {
-      color: #ffffff;
-      font-weight: 800;
+    .section-title {
+      font-family: 'Syne', sans-serif;
       font-size: 1.4rem;
-      padding: 15px 5px;
-      text-align: center;
-      border-bottom: 2px solid #222;
-      margin-top: 15px;
+      font-weight: 700;
+      margin-bottom: 20px;
     }
 
-    .term-row { display: grid; grid-template-columns: 260px 1fr; gap: 12px; }
-    .term-badge { padding: 12px 15px; font-weight: 800; font-style: italic; font-size: 1rem; text-align: center; border-radius: 8px; }
-    .term-desc { background: #111111; color: #ffffff; padding: 12px 18px; font-weight: 600; font-size: 0.95rem; border-radius: 8px; display: flex; align-items: center; }
+    .update-item {
+      padding-bottom: 16px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .update-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .update-head { display: flex; justify-content: space-between; margin-bottom: 6px; }
+    .update-title { font-weight: 700; color: #fff; font-size: 0.95rem; }
+    .update-date { font-size: 0.8rem; color: var(--text-muted); }
+    .update-body { font-size: 0.875rem; color: var(--text-secondary); line-height: 1.5; }
 
-    /* EDITORS TABLE */
-    .editors-table { width: 100%; border-collapse: collapse; background: #000000; color: #ffffff; }
-    .editors-table th { background: #050505; padding: 16px; }
-    .editors-table td { background: #0a0a0a; border-bottom: 1px solid #1a1a1a; padding: 16px; }
+    /* TERMS GRID */
+    .terms-list { display: flex; flex-direction: column; gap: 8px; }
+    .term-card {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 16px;
+      align-items: center;
+      background: #0e1015;
+      padding: 10px 14px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+    }
 
-    .editor-avatar { width: 65px; height: 65px; border-radius: 50%; border: 2px solid var(--accent-purple); }
-    .roblox-tag { color: #38bdf8; text-decoration: none; font-weight: 800; }
-    .roblox-tag:hover { text-decoration: underline; }
+    .term-name {
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-align: center;
+    }
 
-    .status-box { padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 800; }
-    .status-box.active { background: rgba(46, 204, 113, 0.2); color: #2ecc71; border: 1px solid #2ecc71; }
-    .status-box.inactive { background: rgba(231, 76, 60, 0.2); color: #e74c3c; border: 1px solid #e74c3c; }
+    .term-text { font-size: 0.85rem; color: var(--text-secondary); }
 
-    .loading-text { text-align: center; padding: 40px; font-size: 1.1rem; color: #94a3b8; font-weight: 700; }
+    .loading-box { text-align: center; padding: 40px; color: var(--text-muted); font-size: 0.85rem; }
 
     @media (max-width: 768px) {
-      .navbar { flex-direction: column; height: auto; padding: 15px; gap: 12px; }
-      .nav-links { gap: 12px; flex-wrap: wrap; justify-content: center; }
-      .page-title { font-size: 3rem; }
-      .table-wrapper { overflow-x: auto; }
-      table, .editors-table { min-width: 680px; }
-      .term-row { grid-template-columns: 1fr; }
+      .topbar { padding: 0 16px; }
+      .data-table-container { overflow-x: auto; }
+      table { min-width: 650px; }
+      .term-card { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
-  <nav class="navbar">
-    <a href="#" class="nav-logo">UBV</a>
-    <ul class="nav-links">
-      <li><a href="#" class="nav-link active" onclick="openTab(event, 'valuelists')">Value Lists</a></li>
+  <header class="topbar">
+    <a href="#" class="brand">
+      <span class="brand-logo">UBV</span>
+      <span class="brand-title">Value Index</span>
+    </a>
+    <ul class="nav-tabs">
+      <li><a href="#" class="nav-link active" onclick="openTab(event, 'valuelists')">Values</a></li>
       <li><a href="#" class="nav-link" onclick="openTab(event, 'updates')">Updates</a></li>
       <li><a href="#" class="nav-link" onclick="openTab(event, 'terms')">Terms</a></li>
       <li><a href="#" class="nav-link" onclick="openTab(event, 'about')">About</a></li>
-      <li><a href="#" class="nav-link" onclick="openTab(event, 'editors')">List Editors</a></li>
+      <li><a href="#" class="nav-link" onclick="openTab(event, 'editors')">Editors</a></li>
     </ul>
-    <a href="https://discord.gg/ubv" target="_blank" class="nav-social" title="Discord Server">
-      <i class="fab fa-discord"></i>
-    </a>
-  </nav>
+    <a href="https://discord.gg/ubv" target="_blank" class="social-link"><i class="fab fa-discord"></i></a>
+  </header>
 
-  <div class="main-container">
+  <main class="app-container">
 
+    <!-- VALUES TAB -->
     <div id="valuelists" class="tab-content active">
-      <h1 class="page-title">VALUE LISTS</h1>
+      <div class="view-header">
+        <div class="sub-toggle">
+          <button id="btn-main" class="toggle-btn active" onclick="switchListTab('normal-section', 'btn-main')">Main Items</button>
+          <button id="btn-collect" class="toggle-btn" onclick="switchListTab('collectable-section', 'btn-collect')">Collectors</button>
+        </div>
 
-      <div id="custom-button-group">
-        <button id="btn-main" class="custom-btn active-subtab" onclick="switchListTab('normal-section', 'btn-main')">Main List</button>
-        <button id="btn-collect" class="custom-btn" onclick="switchListTab('collectable-section', 'btn-collect')">Collectors List</button>
+        <div class="search-wrapper">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="text" id="search-box" class="search-input" placeholder="Search item..." oninput="filterTable()">
+        </div>
       </div>
 
-      <div id="search-section">
-        <input type="text" id="search-box" placeholder="🔍 Search item name..." oninput="filterTable()">
-      </div>
+      <div id="loading" class="loading-box">Loading dataset...</div>
 
-      <div id="loading" class="loading-text">Loading items...</div>
-
-      <div class="table-wrapper sublist-tab active-sublist" id="normal-section">
+      <div class="data-table-container sublist-tab active-sublist" id="normal-section">
         <table>
           <thead>
             <tr>
-              <th>ITEM</th>
-              <th>VALUE</th>
-              <th>AVERAGE RAP</th>
-              <th>DEMAND SCALE</th>
-              <th>DEMAND RANKING</th>
-              <th>VALUE STATUS</th>
-              <th>DEMAND STATUS</th>
-              <th>ITEM TYPE</th>
+              <th>Item</th>
+              <th>Value</th>
+              <th>Avg RAP</th>
+              <th>Demand Scale</th>
+              <th>Demand Rank</th>
+              <th>Value Status</th>
+              <th>Demand Status</th>
+              <th>Type</th>
             </tr>
           </thead>
           <tbody id="normal-body"></tbody>
         </table>
       </div>
 
-      <div class="table-wrapper sublist-tab" id="collectable-section">
+      <div class="data-table-container sublist-tab" id="collectable-section">
         <table>
           <thead>
             <tr>
-              <th>ITEM</th>
-              <th>VALUE</th>
-              <th>AVERAGE RAP</th>
-              <th>DEMAND SCALE</th>
-              <th>DEMAND RANKING</th>
-              <th>VALUE STATUS</th>
-              <th>DEMAND STATUS</th>
-              <th>ITEM TYPE</th>
+              <th>Item</th>
+              <th>Value</th>
+              <th>Avg RAP</th>
+              <th>Demand Scale</th>
+              <th>Demand Rank</th>
+              <th>Value Status</th>
+              <th>Demand Status</th>
+              <th>Type</th>
             </tr>
           </thead>
           <tbody id="collectable-body"></tbody>
@@ -388,40 +345,42 @@
       </div>
     </div>
 
+    <!-- UPDATES TAB -->
     <div id="updates" class="tab-content">
-      <h1 class="page-title">UPDATES</h1>
-      <div class="updates-wrapper" id="updates-container">
-        <div class="loading-text">Loading updates...</div>
+      <div class="content-panel">
+        <h2 class="section-title">Changelog</h2>
+        <div id="updates-container"><div class="loading-box">Loading updates...</div></div>
       </div>
     </div>
 
+    <!-- TERMS TAB -->
     <div id="terms" class="tab-content">
-      <h1 class="page-title">TERMS</h1>
-      <div class="terms-wrapper" id="terms-container">
-        <div class="loading-text">Loading terms...</div>
+      <div class="content-panel">
+        <h2 class="section-title">Market Glossary</h2>
+        <div class="terms-list" id="terms-container"><div class="loading-box">Loading terms...</div></div>
       </div>
     </div>
 
+    <!-- ABOUT TAB -->
     <div id="about" class="tab-content">
-      <h1 class="page-title">ABOUT US</h1>
-      <div class="updates-wrapper">
-        <h2 style="font-size: 1.8rem; margin-bottom: 10px;">About UBV</h2>
-        <p style="line-height: 1.6; color: #94a3b8; font-size: 1rem; font-weight: 600;">
-          UBV is a dedicated platform providing live trading values, market analytics, average RAP metrics, and item showcases for the Roblox trading community.
+      <div class="content-panel">
+        <h2 class="section-title">About UBV</h2>
+        <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">
+          UBV tracks real-time item values, demand ratings, and RAP stats for the Roblox trading market.
         </p>
       </div>
     </div>
 
+    <!-- EDITORS TAB -->
     <div id="editors" class="tab-content">
-      <h1 class="page-title">LIST EDITORS</h1>
-      <div class="table-wrapper">
-        <table class="editors-table">
+      <div class="data-table-container">
+        <table>
           <thead>
             <tr>
-              <th style="width: 100px;">Avatar</th>
+              <th>Avatar</th>
               <th>Username</th>
               <th>Role</th>
-              <th>Roblox Profile</th>
+              <th>Profile</th>
               <th>Status</th>
             </tr>
           </thead>
@@ -430,7 +389,7 @@
       </div>
     </div>
 
-  </div>
+  </main>
 
   <script>
     const CSV_URLS = {
@@ -449,40 +408,30 @@
 
     function openTab(evt, tabName) {
       evt.preventDefault();
-      const tabContents = document.getElementsByClassName("tab-content");
-      for (let i = 0; i < tabContents.length; i++) tabContents[i].classList.remove("active");
-      const navLinks = document.getElementsByClassName("nav-link");
-      for (let i = 0; i < navLinks.length; i++) navLinks[i].classList.remove("active");
+      document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active"));
+      document.querySelectorAll(".nav-link").forEach(el => el.classList.remove("active"));
       document.getElementById(tabName).classList.add("active");
       evt.currentTarget.classList.add("active");
     }
 
     let currentSubTab = 'normal-section';
-
     function switchListTab(targetId, btnId) {
       currentSubTab = targetId;
-      const subtabs = document.getElementsByClassName("sublist-tab");
-      for (let i = 0; i < subtabs.length; i++) subtabs[i].classList.remove("active-sublist");
-      const btns = document.getElementsByClassName("custom-btn");
-      for (let i = 0; i < btns.length; i++) btns[i].classList.remove("active-subtab");
+      document.querySelectorAll(".sublist-tab").forEach(el => el.classList.remove("active-sublist"));
+      document.querySelectorAll(".toggle-btn").forEach(el => el.classList.remove("active"));
       document.getElementById(targetId).classList.add("active-sublist");
-      document.getElementById(btnId).classList.add("active-subtab");
+      document.getElementById(btnId).classList.add("active");
       filterTable();
     }
 
-    let mainListData = [];
-    let collectableListData = [];
-    let dynamicColorMap = {};
+    let mainListData = [], collectableListData = [], dynamicColorMap = {};
 
     function getTextColor(bgColor) {
       if (!bgColor || bgColor === '#000000') return '#ffffff';
       const hex = bgColor.replace('#', '');
       if (hex.length !== 6) return '#ffffff';
-      const r = parseInt(hex.substr(0, 2), 16);
-      const g = parseInt(hex.substr(2, 2), 16);
-      const b = parseInt(hex.substr(4, 2), 16);
-      const brightness = (r * 299 + g * 587 + b * 114) / 1000;
-      return brightness > 145 ? '#000000' : '#ffffff';
+      const r = parseInt(hex.substr(0, 2), 16), g = parseInt(hex.substr(2, 2), 16), b = parseInt(hex.substr(4, 2), 16);
+      return ((r * 299 + g * 587 + b * 114) / 1000) > 140 ? '#000000' : '#ffffff';
     }
 
     function loadTerms() {
@@ -491,30 +440,22 @@
         complete: function(results) {
           const container = document.getElementById('terms-container');
           container.innerHTML = '';
-          const rows = results.data;
-          
-          rows.forEach(r => {
+          results.data.forEach(r => {
             if (!r || !r[0]) return;
             const term = String(r[0]).trim();
             const desc = r[1] ? String(r[1]).trim() : '';
-            let color = r[2] ? String(r[2]).trim() : '#e2e8f0';
-
+            let color = r[2] ? String(r[2]).trim() : '#2a303f';
             if (term) dynamicColorMap[term.toLowerCase()] = color;
 
-            if (desc === 'SECTION_HEADER' || desc === '' || term.toLowerCase().includes('terms')) {
-              const header = document.createElement('div');
-              header.className = 'terms-section-title';
-              header.textContent = term;
-              container.appendChild(header);
-            } else {
+            if (desc !== 'SECTION_HEADER' && desc !== '' && !term.toLowerCase().includes('terms')) {
               const textColor = getTextColor(color);
-              const row = document.createElement('div');
-              row.className = 'term-row';
-              row.innerHTML = `
-                <div class="term-badge" style="background-color: ${color}; color: ${textColor};">${term}</div>
-                <div class="term-desc">${desc}</div>
+              const card = document.createElement('div');
+              card.className = 'term-card';
+              card.innerHTML = `
+                <div class="term-name" style="background-color: ${color}; color: ${textColor};">${term}</div>
+                <div class="term-text">${desc}</div>
               `;
-              container.appendChild(row);
+              container.appendChild(card);
             }
           });
           loadItems();
@@ -528,25 +469,19 @@
         download: true,
         complete: function(results) {
           document.getElementById('loading').style.display = 'none';
-          const rows = results.data;
-          mainListData = [];
-          collectableListData = [];
-          let isCollectableSection = false;
+          mainListData = []; collectableListData = [];
+          let isCollectable = false;
 
-          rows.forEach(row => {
-            if (!row || row.length === 0 || !row[0]) return;
+          results.data.forEach(row => {
+            if (!row || !row[0]) return;
             const firstCell = String(row[0]).trim().toLowerCase();
             if (firstCell === 'item') return;
             if (firstCell.includes("collectors") || firstCell.includes("collectable")) {
-              isCollectableSection = true;
+              isCollectable = true;
               return;
             }
-
-            if (isCollectableSection) {
-              collectableListData.push(row);
-            } else {
-              mainListData.push(row);
-            }
+            if (isCollectable) collectableListData.push(row);
+            else mainListData.push(row);
           });
 
           renderTable(mainListData, document.getElementById("normal-body"));
@@ -559,11 +494,11 @@
       if(!tbody) return;
       tbody.innerHTML = "";
       data.forEach(row => {
-        if (!row || row.length === 0 || !row[0]) return;
+        if (!row || !row[0]) return;
         const tr = document.createElement("tr");
 
-        let itemBgColor = String(row[8] ?? '').trim();
-        if (!itemBgColor.startsWith('#')) itemBgColor = '#d800ff';
+        let itemColor = String(row[8] ?? '').trim();
+        if (!itemColor.startsWith('#')) itemColor = '#ffffff';
 
         for (let idx = 0; idx < 8; idx++) {
           const td = document.createElement("td");
@@ -571,36 +506,26 @@
           const lowerText = rawText.toLowerCase();
 
           if (idx === 0) {
-            td.className = "item-cell";
-            td.style.backgroundColor = itemBgColor;
-            td.style.color = getTextColor(itemBgColor);
+            td.className = "item-name";
+            td.style.color = itemColor;
             td.textContent = rawText;
-          } 
-          else if (idx === 1) {
-            td.className = "val-cell";
+          } else if (idx === 1) {
+            td.className = "value-num";
             td.textContent = rawText;
-          } 
-          else if (idx === 2) {
-            // AVERAGE RAP - SAYI DÜZELTME
+          } else if (idx === 2) {
+            td.className = "rap-num";
             td.textContent = formatNumber(rawText);
-          }
-          else if (idx === 3) {
-            td.className = "scale-cell";
-            td.textContent = rawText;
-          } 
-          else if (idx === 4 || idx === 5 || idx === 6) {
+          } else if (idx >= 4 && idx <= 6) {
             const mappedColor = dynamicColorMap[lowerText];
             if (mappedColor) {
               const textColor = getTextColor(mappedColor);
-              td.innerHTML = `<span class="badge-tag" style="background-color: ${mappedColor}; color: ${textColor};">${rawText}</span>`;
+              td.innerHTML = `<span class="status-badge" style="background-color: ${mappedColor}; color: ${textColor};">${rawText}</span>`;
             } else {
               td.textContent = rawText;
             }
-          } 
-          else {
+          } else {
             td.textContent = rawText;
           }
-
           tr.appendChild(td);
         }
         tbody.appendChild(tr);
@@ -624,22 +549,18 @@
         complete: function(results) {
           const container = document.getElementById('updates-container');
           container.innerHTML = '';
-          const rows = results.data;
-          
-          rows.forEach(r => {
+          results.data.forEach(r => {
             if (!r || !r[0]) return;
-            const title = r[0] ? r[0] : 'UPDATE';
-            const date = r[1] ? r[1] : '';
-            const content = r[2] ? r[2] : '';
-
-            const block = document.createElement('div');
-            block.className = 'update-block';
-            block.innerHTML = `
-              <div class="update-header-title">${title}</div>
-              ${date ? `<div class="update-date-tag">${date}</div>` : ''}
-              <div class="update-content-text">${content}</div>
+            const item = document.createElement('div');
+            item.className = 'update-item';
+            item.innerHTML = `
+              <div class="update-head">
+                <span class="update-title">${r[0]}</span>
+                <span class="update-date">${r[1] || ''}</span>
+              </div>
+              <div class="update-body">${r[2] || ''}</div>
             `;
-            container.appendChild(block);
+            container.appendChild(item);
           });
         }
       });
@@ -650,35 +571,26 @@
         download: true,
         complete: function(results) {
           const tbody = document.getElementById('editors-body');
-          const rows = results.data;
-          if (!rows || rows.length === 0) return;
           tbody.innerHTML = '';
-
-          rows.forEach(r => {
-            if (!r || !r[1]) return;
-            if (String(r[1]).toLowerCase() === 'username') return;
-
-            const avatarImg = r[0] ? r[0] : '';
-            const username = r[1] ? r[1] : '';
-            const role = r[2] ? r[2] : 'List Editor';
-            const profileUrl = r[3] ? r[3] : '#';
-            const status = r[4] ? String(r[4]) : 'Active';
+          results.data.forEach(r => {
+            if (!r || !r[1] || String(r[1]).toLowerCase() === 'username') return;
+            const avatarImg = r[0] || '';
+            const username = r[1] || '';
+            const role = r[2] || 'Editor';
+            const profileUrl = r[3] || '#';
+            const isActive = String(r[4]).toLowerCase().trim() === 'active';
 
             const imgSrc = (avatarImg && String(avatarImg).startsWith('http')) 
               ? avatarImg 
-              : `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=333&color=fff`;
-
-            const isActive = status.toLowerCase().trim() === 'active';
-            const statusClass = isActive ? 'active' : 'inactive';
-            const statusText = isActive ? 'ACTIVE' : 'INACTIVE';
+              : `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=1f232e&color=fff`;
 
             const tr = document.createElement('tr');
             tr.innerHTML = `
-              <td><img src="${imgSrc}" class="editor-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=333&color=fff'"></td>
-              <td>${username}</td>
-              <td style="color: #cbd5e1;">${role}</td>
-              <td><a href="${profileUrl}" target="_blank" class="roblox-tag">@${username.toLowerCase()}</a></td>
-              <td><span class="status-box ${statusClass}">${statusText}</span></td>
+              <td><img src="${imgSrc}" style="width:32px; height:32px; border-radius:50%;"></td>
+              <td><strong>${username}</strong></td>
+              <td style="color: var(--text-secondary);">${role}</td>
+              <td><a href="${profileUrl}" target="_blank" style="color:var(--accent-blue); text-decoration:none;">Profile</a></td>
+              <td><span style="color:${isActive ? '#22c55e' : '#ef4444'}; font-weight:700; font-size:0.8rem;">${isActive ? 'Active' : 'Inactive'}</span></td>
             `;
             tbody.appendChild(tr);
           });
