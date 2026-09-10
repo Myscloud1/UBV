@@ -40,7 +40,6 @@
       top: 0;
       z-index: 1000;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-      transition: all 0.3s ease;
     }
 
     .nav-links {
@@ -56,7 +55,6 @@
       font-size: 0.95rem;
       padding: 8px 4px;
       position: relative;
-      transition: color 0.3s ease;
     }
 
     .nav-links a::after {
@@ -82,23 +80,12 @@
       color: #ffffff;
       letter-spacing: 1px;
       text-decoration: none;
-      transition: transform 0.3s ease;
-    }
-
-    .nav-logo:hover {
-      transform: scale(1.05);
     }
 
     .nav-social {
       color: #ffffff;
       font-size: 1.6rem;
-      transition: transform 0.3s ease, color 0.3s ease;
       text-decoration: none;
-    }
-
-    .nav-social:hover {
-      transform: scale(1.2) rotate(8deg);
-      color: #7289da;
     }
 
     .main-container {
@@ -113,7 +100,7 @@
       display: none; 
       opacity: 0;
       transform: translateY(12px);
-      transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: opacity 0.4s ease, transform 0.4s ease;
     }
 
     .tab-content.active { 
@@ -130,7 +117,6 @@
       margin-bottom: 25px;
       text-transform: uppercase;
       text-align: center;
-      text-shadow: 2px 2px 0px rgba(255,255,255,0.2);
     }
 
     #search-section { text-align: center; margin-bottom: 1.5rem; }
@@ -144,18 +130,7 @@
       background: rgba(15, 23, 42, 0.88);
       color: #ffffff;
       outline: none;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-      transition: all 0.3s ease;
     }
-
-    #search-box:focus {
-      background: rgba(15, 23, 42, 0.98);
-      border-color: var(--accent-yellow);
-      box-shadow: 0 0 20px rgba(253, 203, 110, 0.4);
-      transform: scale(1.02);
-    }
-
-    #search-box::placeholder { color: #94a3b8; }
 
     #custom-button-group { 
       display: flex; 
@@ -174,20 +149,11 @@
       font-size: 0.95rem;
       font-weight: 700;
       cursor: pointer;
-      text-decoration: none;
-      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    }
-
-    .custom-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
     }
 
     .custom-btn.active-subtab {
       background: var(--accent-yellow);
       color: #0f172a;
-      box-shadow: 0 0 18px var(--accent-yellow);
     }
 
     .sublist-tab { display: none; }
@@ -196,7 +162,6 @@
     .table-wrapper {
       width: 100%;
       border-radius: 12px;
-      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
       margin-bottom: 2rem;
       overflow: hidden;
       background: #000000;
@@ -217,7 +182,6 @@
       font-weight: 800;
       text-transform: uppercase;
       font-size: 0.9rem;
-      letter-spacing: 0.5px;
       border-bottom: 2px solid #333333;
       border-right: 1px solid #222222;
       text-align: center;
@@ -240,23 +204,10 @@
       font-weight: 800;
       font-style: italic;
       font-size: 1rem;
-      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
-      transition: background-color 0.3s ease;
     }
 
-    .val-cell {
-      color: #ffffff;
-      font-weight: 800;
-      font-size: 1.05rem;
-      background-color: #000000;
-    }
-
-    .scale-cell {
-      color: #b197fc;
-      font-weight: 800;
-      font-size: 1.1rem;
-      background-color: #000000;
-    }
+    .val-cell { color: #ffffff; font-weight: 800; font-size: 1.05rem; }
+    .scale-cell { color: #b197fc; font-weight: 800; font-size: 1.1rem; }
 
     .badge-tag {
       display: inline-block;
@@ -267,7 +218,6 @@
       font-style: italic;
       font-size: 0.9rem;
       text-align: center;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
 
     .updates-wrapper {
@@ -275,7 +225,6 @@
       color: #ffffff;
       padding: 30px;
       border-radius: 14px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     }
 
     .update-block {
@@ -284,34 +233,14 @@
       padding-bottom: 20px;
     }
 
-    .update-block:last-child { border-bottom: none; }
-
-    .update-header-title {
-      font-size: 1.6rem;
-      font-weight: 800;
-      color: #ffffff;
-      margin-bottom: 8px;
-    }
-
-    .update-date-tag {
-      font-size: 0.85rem;
-      color: #888;
-      margin-bottom: 12px;
-    }
-
-    .update-content-text {
-      white-space: pre-wrap;
-      font-size: 1rem;
-      line-height: 1.6;
-      color: #e2e8f0;
-      font-weight: 600;
-    }
+    .update-header-title { font-size: 1.6rem; font-weight: 800; color: #ffffff; margin-bottom: 8px; }
+    .update-date-tag { font-size: 0.85rem; color: #888; margin-bottom: 12px; }
+    .update-content-text { white-space: pre-wrap; font-size: 1rem; line-height: 1.6; color: #e2e8f0; font-weight: 600; }
 
     .terms-wrapper {
       background: #000000;
       padding: 20px;
       border-radius: 14px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
       display: flex;
       flex-direction: column;
       gap: 10px;
@@ -320,7 +249,6 @@
     .terms-section-title {
       background: #000000;
       color: #ffffff;
-      font-family: 'Montserrat', sans-serif;
       font-style: italic;
       font-weight: 800;
       font-size: 1.3rem;
@@ -330,149 +258,27 @@
       margin-top: 15px;
     }
 
-    .terms-section-title:first-child { margin-top: 0; }
+    .term-row { display: grid; grid-template-columns: 260px 1fr; gap: 8px; }
+    .term-badge { padding: 12px 15px; font-weight: 800; font-style: italic; font-size: 1.05rem; text-align: center; border-radius: 4px; }
+    .term-desc { background: #ffffff; color: #000000; padding: 12px 16px; font-weight: 700; font-style: italic; font-size: 1rem; border-radius: 4px; }
 
-    .term-row {
-      display: grid;
-      grid-template-columns: 260px 1fr;
-      gap: 8px;
-    }
+    .editors-table { width: 100%; border-collapse: collapse; background: #b0b0b0; color: #000000; border: 3px solid #000; }
+    .editors-table th { background: #000000; color: #ffffff; font-size: 1.1rem; padding: 16px; border: 2px solid #000; }
+    .editors-table td { background: #c2c2c2; color: #000000; border: 2px solid #555; padding: 14px 10px; text-align: center; }
 
-    .term-badge {
-      padding: 12px 15px;
-      font-weight: 800;
-      font-style: italic;
-      font-size: 1.05rem;
-      text-align: center;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 4px;
-    }
-
-    .term-desc {
-      background: #ffffff;
-      color: #000000;
-      padding: 12px 16px;
-      font-weight: 700;
-      font-style: italic;
-      font-size: 1rem;
-      display: flex;
-      align-items: center;
-      border-radius: 4px;
-    }
-
-    .editors-table {
-      width: 100%;
-      border-collapse: collapse;
-      background: #b0b0b0;
-      color: #000000;
-      font-weight: 700;
-      border: 3px solid #000;
-    }
-
-    .editors-table th {
-      background: #000000;
-      color: #ffffff;
-      font-size: 1.1rem;
-      padding: 16px;
-      text-align: center;
-      border: 2px solid #000;
-    }
-
-    .editors-table td {
-      background: #c2c2c2;
-      color: #000000;
-      border: 2px solid #555;
-      font-size: 1.05rem;
-      padding: 14px 10px;
-      vertical-align: middle;
-      text-align: center;
-    }
-
-    .editor-avatar {
-      width: 70px;
-      height: 70px;
-      border-radius: 12px;
-      object-fit: cover;
-      background: #333;
-      border: 2px solid #000;
-    }
-
-    .roblox-tag {
-      color: #0056b3;
-      text-decoration: underline;
-      font-weight: 800;
-      font-size: 1.05rem;
-    }
-
-    .status-box {
-      display: inline-block;
-      padding: 6px 14px;
-      border: 2px solid #000;
-      border-radius: 6px;
-      text-align: center;
-      font-size: 0.95rem;
-      font-weight: 800;
-      text-transform: uppercase;
-    }
-
+    .editor-avatar { width: 70px; height: 70px; border-radius: 12px; object-fit: cover; background: #333; border: 2px solid #000; }
+    .roblox-tag { color: #0056b3; text-decoration: underline; font-weight: 800; }
+    .status-box { display: inline-block; padding: 6px 14px; border: 2px solid #000; border-radius: 6px; font-weight: 800; text-transform: uppercase; }
     .status-box.active { background-color: #2ecc71; color: #000000; }
     .status-box.inactive { background-color: #e74c3c; color: #ffffff; }
 
-    .info-card {
-      background: #ffffff;
-      border-radius: 14px;
-      padding: 30px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-    }
-
     .loading-text { text-align: center; padding: 30px; font-size: 1.1rem; color: #ffffff; font-weight: 700; }
-
-    @media (max-width: 768px) {
-      html, body { overflow-x: hidden; }
-
-      .navbar {
-        flex-direction: column;
-        height: auto;
-        padding: 15px;
-        gap: 12px;
-      }
-
-      .nav-links {
-        gap: 12px;
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-
-      .nav-links a { font-size: 0.85rem; }
-      .page-title { font-size: 2.8rem; }
-
-      #custom-button-group { flex-wrap: wrap; }
-
-      .table-wrapper {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-      }
-
-      table, .editors-table { min-width: 680px; }
-
-      .term-row {
-        grid-template-columns: 1fr;
-        gap: 2px;
-        margin-bottom: 6px;
-      }
-
-      .term-badge { font-size: 0.95rem; padding: 10px; }
-      .term-desc { font-size: 0.9rem; padding: 10px; }
-    }
   </style>
 </head>
 <body>
 
   <nav class="navbar">
     <a href="#" class="nav-logo">UBV</a>
-
     <ul class="nav-links">
       <li><a href="#" class="nav-link active" onclick="openTab(event, 'valuelists')">Value Lists</a></li>
       <li><a href="#" class="nav-link" onclick="openTab(event, 'updates')">Updates</a></li>
@@ -480,17 +286,13 @@
       <li><a href="#" class="nav-link" onclick="openTab(event, 'about')">About</a></li>
       <li><a href="#" class="nav-link" onclick="openTab(event, 'editors')">List Editors</a></li>
     </ul>
-
-    <a href="https://discord.gg/ubv" target="_blank" class="nav-social" title="Discord Server">
-      <i class="fab fa-discord"></i>
-    </a>
+    <a href="https://discord.gg/ubv" target="_blank" class="nav-social"><i class="fab fa-discord"></i></a>
   </nav>
 
   <div class="main-container">
 
     <div id="valuelists" class="tab-content active">
       <h1 class="page-title">VALUE LISTS</h1>
-
       <div id="custom-button-group">
         <button id="btn-main" class="custom-btn active-subtab" onclick="switchListTab('normal-section', 'btn-main')">Main List</button>
         <button id="btn-collect" class="custom-btn" onclick="switchListTab('collectable-section', 'btn-collect')">Collectors List</button>
@@ -555,11 +357,9 @@
 
     <div id="about" class="tab-content">
       <h1 class="page-title">ABOUT US</h1>
-      <div class="info-card">
-        <h2 style="font-size: 1.8rem; margin-bottom: 10px;">About UBV</h2>
-        <p style="line-height: 1.6; color: #475569; font-size: 1rem; font-weight: 600;">
-          UBV is a dedicated platform providing live trading values, market analytics, average RAP metrics, and item showcases for the Roblox trading community.
-        </p>
+      <div style="background: #fff; padding: 30px; border-radius: 14px;">
+        <h2>About UBV</h2>
+        <p style="margin-top: 10px; font-weight: 600;">UBV is a dedicated platform providing live trading values, market analytics, average RAP metrics, and item showcases for the Roblox trading community.</p>
       </div>
     </div>
 
@@ -607,8 +407,12 @@
       filterTable();
     }
 
-    const CSV_BASE_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR-iH2G2YVcW1PDsLcE4KfPiLhMpaUyzKC6o_E-1BWemF3GS7YYN8kBRpgOjmIDBsYnTqWayxBTlsrt/pub?output=csv';
-    
+    // GID PARAMETRELI YENI GOOGLE SHEETS CSV LINKLERI
+    const URL_ITEMS   = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR-iH2G2YVcW1PDsLcE4KfPiLhMpaUyzKC6o_E-1BWemF3GS7YYN8kBRpgOjmIDBsYnTqWayxBTlsrt/pub?gid=0&single=true&output=csv'; 
+    const URL_UPDATES = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR-iH2G2YVcW1PDsLcE4KfPiLhMpaUyzKC6o_E-1BWemF3GS7YYN8kBRpgOjmIDBsYnTqWayxBTlsrt/pub?gid=568303787&single=true&output=csv'; 
+    const URL_EDITORS = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR-iH2G2YVcW1PDsLcE4KfPiLhMpaUyzKC6o_E-1BWemF3GS7YYN8kBRpgOjmIDBsYnTqWayxBTlsrt/pub?gid=1456456561&single=true&output=csv'; 
+    const URL_TERMS   = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR-iH2G2YVcW1PDsLcE4KfPiLhMpaUyzKC6o_E-1BWemF3GS7YYN8kBRpgOjmIDBsYnTqWayxBTlsrt/pub?gid=517689974&single=true&output=csv'; 
+
     let mainListData = [];
     let collectableListData = [];
     let dynamicColorMap = {};
@@ -624,17 +428,13 @@
       return brightness > 145 ? '#000000' : '#ffffff';
     }
 
-    function fetchCSV(sheetName, callback) {
-      const url = sheetName ? `${CSV_BASE_URL}&sheet=${encodeURIComponent(sheetName)}` : CSV_BASE_URL;
+    function fetchCSV(url, callback) {
+      if (!url) return;
       Papa.parse(url, {
         download: true,
         skipEmptyLines: true,
-        complete: function(results) {
-          callback(results.data);
-        },
-        error: function(err) {
-          console.error("CSV Fetch Error:", err);
-        }
+        complete: function(results) { callback(results.data); },
+        error: function(err) { console.error("CSV Fetch Error:", err); }
       });
     }
 
@@ -670,12 +470,8 @@
       data.forEach(row => {
         if (!row || row.length === 0 || !row[0]) return;
         const tr = document.createElement("tr");
-
         let itemBgColor = String(row[8] ?? '').trim();
-        
-        if (!itemBgColor.startsWith('#')) {
-          itemBgColor = '#d800ff';
-        }
+        if (!itemBgColor.startsWith('#')) itemBgColor = '#d800ff';
 
         for (let idx = 0; idx < 8; idx++) {
           const td = document.createElement("td");
@@ -687,16 +483,13 @@
             td.style.backgroundColor = itemBgColor;
             td.style.color = getTextColor(itemBgColor);
             td.textContent = rawText;
-          } 
-          else if (idx === 1) {
+          } else if (idx === 1) {
             td.className = "val-cell";
             td.textContent = rawText;
-          } 
-          else if (idx === 3) {
+          } else if (idx === 3) {
             td.className = "scale-cell";
             td.textContent = rawText;
-          } 
-          else if (idx === 4 || idx === 5 || idx === 6) {
+          } else if (idx === 4 || idx === 5 || idx === 6) {
             const mappedColor = dynamicColorMap[lowerText];
             if (mappedColor) {
               const textColor = getTextColor(mappedColor);
@@ -704,11 +497,9 @@
             } else {
               td.textContent = rawText;
             }
-          } 
-          else {
+          } else {
             td.textContent = rawText;
           }
-
           tr.appendChild(td);
         }
         tbody.appendChild(tr);
@@ -720,53 +511,20 @@
       const targetData = currentSubTab === 'normal-section' ? mainListData : collectableListData;
       const targetBody = currentSubTab === 'normal-section' ? document.getElementById("normal-body") : document.getElementById("collectable-body");
       
-      const filtered = targetData.filter(row => 
-        row.some(cell => String(cell).toLowerCase().includes(query))
-      );
+      const filtered = targetData.filter(row => row.some(cell => String(cell).toLowerCase().includes(query)));
       renderTable(filtered, targetBody);
-    }
-
-    function processUpdatesData(rows) {
-      const container = document.getElementById('updates-container');
-      container.innerHTML = '';
-      if (!rows || rows.length === 0) {
-        container.innerHTML = '<p class="loading-text">No updates found.</p>';
-        return;
-      }
-      rows.forEach(r => {
-        if (!r[0]) return;
-        const title = r[0] || 'UPDATE';
-        const date = r[1] || '';
-        const content = r[2] || '';
-
-        const block = document.createElement('div');
-        block.className = 'update-block';
-        block.innerHTML = `
-          <div class="update-header-title">${title}</div>
-          ${date ? `<div class="update-date-tag">${date}</div>` : ''}
-          <div class="update-content-text">${content}</div>
-        `;
-        container.appendChild(block);
-      });
     }
 
     function processTermsData(rows) {
       const container = document.getElementById('terms-container');
       container.innerHTML = '';
-      if (!rows || rows.length === 0) {
-        container.innerHTML = '<p class="loading-text">Failed to load terms.</p>';
-        return;
-      }
       rows.forEach(r => {
         if (!r[0]) return;
-        
         const term = String(r[0]).trim();
         const desc = r[1] ? String(r[1]).trim() : '';
         let color = r[2] ? String(r[2]).trim() : '#e2e8f0';
 
-        if (term) {
-          dynamicColorMap[term.toLowerCase()] = color;
-        }
+        if (term) dynamicColorMap[term.toLowerCase()] = color;
 
         if (desc === 'SECTION_HEADER' || desc === '' || term.toLowerCase().includes('terms')) {
           const header = document.createElement('div');
@@ -777,70 +535,52 @@
           const textColor = getTextColor(color);
           const row = document.createElement('div');
           row.className = 'term-row';
-          row.innerHTML = `
-            <div class="term-badge" style="background-color: ${color}; color: ${textColor};">${term}</div>
-            <div class="term-desc">${desc}</div>
-          `;
+          row.innerHTML = `<div class="term-badge" style="background-color: ${color}; color: ${textColor};">${term}</div><div class="term-desc">${desc}</div>`;
           container.appendChild(row);
         }
       });
-
       if (mainListData.length > 0) {
         renderTable(mainListData, document.getElementById("normal-body"));
         renderTable(collectableListData, document.getElementById("collectable-body"));
       }
     }
 
+    function processUpdatesData(rows) {
+      const container = document.getElementById('updates-container');
+      container.innerHTML = '';
+      rows.forEach(r => {
+        if (!r[0]) return;
+        const block = document.createElement('div');
+        block.className = 'update-block';
+        block.innerHTML = `<div class="update-header-title">${r[0]}</div>${r[1] ? `<div class="update-date-tag">${r[1]}</div>` : ''}<div class="update-content-text">${r[2] || ''}</div>`;
+        container.appendChild(block);
+      });
+    }
+
     function processEditorsData(rows) {
       const tbody = document.getElementById('editors-body');
-      if (!rows || rows.length === 0) return;
       tbody.innerHTML = '';
-
       rows.forEach(r => {
-        if (!r[1]) return;
-        if (String(r[1]).toLowerCase() === 'username') return;
-
-        const avatarImg = r[0] || '';
-        const username = r[1] || '';
-        const role = r[2] || 'List Editor';
-        const profileUrl = r[3] || '#';
-        const status = r[4] ? String(r[4]) : 'Active';
-
-        const imgSrc = (avatarImg && String(avatarImg).startsWith('http')) 
-          ? avatarImg 
-          : `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=333&color=fff`;
-
-        const isActive = status.toLowerCase().trim() === 'active';
-        const statusClass = isActive ? 'active' : 'inactive';
-        const statusText = isActive ? 'ACTIVE' : 'INACTIVE';
-
+        if (!r[1] || String(r[1]).toLowerCase() === 'username') return;
+        const username = r[1];
+        const isActive = String(r[4] || 'active').toLowerCase().trim() === 'active';
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td><img src="${imgSrc}" class="editor-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=333&color=fff'"></td>
+          <td><img src="${r[0] || 'https://ui-avatars.com/api/?name='+username}" class="editor-avatar"></td>
           <td>${username}</td>
-          <td style="color: #333;">${role}</td>
-          <td><a href="${profileUrl}" target="_blank" class="roblox-tag">@${username.toLowerCase()}</a></td>
-          <td><span class="status-box ${statusClass}">${statusText}</span></td>
+          <td>${r[2] || 'List Editor'}</td>
+          <td><a href="${r[3] || '#'}" target="_blank" class="roblox-tag">@${username.toLowerCase()}</a></td>
+          <td><span class="status-box ${isActive ? 'active':'inactive'}">${isActive ? 'ACTIVE':'INACTIVE'}</span></td>
         `;
         tbody.appendChild(tr);
       });
     }
 
     window.addEventListener('DOMContentLoaded', () => {
-      fetchCSV('Terms', (data) => {
-        processTermsData(data);
-        fetchCSV('Items', (itemsData) => {
-          processItemsData(itemsData);
-        });
-      });
-
-      fetchCSV('Updates', (data) => {
-        processUpdatesData(data);
-      });
-
-      fetchCSV('Editors', (data) => {
-        processEditorsData(data);
-      });
+      fetchCSV(URL_ITEMS, processItemsData);
+      fetchCSV(URL_TERMS, processTermsData);
+      fetchCSV(URL_UPDATES, processUpdatesData);
+      fetchCSV(URL_EDITORS, processEditorsData);
     });
   </script>
 </body>
