@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>UBV - Ultimate Baller Values</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,13 +12,14 @@
 
   <style>
     :root {
-      --bg-dark: #07090e;
-      --card-bg: rgba(15, 21, 32, 0.8);
-      --card-border: rgba(255, 255, 255, 0.08);
+      --bg-dark: #06080d;
+      --card-bg: rgba(13, 18, 28, 0.75);
+      --card-border: rgba(255, 255, 255, 0.07);
+      --card-border-glow: rgba(168, 85, 247, 0.25);
       --accent-primary: #38bdf8;
       --accent-purple: #a855f7;
       --text-main: #f8fafc;
-      --text-muted: #94a3b8;
+      --text-muted: #8e9aaf;
       --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
     }
 
@@ -36,76 +37,80 @@
       position: relative;
     }
 
+    /* Subtle Ambient Lighting */
     body::before {
       content: '';
       position: absolute;
-      top: -100px;
+      top: -120px;
       left: 50%;
       transform: translateX(-50%);
-      width: 1000px;
-      height: 400px;
-      background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(56, 189, 248, 0.08) 50%, rgba(0,0,0,0) 80%);
-      filter: blur(80px);
+      width: 1200px;
+      height: 450px;
+      background: radial-gradient(circle, rgba(168, 85, 247, 0.12) 0%, rgba(56, 189, 248, 0.05) 45%, rgba(0,0,0,0) 75%);
+      filter: blur(90px);
       z-index: -1;
       pointer-events: none;
     }
 
+    /* NAVBAR */
     .navbar {
-      background: rgba(7, 9, 14, 0.85);
-      backdrop-filter: blur(16px);
+      background: rgba(6, 8, 13, 0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--card-border);
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 0 40px;
-      height: 76px;
+      height: 72px;
       position: sticky;
       top: 0;
       z-index: 1000;
-      transition: all 0.3s var(--ease-smooth);
     }
 
     .nav-logo-container { display: flex; align-items: center; text-decoration: none; }
     .nav-logo-img {
-      height: 50px; width: 50px; object-fit: cover; border-radius: 12px;
-      border: 1px solid rgba(168, 85, 247, 0.3);
-      transition: transform 0.3s var(--ease-smooth);
+      height: 42px; width: 42px; object-fit: cover; border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: transform 0.3s var(--ease-smooth), border-color 0.3s var(--ease-smooth);
     }
-    .nav-logo-img:hover { transform: scale(1.05); }
+    .nav-logo-img:hover { transform: scale(1.05); border-color: var(--accent-purple); }
 
     .nav-links {
-      display: flex; gap: 6px; list-style: none;
-      background: rgba(255, 255, 255, 0.03); padding: 5px; border-radius: 14px;
+      display: flex; gap: 4px; list-style: none;
+      background: rgba(255, 255, 255, 0.025); padding: 4px; border-radius: 14px;
       border: 1px solid var(--card-border);
     }
 
     .nav-links a {
       color: var(--text-muted); text-decoration: none; font-weight: 600;
-      font-size: 0.95rem; padding: 10px 20px; border-radius: 10px;
-      transition: all 0.3s var(--ease-smooth);
+      font-size: 0.88rem; padding: 8px 18px; border-radius: 10px;
+      transition: all 0.25s var(--ease-smooth);
+      white-space: nowrap;
     }
 
     .nav-links a.active, .nav-links a:hover {
-      color: #ffffff; background: rgba(255, 255, 255, 0.08);
+      color: #ffffff; background: rgba(255, 255, 255, 0.07);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
 
     .nav-social {
-      color: var(--text-muted); font-size: 1.3rem; text-decoration: none;
-      width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;
-      border-radius: 12px; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--card-border);
+      color: var(--text-muted); font-size: 1.1rem; text-decoration: none;
+      width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+      border-radius: 12px; background: rgba(255, 255, 255, 0.025); border: 1px solid var(--card-border);
       transition: all 0.3s var(--ease-smooth);
     }
 
-    .nav-social:hover { color: #ffffff; background: #5865F2; transform: translateY(-2px); }
+    .nav-social:hover { color: #ffffff; background: #5865F2; border-color: #5865F2; transform: translateY(-2px); }
 
-    .main-container { flex: 1; padding: 40px 24px; max-width: 1440px; margin: 0 auto; width: 100%; }
+    .main-container { flex: 1; padding: 40px 24px; max-width: 1400px; margin: 0 auto; width: 100%; }
 
-    /* Tab Animations */
+    /* TAB ANIMATIONS */
     .tab-content {
       display: none;
       opacity: 0;
-      transform: translateY(12px);
-      transition: opacity 0.4s var(--ease-smooth), transform 0.4s var(--ease-smooth);
+      transform: translateY(8px);
+      transition: opacity 0.35s var(--ease-smooth), transform 0.35s var(--ease-smooth);
     }
     
     .tab-content.active {
@@ -114,125 +119,198 @@
       transform: translateY(0);
     }
 
-    .page-title { font-size: 3rem; font-weight: 800; text-align: center; margin-bottom: 32px; color: #ffffff; }
+    .page-title { font-size: 2.5rem; font-weight: 800; text-align: center; margin-bottom: 24px; color: #ffffff; letter-spacing: -0.5px; }
 
+    /* SEARCH & BUTTONS */
     #search-section { text-align: center; margin-bottom: 2rem; }
-    .search-wrapper { position: relative; display: inline-block; width: 100%; max-width: 580px; }
+    .search-wrapper { position: relative; display: inline-block; width: 100%; max-width: 520px; }
 
     #search-box {
-      padding: 16px 24px 16px 50px; width: 100%; font-size: 1.05rem; font-weight: 500;
+      padding: 14px 20px 14px 48px; width: 100%; font-size: 0.95rem; font-weight: 500;
       border-radius: 14px; border: 1px solid var(--card-border);
-      background: rgba(15, 21, 32, 0.9); color: #ffffff; outline: none;
-      transition: border-color 0.3s var(--ease-smooth), box-shadow 0.3s var(--ease-smooth);
-    }
-
-    #search-box:focus {
-      border-color: rgba(168, 85, 247, 0.5);
-      box-shadow: 0 0 20px rgba(168, 85, 247, 0.15);
-    }
-
-    .search-icon {
-      position: absolute; left: 20px; top: 50%; transform: translateY(-50%);
-      color: var(--text-muted); font-size: 1.1rem; pointer-events: none;
-    }
-
-    #custom-button-group { display: flex; justify-content: center; gap: 12px; margin-bottom: 2rem; }
-
-    .custom-btn {
-      background: rgba(255, 255, 255, 0.03); border: 1px solid var(--card-border);
-      color: var(--text-muted); padding: 12px 30px; border-radius: 12px;
-      font-size: 1rem; font-weight: 700; cursor: pointer;
+      background: rgba(13, 18, 28, 0.6); color: #ffffff; outline: none;
+      backdrop-filter: blur(10px);
       transition: all 0.3s var(--ease-smooth);
     }
 
-    .custom-btn:hover { background: rgba(255, 255, 255, 0.08); color: #ffffff; }
+    #search-box:focus {
+      border-color: rgba(168, 85, 247, 0.4);
+      background: rgba(13, 18, 28, 0.85);
+      box-shadow: 0 0 24px rgba(168, 85, 247, 0.12);
+    }
 
-    .custom-btn.active-subtab { background: #ffffff; color: #000000; border-color: #ffffff; }
+    .search-icon {
+      position: absolute; left: 18px; top: 50%; transform: translateY(-50%);
+      color: var(--text-muted); font-size: 1rem; pointer-events: none;
+    }
+
+    #custom-button-group { display: flex; justify-content: center; gap: 10px; margin-bottom: 2rem; }
+
+    .custom-btn {
+      background: rgba(255, 255, 255, 0.025); border: 1px solid var(--card-border);
+      color: var(--text-muted); padding: 10px 24px; border-radius: 12px;
+      font-size: 0.9rem; font-weight: 700; cursor: pointer;
+      transition: all 0.25s var(--ease-smooth);
+    }
+
+    .custom-btn:hover { background: rgba(255, 255, 255, 0.06); color: #ffffff; }
+    .custom-btn.active-subtab { background: #ffffff; color: #000000; border-color: #ffffff; box-shadow: 0 4px 20px rgba(255, 255, 255, 0.15); }
 
     .sublist-tab { display: none; opacity: 0; transition: opacity 0.3s var(--ease-smooth); }
     .sublist-tab.active-sublist { display: block; opacity: 1; }
 
+    /* DESKTOP TABLE UI */
     .table-wrapper {
-      width: 100%; border-radius: 18px; overflow-x: auto;
+      width: 100%; border-radius: 16px; overflow-x: auto;
       background: var(--card-bg); border: 1px solid var(--card-border);
-      backdrop-filter: blur(12px);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
     }
 
-    table { width: 100%; min-width: 1000px; border-collapse: separate; border-spacing: 0; }
+    table { width: 100%; min-width: 980px; border-collapse: separate; border-spacing: 0; }
 
     th {
-      padding: 20px 12px; background: rgba(11, 15, 23, 0.95);
-      color: var(--text-muted); font-weight: 700; font-size: 0.82rem;
-      border-bottom: 1px solid var(--card-border); text-align: center; text-transform: uppercase;
+      padding: 16px 12px; background: rgba(8, 11, 18, 0.85);
+      color: var(--text-muted); font-weight: 700; font-size: 0.78rem;
+      border-bottom: 1px solid var(--card-border); text-align: center; text-transform: uppercase; letter-spacing: 0.5px;
     }
 
     td {
-      padding: 0 !important; height: 68px; text-align: center;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.03); font-size: 1rem; font-weight: 700;
+      padding: 0 !important; height: 60px; text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.025); font-size: 0.92rem; font-weight: 700;
       vertical-align: middle;
     }
 
     tbody tr {
-      transition: background-color 0.2s var(--ease-smooth);
-      animation: fadeInRow 0.35s var(--ease-smooth) forwards;
+      transition: background-color 0.2s var(--ease-smooth), transform 0.2s var(--ease-smooth);
+      animation: fadeInRow 0.3s var(--ease-smooth) forwards;
     }
 
     @keyframes fadeInRow {
-      from { opacity: 0; transform: translateY(4px); }
+      from { opacity: 0; transform: translateY(3px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    tbody tr:hover { background-color: rgba(255, 255, 255, 0.04); }
+    tbody tr:hover { background-color: rgba(255, 255, 255, 0.035); }
 
     .item-cell {
-      font-weight: 800; font-size: 1.05rem; height: 100%; display: flex;
+      font-weight: 800; font-size: 0.95rem; height: 100%; display: flex;
       align-items: center; justify-content: center; padding: 0 16px; margin: 0 !important;
-      transition: filter 0.2s var(--ease-smooth);
     }
 
-    .val-cell { color: #ffffff; font-size: 1.05rem; }
-    .scale-cell { color: #c084fc; font-size: 1.02rem; }
+    .val-cell { color: #ffffff; font-size: 0.95rem; }
+    .scale-cell { color: #c084fc; font-size: 0.92rem; }
 
     .badge-container { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; padding: 0 8px; }
     .badge-tag {
       display: inline-flex; align-items: center; justify-content: center;
-      width: 100%; max-width: 140px; height: 38px; border-radius: 10px;
-      font-weight: 800; font-size: 0.78rem; text-transform: uppercase;
+      width: 100%; max-width: 125px; height: 34px; border-radius: 8px;
+      font-weight: 800; font-size: 0.72rem; text-transform: uppercase;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 10px;
-      transition: transform 0.2s var(--ease-smooth);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
     }
-    
-    .badge-tag:hover { transform: scale(1.03); }
 
-    .editors-table td { height: 100px !important; font-size: 1.15rem; }
-    .editor-avatar { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 3px solid var(--card-border); }
+    .editors-table td { height: 80px !important; font-size: 1rem; }
+    .editor-avatar { width: 52px; height: 52px; border-radius: 50%; object-fit: cover; border: 2px solid var(--card-border); }
 
     .terms-wrapper, .updates-wrapper {
-      background: var(--card-bg); border: 1px solid var(--card-border); padding: 36px; border-radius: 20px;
+      background: var(--card-bg); border: 1px solid var(--card-border); padding: 28px; border-radius: 18px;
+      backdrop-filter: blur(16px);
     }
 
     .terms-section-title {
-      color: var(--accent-primary); font-weight: 800; font-size: 1.6rem;
-      padding: 20px 0 10px; border-bottom: 1px solid var(--card-border); margin-top: 10px;
+      color: var(--accent-primary); font-weight: 800; font-size: 1.4rem;
+      padding: 14px 0 8px; border-bottom: 1px solid var(--card-border); margin-top: 8px;
     }
 
-    .term-row { display: grid; grid-template-columns: 280px 1fr; gap: 20px; align-items: center; margin-top: 14px; }
+    .term-row { display: grid; grid-template-columns: 240px 1fr; gap: 14px; align-items: center; margin-top: 12px; }
     .term-badge {
-      height: 52px; font-weight: 800; font-size: 1rem; display: flex;
-      align-items: center; justify-content: center; border-radius: 12px;
+      height: 44px; font-weight: 800; font-size: 0.98rem; display: flex;
+      align-items: center; justify-content: center; border-radius: 10px;
       text-transform: uppercase; color: #000000 !important;
     }
 
     .term-desc {
       background: rgba(255, 255, 255, 0.02); border: 1px solid var(--card-border);
-      color: #e2e8f0; padding: 16px 24px; font-weight: 600; font-size: 1.05rem; border-radius: 12px;
+      color: #e2e8f0; padding: 12px 18px; font-weight: 600; font-size: 0.95rem; border-radius: 10px;
     }
 
-    .update-block { margin-bottom: 28px; border-bottom: 1px solid var(--card-border); padding-bottom: 28px; }
-    .update-header-title { font-size: 1.75rem; font-weight: 800; color: #ffffff; }
-    .update-date-tag { font-size: 0.95rem; color: var(--accent-primary); font-weight: 700; margin: 6px 0 14px; }
-    .update-content-text { white-space: pre-wrap; font-size: 1.05rem; line-height: 1.6; color: #cbd5e1; }
-    .loading-text { text-align: center; padding: 60px; color: var(--text-muted); font-size: 1.2rem; }
+    .update-block { margin-bottom: 20px; border-bottom: 1px solid var(--card-border); padding-bottom: 20px; }
+    .update-header-title { font-size: 1.4rem; font-weight: 800; color: #ffffff; }
+    .update-date-tag { font-size: 0.85rem; color: var(--accent-primary); font-weight: 700; margin: 4px 0 10px; }
+    .update-content-text { white-space: pre-wrap; font-size: 0.98rem; line-height: 1.6; color: #cbd5e1; }
+    
+    .loading-text {
+      text-align: center; padding: 30px; color: var(--text-muted); font-size: 0.95rem; font-weight: 600;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    .spinner {
+      width: 18px; height: 18px; border: 2px solid var(--card-border);
+      border-top-color: var(--accent-purple); border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* MOBILE CARDS CONTAINER */
+    .mobile-cards-wrapper { display: none; flex-direction: column; gap: 12px; }
+
+    /* MOBILE UI DESIGN */
+    @media (max-width: 768px) {
+      .navbar { padding: 0 16px; height: 62px; }
+      .nav-logo-img { height: 36px; width: 36px; }
+      .nav-links { gap: 2px; padding: 3px; overflow-x: auto; max-width: calc(100vw - 110px); }
+      .nav-links::-webkit-scrollbar { display: none; }
+      .nav-links a { font-size: 0.78rem; padding: 6px 12px; }
+      .nav-social { width: 36px; height: 36px; font-size: 0.95rem; }
+
+      .main-container { padding: 16px 12px; }
+      .page-title { font-size: 1.8rem; margin-bottom: 16px; }
+      
+      #custom-button-group { gap: 6px; }
+      .custom-btn { padding: 8px 16px; font-size: 0.82rem; width: 50%; }
+
+      .table-wrapper { display: none !important; }
+      .mobile-cards-wrapper { display: flex; }
+
+      .mobile-card {
+        background: var(--card-bg);
+        border: 1px solid var(--card-border);
+        border-radius: 14px;
+        padding: 14px;
+        backdrop-filter: blur(12px);
+      }
+
+      .mobile-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      }
+
+      .mobile-item-title {
+        font-weight: 800;
+        font-size: 0.98rem;
+        padding: 5px 12px;
+        border-radius: 8px;
+        display: inline-block;
+      }
+
+      .mobile-card-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px 12px;
+      }
+
+      .mobile-field { display: flex; flex-direction: column; gap: 1px; }
+      .mobile-field-label { color: var(--text-muted); font-size: 0.68rem; text-transform: uppercase; font-weight: 700; }
+      .mobile-field-val { color: #ffffff; font-weight: 700; font-size: 0.88rem; }
+
+      .term-row { grid-template-columns: 1fr; gap: 6px; }
+      .term-badge { height: 38px; font-size: 0.85rem; }
+      .terms-wrapper, .updates-wrapper { padding: 16px; }
+    }
   </style>
 </head>
 <body>
@@ -268,64 +346,74 @@
         </div>
       </div>
 
-      <div id="loading" class="loading-text" style="display: none;">Loading live values...</div>
-
-      <div class="table-wrapper sublist-tab active-sublist" id="normal-section">
-        <table>
-          <thead>
-            <tr>
-              <th style="width: 14%;">ITEM</th>
-              <th style="width: 15%;">VALUE</th>
-              <th style="width: 13%;">DEMAND SCALE</th>
-              <th style="width: 10%;">AVERAGE RAP</th>
-              <th style="width: 14%;">DEMAND RANKING</th>
-              <th style="width: 12%;">VALUE STATUS</th>
-              <th style="width: 13%;">DEMAND STATUS</th>
-              <th style="width: 9%;">ITEM TYPE</th>
-            </tr>
-          </thead>
-          <tbody id="normal-body"></tbody>
-        </table>
+      <div id="loading" class="loading-text" style="display: none;">
+        <div class="spinner"></div> Synchronizing live values...
       </div>
 
-      <div class="table-wrapper sublist-tab" id="collectable-section">
-        <table>
-          <thead>
-            <tr>
-              <th style="width: 14%;">ITEM</th>
-              <th style="width: 15%;">VALUE</th>
-              <th style="width: 13%;">DEMAND SCALE</th>
-              <th style="width: 10%;">AVERAGE RAP</th>
-              <th style="width: 14%;">DEMAND RANKING</th>
-              <th style="width: 12%;">VALUE STATUS</th>
-              <th style="width: 13%;">DEMAND STATUS</th>
-              <th style="width: 9%;">ITEM TYPE</th>
-            </tr>
-          </thead>
-          <tbody id="collectable-body"></tbody>
-        </table>
+      <!-- MAIN LIST -->
+      <div class="sublist-tab active-sublist" id="normal-section">
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 14%;">ITEM</th>
+                <th style="width: 15%;">VALUE</th>
+                <th style="width: 13%;">DEMAND SCALE</th>
+                <th style="width: 10%;">AVERAGE RAP</th>
+                <th style="width: 14%;">DEMAND RANKING</th>
+                <th style="width: 12%;">VALUE STATUS</th>
+                <th style="width: 13%;">DEMAND STATUS</th>
+                <th style="width: 9%;">ITEM TYPE</th>
+              </tr>
+            </thead>
+            <tbody id="normal-body"></tbody>
+          </table>
+        </div>
+        <div class="mobile-cards-wrapper" id="normal-cards"></div>
+      </div>
+
+      <!-- COLLECTORS LIST -->
+      <div class="sublist-tab" id="collectable-section">
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 14%;">ITEM</th>
+                <th style="width: 15%;">VALUE</th>
+                <th style="width: 13%;">DEMAND SCALE</th>
+                <th style="width: 10%;">AVERAGE RAP</th>
+                <th style="width: 14%;">DEMAND RANKING</th>
+                <th style="width: 12%;">VALUE STATUS</th>
+                <th style="width: 13%;">DEMAND STATUS</th>
+                <th style="width: 9%;">ITEM TYPE</th>
+              </tr>
+            </thead>
+            <tbody id="collectable-body"></tbody>
+          </table>
+        </div>
+        <div class="mobile-cards-wrapper" id="collectable-cards"></div>
       </div>
     </div>
 
     <div id="updates" class="tab-content">
       <h1 class="page-title">UPDATES</h1>
       <div class="updates-wrapper" id="updates-container">
-        <div class="loading-text">Loading updates...</div>
+        <div class="loading-text"><div class="spinner"></div> Loading updates...</div>
       </div>
     </div>
 
     <div id="terms" class="tab-content">
       <h1 class="page-title">TERMS & DEFINITIONS</h1>
       <div class="terms-wrapper" id="terms-container">
-        <div class="loading-text">Loading terms...</div>
+        <div class="loading-text"><div class="spinner"></div> Loading terms...</div>
       </div>
     </div>
 
     <div id="about" class="tab-content">
       <h1 class="page-title">ABOUT US</h1>
       <div class="updates-wrapper">
-        <h2 style="font-size: 1.8rem; margin-bottom: 12px;">About UBV</h2>
-        <p style="line-height: 1.7; color: #cbd5e1; font-size: 1.05rem;">
+        <h2 style="font-size: 1.5rem; margin-bottom: 10px;">About UBV</h2>
+        <p style="line-height: 1.7; color: #cbd5e1; font-size: 0.98rem;">
           UBV provides live trading values, market analytics, average RAP metrics, and item showcases for the trading community.
         </p>
       </div>
@@ -337,7 +425,7 @@
         <table class="editors-table">
           <thead>
             <tr>
-              <th style="width: 120px;">Avatar</th>
+              <th style="width: 90px;">Avatar</th>
               <th>Username</th>
               <th>Role</th>
               <th>Roblox Profile</th>
@@ -352,20 +440,12 @@
   </div>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwqsDZQ7UYGZE9SjsV52BpR4jXz5BSzqWxyMSmInd7MoJLVZ5BttDudZzsxU2NsQ2KrxA/exec";
+    // Buraya kendi güncellenmiş Apps Script URL'nizi girin
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwgy0-unscIWFF8CnpZbr8Ff1o6HtJYGPOos9T2L-UBhKyonq61UVzjrPpT3RsnUkCbwA/exec";
 
     let mainListData = [];
     let collectableListData = [];
     let dynamicColorMap = {};
-
-    function fetchJSON(gid) {
-      return fetch(`${SCRIPT_URL}?gid=${gid}`)
-        .then(res => res.json())
-        .catch(err => {
-          console.error("Fetch Error:", err);
-          return null;
-        });
-    }
 
     function openTab(evt, tabName) {
       evt.preventDefault();
@@ -374,8 +454,7 @@
       const navLinks = document.getElementsByClassName("nav-link");
       for (let i = 0; i < navLinks.length; i++) navLinks[i].classList.remove("active");
       
-      const target = document.getElementById(tabName);
-      target.classList.add("active");
+      document.getElementById(tabName).classList.add("active");
       evt.currentTarget.classList.add("active");
     }
 
@@ -405,7 +484,7 @@
     }
 
     function processItemsData(allData) {
-      if (!allData) return;
+      if (!allData || !Array.isArray(allData)) return;
       mainListData = [];
       collectableListData = [];
       let isCollectableSection = false;
@@ -428,18 +507,23 @@
         }
       });
 
-      renderTable(mainListData, document.getElementById("normal-body"));
-      renderTable(collectableListData, document.getElementById("collectable-body"));
+      renderData(mainListData, 'normal');
+      renderData(collectableListData, 'collectable');
     }
 
-    function renderTable(data, tbody) {
-      if (!tbody) return;
+    function renderData(data, type) {
+      const tbody = document.getElementById(`${type}-body`);
+      const cardsContainer = document.getElementById(`${type}-cards`);
+      if (!tbody || !cardsContainer) return;
+
       tbody.innerHTML = "";
-      const fragment = document.createDocumentFragment();
+      cardsContainer.innerHTML = "";
+
+      const tableFragment = document.createDocumentFragment();
+      const cardsFragment = document.createDocumentFragment();
 
       data.forEach(row => {
         if (!row || row.length === 0 || !row[0]) return;
-        const tr = document.createElement("tr");
 
         let itemBgColor = '#6366f1';
         for (let c = 0; c < row.length; c++) {
@@ -450,6 +534,8 @@
           }
         }
 
+        // DESKTOP TABLE
+        const tr = document.createElement("tr");
         for (let idx = 0; idx < 8; idx++) {
           const td = document.createElement("td");
           const rawText = String(row[idx] ?? '-').trim();
@@ -462,59 +548,75 @@
             itemDiv.style.color = getTextColor(itemBgColor);
             itemDiv.textContent = rawText;
             td.appendChild(itemDiv);
-          } 
-          else if (idx === 1) {
+          } else if (idx === 1) {
             td.className = "val-cell";
             td.textContent = rawText;
-          } 
-          else if (idx === 2) {
+          } else if (idx === 2) {
             td.className = "scale-cell";
             td.textContent = rawText;
-          } 
-          else if (idx === 4 || idx === 5 || idx === 6) {
+          } else if (idx === 4 || idx === 5 || idx === 6) {
             const mappedColor = dynamicColorMap[lowerText];
             if (mappedColor) {
               td.innerHTML = `<div class="badge-container"><span class="badge-tag" style="background-color: ${mappedColor}; color: #000000;" title="${rawText}">${rawText}</span></div>`;
             } else {
               td.textContent = rawText;
             }
-          } 
-          else {
+          } else {
             td.textContent = rawText;
           }
-
           tr.appendChild(td);
         }
-        fragment.appendChild(tr);
+        tableFragment.appendChild(tr);
+
+        // MOBILE CARD
+        const card = document.createElement("div");
+        card.className = "mobile-card";
+        
+        card.innerHTML = `
+          <div class="mobile-card-header">
+            <div class="mobile-item-title" style="background-color: ${itemBgColor}; color: ${getTextColor(itemBgColor)};">${String(row[0] ?? '-').trim()}</div>
+            <div style="font-size: 0.75rem; color: var(--text-muted); font-weight:700;">${String(row[7] ?? '-').trim()}</div>
+          </div>
+          <div class="mobile-card-grid">
+            <div class="mobile-field"><span class="mobile-field-label">Value</span><span class="mobile-field-val">${String(row[1] ?? '-').trim()}</span></div>
+            <div class="mobile-field"><span class="mobile-field-label">Demand Scale</span><span class="mobile-field-val" style="color:#c084fc;">${String(row[2] ?? '-').trim()}</span></div>
+            <div class="mobile-field"><span class="mobile-field-label">Avg Rap</span><span class="mobile-field-val">${String(row[3] ?? '-').trim()}</span></div>
+            <div class="mobile-field"><span class="mobile-field-label">Demand Rank</span><span class="mobile-field-val">${String(row[4] ?? '-').trim()}</span></div>
+            <div class="mobile-field"><span class="mobile-field-label">Value Status</span><span class="mobile-field-val">${String(row[5] ?? '-').trim()}</span></div>
+            <div class="mobile-field"><span class="mobile-field-label">Demand Status</span><span class="mobile-field-val">${String(row[6] ?? '-').trim()}</span></div>
+          </div>
+        `;
+        cardsFragment.appendChild(card);
       });
 
-      tbody.appendChild(fragment);
+      tbody.appendChild(tableFragment);
+      cardsContainer.appendChild(cardsFragment);
     }
 
     let searchTimeout = null;
     function handleSearchInput() {
       clearTimeout(searchTimeout);
-      searchTimeout = setTimeout(() => { filterTable(); }, 80);
+      searchTimeout = setTimeout(() => { filterTable(); }, 60);
     }
 
     function filterTable() {
       const query = document.getElementById("search-box").value.toLowerCase().trim();
       const targetData = currentSubTab === 'normal-section' ? mainListData : collectableListData;
-      const targetBody = currentSubTab === 'normal-section' ? document.getElementById("normal-body") : document.getElementById("collectable-body");
+      const type = currentSubTab === 'normal-section' ? 'normal' : 'collectable';
       
       if (!query) {
-        renderTable(targetData, targetBody);
+        renderData(targetData, type);
         return;
       }
 
       const filtered = targetData.filter(row => 
         row.some(cell => String(cell).toLowerCase().includes(query))
       );
-      renderTable(filtered, targetBody);
+      renderData(filtered, type);
     }
 
     function processTermsData(rows) {
-      if (!rows) return;
+      if (!rows || !Array.isArray(rows)) return;
       const container = document.getElementById('terms-container');
       container.innerHTML = '';
       rows.forEach(r => {
@@ -523,9 +625,7 @@
         const desc = r[1] ? String(r[1]).trim() : '';
         let color = r[2] ? String(r[2]).trim() : '#e2e8f0';
 
-        if (term) {
-          dynamicColorMap[term.toLowerCase()] = color;
-        }
+        if (term) dynamicColorMap[term.toLowerCase()] = color;
 
         if (desc === 'SECTION_HEADER' || desc === '' || term.toLowerCase().includes('terms')) {
           const header = document.createElement('div');
@@ -544,40 +644,35 @@
       });
 
       if (mainListData.length > 0) {
-        renderTable(mainListData, document.getElementById("normal-body"));
-        renderTable(collectableListData, document.getElementById("collectable-body"));
+        renderData(mainListData, 'normal');
+        renderData(collectableListData, 'collectable');
       }
     }
 
     function processUpdatesData(rows) {
-      if (!rows) return;
+      if (!rows || !Array.isArray(rows)) return;
       const container = document.getElementById('updates-container');
       container.innerHTML = '';
       rows.forEach(r => {
         if (!r || !r[0]) return;
-        const title = r[0] || 'UPDATE';
-        const date = r[1] || '';
-        const content = r[2] || '';
-
         const block = document.createElement('div');
         block.className = 'update-block';
         block.innerHTML = `
-          <div class="update-header-title">${title}</div>
-          ${date ? `<div class="update-date-tag">${date}</div>` : ''}
-          <div class="update-content-text">${content}</div>
+          <div class="update-header-title">${r[0] || 'UPDATE'}</div>
+          ${r[1] ? `<div class="update-date-tag">${r[1]}</div>` : ''}
+          <div class="update-content-text">${r[2] || ''}</div>
         `;
         container.appendChild(block);
       });
     }
 
     function processEditorsData(rows) {
-      if (!rows || rows.length === 0) return;
+      if (!rows || !Array.isArray(rows) || rows.length === 0) return;
       const tbody = document.getElementById('editors-body');
       tbody.innerHTML = '';
 
       rows.forEach(r => {
-        if (!r || !r[1]) return;
-        if (String(r[1]).toLowerCase() === 'username') return;
+        if (!r || !r[1] || String(r[1]).toLowerCase() === 'username') return;
 
         const avatarImg = r[0] || '';
         const username = r[1] || '';
@@ -594,59 +689,50 @@
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td><img src="${imgSrc}" class="editor-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=151521&color=a855f7&size=128'"></td>
-          <td style="font-weight: 800; font-size: 1.2rem;">${username}</td>
+          <td style="font-weight: 800; font-size: 1rem;">${username}</td>
           <td style="color: var(--text-muted); font-weight: 600;">${role}</td>
           <td><a href="${profileUrl}" target="_blank" style="color: var(--accent-primary); text-decoration:none; font-weight: 700;">@${username.toLowerCase()}</a></td>
-          <td><span style="display:inline-block; padding:6px 18px; border-radius:30px; font-size:0.8rem; font-weight:800; background:${isActive ? 'rgba(34,197,94,0.15)' : 'rgba(239,68,68,0.15)'}; color:${isActive ? '#4ade80' : '#f87171'}; border:1px solid ${isActive ? 'rgba(34,197,94,0.3)' : 'rgba(239,68,68,0.3)'};">${isActive ? 'ACTIVE' : 'INACTIVE'}</span></td>
+          <td><span style="display:inline-block; padding:4px 12px; border-radius:30px; font-size:0.72rem; font-weight:800; background:${isActive ? 'rgba(34,197,94,0.15)' : 'rgba(239,68,68,0.15)'}; color:${isActive ? '#4ade80' : '#f87171'}; border:1px solid ${isActive ? 'rgba(34,197,94,0.3)' : 'rgba(239,68,68,0.3)'};">${isActive ? 'ACTIVE' : 'INACTIVE'}</span></td>
         `;
         tbody.appendChild(tr);
       });
     }
 
-    // Paralel Yükleme ve Önbellek (Cache) Yönetimi
+    // TEK İSTEKLE HIZLANDIRILMIŞ VE ÖNBELLEKLENMİŞ YÜKLEME
     async function initData() {
-      // Önce varsa tarayıcı hafızasındaki (cache) verileri anında yükle
-      const cachedTerms = localStorage.getItem('ubv_terms');
-      const cachedItems = localStorage.getItem('ubv_items');
-      const cachedUpdates = localStorage.getItem('ubv_updates');
-      const cachedEditors = localStorage.getItem('ubv_editors');
-
-      if (cachedTerms) processTermsData(JSON.parse(cachedTerms));
-      if (cachedItems) processItemsData(JSON.parse(cachedItems));
-      if (cachedUpdates) processUpdatesData(JSON.parse(cachedUpdates));
-      if (cachedEditors) processEditorsData(JSON.parse(cachedEditors));
-
-      // Ön bellek yoksa loader göster
-      if (!cachedItems) {
-        document.getElementById('loading').style.display = 'block';
+      // 1. DÜZEY: Varsa eski verileri anında ekrana bas (Sıfır Bekleme)
+      const cachedBundle = localStorage.getItem('ubv_data_bundle');
+      if (cachedBundle) {
+        try {
+          const parsed = JSON.parse(cachedBundle);
+          if (parsed.terms) processTermsData(parsed.terms);
+          if (parsed.items) processItemsData(parsed.items);
+          if (parsed.updates) processUpdatesData(parsed.updates);
+          if (parsed.editors) processEditorsData(parsed.editors);
+        } catch(e) { console.error("Cache parsing error", e); }
+      } else {
+        document.getElementById('loading').style.display = 'flex';
       }
 
-      // Tüm API isteklerini aynı anda (paralel) yap
-      const [terms, items, updates, editors] = await Promise.all([
-        fetchJSON('517689974'),
-        fetchJSON('0'),
-        fetchJSON('568303787'),
-        fetchJSON('1456456561')
-      ]);
+      // 2. DÜZEY: Arka planda TEK BİR İSTEK ile Google Sheets'ten güncel verileri al
+      try {
+        const response = await fetch(`${SCRIPT_URL}?_t=${Date.now()}`);
+        const data = await response.json();
+        
+        document.getElementById('loading').style.display = 'none';
 
-      document.getElementById('loading').style.display = 'none';
+        if (data) {
+          if (data.terms) processTermsData(data.terms);
+          if (data.items) processItemsData(data.items);
+          if (data.updates) processUpdatesData(data.updates);
+          if (data.editors) processEditorsData(data.editors);
 
-      // Arka planda yeni gelen güncel verileri işle ve cache'e kaydet
-      if (terms) {
-        processTermsData(terms);
-        localStorage.setItem('ubv_terms', JSON.stringify(terms));
-      }
-      if (items) {
-        processItemsData(items);
-        localStorage.setItem('ubv_items', JSON.stringify(items));
-      }
-      if (updates) {
-        processUpdatesData(updates);
-        localStorage.setItem('ubv_updates', JSON.stringify(updates));
-      }
-      if (editors) {
-        processEditorsData(editors);
-        localStorage.setItem('ubv_editors', JSON.stringify(editors));
+          // Gelecek hızlı açılışlar için yerel hafızaya kaydet
+          localStorage.setItem('ubv_data_bundle', JSON.stringify(data));
+        }
+      } catch (err) {
+        console.error("API Fetch error:", err);
+        document.getElementById('loading').style.display = 'none';
       }
     }
 
