@@ -10,6 +10,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+  <!-- CSV Ayrıştırma için PapaParse -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
   <style>
     :root {
       --bg-dark: #07090e;
@@ -36,7 +39,6 @@
       position: relative;
     }
 
-    /* AKICI ARKA PLAN IŞIĞI */
     body::before {
       content: '';
       position: absolute;
@@ -57,7 +59,6 @@
       100% { transform: translateX(-50%) scale(1.08); opacity: 1; }
     }
 
-    /* NAVBAR */
     .navbar {
       background: rgba(7, 9, 14, 0.85);
       backdrop-filter: blur(16px);
@@ -146,7 +147,6 @@
       box-shadow: 0 6px 20px rgba(88, 101, 242, 0.4);
     }
 
-    /* MAIN CONTAINER */
     .main-container {
       flex: 1;
       padding: 40px 24px;
@@ -177,7 +177,6 @@
       color: #ffffff;
     }
 
-    /* SEARCH & CONTROLS */
     #search-section { text-align: center; margin-bottom: 2rem; }
 
     .search-wrapper {
@@ -253,7 +252,6 @@
     .sublist-tab { display: none; }
     .sublist-tab.active-sublist { display: block; }
 
-    /* TABLOLAR */
     .table-wrapper {
       width: 100%;
       border-radius: 18px;
@@ -296,15 +294,8 @@
       transition: background-color 0.2s ease;
     }
 
-    tbody tr {
-      transition: all 0.25s var(--ease-smooth);
-    }
+    tbody tr:hover { background-color: rgba(255, 255, 255, 0.04); }
 
-    tbody tr:hover {
-      background-color: rgba(255, 255, 255, 0.04);
-    }
-
-    /* ITEM CELL */
     .item-cell {
       font-weight: 800;
       font-size: 1.05rem;
@@ -325,7 +316,6 @@
     .val-cell { color: #ffffff; font-size: 1.05rem; }
     .scale-cell { color: #c084fc; font-size: 1.02rem; }
 
-    /* BADGE TAGS */
     .badge-container {
       display: flex;
       align-items: center;
@@ -361,11 +351,7 @@
       filter: brightness(1.1);
     }
 
-    /* LIST EDITORS TABLOSU VE FOTOĞRAFLARI */
-    .editors-table td {
-      height: 100px !important;
-      font-size: 1.15rem;
-    }
+    .editors-table td { height: 100px !important; font-size: 1.15rem; }
 
     .editor-avatar {
       width: 72px;
@@ -383,7 +369,6 @@
       box-shadow: 0 0 25px rgba(168, 85, 247, 0.5);
     }
 
-    /* TERMS & UPDATES TAB */
     .terms-wrapper, .updates-wrapper {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
@@ -441,33 +426,15 @@
     }
 
     .update-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-
     .update-header-title { font-size: 1.75rem; font-weight: 800; color: #ffffff; }
     .update-date-tag { font-size: 0.95rem; color: var(--accent-primary); font-weight: 700; margin: 6px 0 14px; }
     .update-content-text { white-space: pre-wrap; font-size: 1.05rem; line-height: 1.6; color: #cbd5e1; }
     .loading-text { text-align: center; padding: 60px; color: var(--text-muted); font-size: 1.2rem; }
 
-    /* MOBİL MEDYA SORGULARI */
     @media (max-width: 768px) {
-      .navbar {
-        padding: 14px 20px;
-        height: auto;
-        flex-direction: column;
-        gap: 12px;
-      }
-
-      .nav-links {
-        width: 100%;
-        justify-content: space-between;
-        overflow-x: auto;
-      }
-
-      .nav-links a {
-        padding: 8px 12px;
-        font-size: 0.85rem;
-        white-space: nowrap;
-      }
-
+      .navbar { padding: 14px 20px; height: auto; flex-direction: column; gap: 12px; }
+      .nav-links { width: 100%; justify-content: space-between; overflow-x: auto; }
+      .nav-links a { padding: 8px 12px; font-size: 0.85rem; white-space: nowrap; }
       .nav-social { display: none; }
       .page-title { font-size: 2.2rem; }
       .term-row { grid-template-columns: 1fr; gap: 10px; }
@@ -478,7 +445,6 @@
 </head>
 <body>
 
-  <!-- NAVBAR -->
   <nav class="navbar">
     <a href="#" class="nav-logo-container">
       <img src="logo.png" alt="UBV Logo" class="nav-logo-img" onerror="this.src='https://ui-avatars.com/api/?name=UBV&background=7c3aed&color=fff&size=128'">
@@ -493,10 +459,8 @@
     <a href="https://discord.gg/ubv" target="_blank" class="nav-social" title="Discord"><i class="fab fa-discord"></i></a>
   </nav>
 
-  <!-- MAIN CONTAINER -->
   <div class="main-container">
 
-    <!-- VALUE LISTS TAB -->
     <div id="valuelists" class="tab-content active">
       <h1 class="page-title">VALUE LISTS</h1>
 
@@ -514,7 +478,6 @@
 
       <div id="loading" class="loading-text">Loading live values...</div>
 
-      <!-- Main Items Table -->
       <div class="table-wrapper sublist-tab active-sublist" id="normal-section">
         <table>
           <thead>
@@ -533,7 +496,6 @@
         </table>
       </div>
 
-      <!-- Collectables Table -->
       <div class="table-wrapper sublist-tab" id="collectable-section">
         <table>
           <thead>
@@ -553,7 +515,6 @@
       </div>
     </div>
 
-    <!-- UPDATES TAB -->
     <div id="updates" class="tab-content">
       <h1 class="page-title">UPDATES</h1>
       <div class="updates-wrapper" id="updates-container">
@@ -561,7 +522,6 @@
       </div>
     </div>
 
-    <!-- TERMS TAB -->
     <div id="terms" class="tab-content">
       <h1 class="page-title">TERMS & DEFINITIONS</h1>
       <div class="terms-wrapper" id="terms-container">
@@ -569,7 +529,6 @@
       </div>
     </div>
 
-    <!-- ABOUT TAB -->
     <div id="about" class="tab-content">
       <h1 class="page-title">ABOUT US</h1>
       <div class="updates-wrapper">
@@ -580,7 +539,6 @@
       </div>
     </div>
 
-    <!-- LIST EDITORS TAB -->
     <div id="editors" class="tab-content">
       <h1 class="page-title">LIST EDITORS</h1>
       <div class="table-wrapper">
@@ -602,6 +560,16 @@
   </div>
 
   <script>
+    // CORS Engelini aşmak için proxy yönlendirmesi eklendi
+    const PROXY = "https://api.allorigins.win/raw?url=";
+
+    const CSV_URLS = {
+      items: PROXY + encodeURIComponent("https://docs.google.com/spreadsheets/d/e/2PACX-1vR-iH2G2YVcW1PDsLcE4KfPiLhMpaUyzKC6o_E-1BWemF3GS7YYN8kBRpgOjmIDBsYnTqWayxBTlsrt/pub?gid=0&single=true&output=csv"),
+      updates: PROXY + encodeURIComponent("https://docs.google.com/spreadsheets/d/e/2PACX-1vR-iH2G2YVcW1PDsLcE4KfPiLhMpaUyzKC6o_E-1BWemF3GS7YYN8kBRpgOjmIDBsYnTqWayxBTlsrt/pub?gid=568303787&single=true&output=csv"),
+      editors: PROXY + encodeURIComponent("https://docs.google.com/spreadsheets/d/e/2PACX-1vR-iH2G2YVcW1PDsLcE4KfPiLhMpaUyzKC6o_E-1BWemF3GS7YYN8kBRpgOjmIDBsYnTqWayxBTlsrt/pub?gid=1456456561&single=true&output=csv"),
+      terms: PROXY + encodeURIComponent("https://docs.google.com/spreadsheets/d/e/2PACX-1vR-iH2G2YVcW1PDsLcE4KfPiLhMpaUyzKC6o_E-1BWemF3GS7YYN8kBRpgOjmIDBsYnTqWayxBTlsrt/pub?gid=517689974&single=true&output=csv")
+    };
+
     function openTab(evt, tabName) {
       evt.preventDefault();
       const tabContents = document.getElementsByClassName("tab-content");
@@ -625,7 +593,6 @@
       filterTable();
     }
 
-    const SHEET_ID = '1g-5-zj5fz1WfKhrPxMUzyAMmtbXOFf8ujufdd-yYKMo';
     let mainListData = [];
     let collectableListData = [];
     let dynamicColorMap = {};
@@ -641,40 +608,44 @@
       return brightness > 150 ? '#000000' : '#ffffff';
     }
 
-    function handleGoogleSheetData(json) {
-      document.getElementById('loading').style.display = 'none';
-      try {
-        const rawRows = json.table.rows;
-        const allData = rawRows.map(row => {
-          if (!row.c) return [];
-          return row.c.map(cell => cell ? (cell.v !== null ? cell.v : '') : '');
-        });
+    function loadItemsData() {
+      Papa.parse(CSV_URLS.items, {
+        download: true,
+        complete: function(results) {
+          const loadingEl = document.getElementById('loading');
+          if (loadingEl) loadingEl.style.display = 'none';
 
-        mainListData = [];
-        collectableListData = [];
-        let isCollectableSection = false;
+          const allData = results.data;
+          mainListData = [];
+          collectableListData = [];
+          let isCollectableSection = false;
 
-        allData.forEach(row => {
-          if (!row || row.length === 0 || !row[0]) return;
-          const firstCell = String(row[0]).trim().toLowerCase();
-          if (firstCell === 'item') return;
-          if (firstCell.includes("collectors") || firstCell.includes("collectable")) {
-            isCollectableSection = true;
-            return;
-          }
+          allData.forEach(row => {
+            if (!row || row.length === 0 || !row[0]) return;
+            const firstCell = String(row[0]).trim();
+            if (firstCell.toLowerCase() === 'item' || firstCell === '') return;
+            
+            if (firstCell.toLowerCase().includes("collectors") || firstCell.toLowerCase().includes("collectable")) {
+              isCollectableSection = true;
+              return;
+            }
 
-          if (isCollectableSection) {
-            collectableListData.push(row);
-          } else {
-            mainListData.push(row);
-          }
-        });
+            if (isCollectableSection) {
+              collectableListData.push(row);
+            } else {
+              mainListData.push(row);
+            }
+          });
 
-        renderTable(mainListData, document.getElementById("normal-body"));
-        renderTable(collectableListData, document.getElementById("collectable-body"));
-      } catch (err) {
-        console.error(err);
-      }
+          renderTable(mainListData, document.getElementById("normal-body"));
+          renderTable(collectableListData, document.getElementById("collectable-body"));
+        },
+        error: function(err) {
+          console.error("CSV Items Error:", err);
+          const loadingEl = document.getElementById('loading');
+          if (loadingEl) loadingEl.textContent = "Error loading item data.";
+        }
+      });
     }
 
     function renderTable(data, tbody) {
@@ -686,15 +657,11 @@
         if (!row || row.length === 0 || !row[0]) return;
         const tr = document.createElement("tr");
 
-        /* I SÜTUNUNDAN (ROW[8]) RENK KODUNU OKUMA */
         let itemBgColor = String(row[8] ?? '').trim();
-
-        // Eğer I sütununda renk koda başlanmamışsa veya boşsa varsayılan mor renge düşer
         if (!itemBgColor.startsWith('#')) {
           itemBgColor = '#6366f1';
         }
 
-        // Tablodaki ilk 8 sütunu (A-H) döngüyle ekrana basıyoruz
         for (let idx = 0; idx < 8; idx++) {
           const td = document.createElement("td");
           const rawText = String(row[idx] ?? '-').trim();
@@ -739,9 +706,7 @@
     let searchTimeout = null;
     function handleSearchInput() {
       clearTimeout(searchTimeout);
-      searchTimeout = setTimeout(() => {
-        filterTable();
-      }, 100);
+      searchTimeout = setTimeout(() => { filterTable(); }, 100);
     }
 
     function filterTable() {
@@ -760,120 +725,118 @@
       renderTable(filtered, targetBody);
     }
 
-    function handleTermsData(json) {
+    function loadTermsData() {
       const container = document.getElementById('terms-container');
-      container.innerHTML = '';
-      try {
-        const rows = json.table.rows;
-        rows.forEach(r => {
-          if (!r.c || !r.c[0]) return;
-          const term = r.c[0] ? String(r.c[0].v).trim() : '';
-          const desc = r.c[1] ? String(r.c[1].v).trim() : '';
-          let color = r.c[2] ? String(r.c[2].v).trim() : '#e2e8f0';
+      Papa.parse(CSV_URLS.terms, {
+        download: true,
+        complete: function(results) {
+          container.innerHTML = '';
+          const rows = results.data;
+          rows.forEach(r => {
+            if (!r || !r[0]) return;
+            const term = String(r[0]).trim();
+            const desc = r[1] ? String(r[1]).trim() : '';
+            let color = r[2] ? String(r[2]).trim() : '#e2e8f0';
 
-          if (term) {
-            dynamicColorMap[term.toLowerCase()] = color;
+            if (term) {
+              dynamicColorMap[term.toLowerCase()] = color;
+            }
+
+            if (desc === 'SECTION_HEADER' || desc === '' || term.toLowerCase().includes('terms')) {
+              const header = document.createElement('div');
+              header.className = 'terms-section-title';
+              header.textContent = term;
+              container.appendChild(header);
+            } else {
+              const row = document.createElement('div');
+              row.className = 'term-row';
+              row.innerHTML = `
+                <div class="term-badge" style="background-color: ${color};">${term}</div>
+                <div class="term-desc">${desc}</div>
+              `;
+              container.appendChild(row);
+            }
+          });
+
+          if (mainListData.length > 0) {
+            renderTable(mainListData, document.getElementById("normal-body"));
+            renderTable(collectableListData, document.getElementById("collectable-body"));
           }
-
-          if (desc === 'SECTION_HEADER' || desc === '' || term.toLowerCase().includes('terms')) {
-            const header = document.createElement('div');
-            header.className = 'terms-section-title';
-            header.textContent = term;
-            container.appendChild(header);
-          } else {
-            const row = document.createElement('div');
-            row.className = 'term-row';
-            row.innerHTML = `
-              <div class="term-badge" style="background-color: ${color};">${term}</div>
-              <div class="term-desc">${desc}</div>
-            `;
-            container.appendChild(row);
-          }
-        });
-
-        if (mainListData.length > 0) {
-          renderTable(mainListData, document.getElementById("normal-body"));
-          renderTable(collectableListData, document.getElementById("collectable-body"));
         }
-      } catch(e) {
-        container.innerHTML = '<p class="loading-text">Failed to load terms.</p>';
-      }
+      });
     }
 
-    function handleUpdatesData(json) {
+    function loadUpdatesData() {
       const container = document.getElementById('updates-container');
-      container.innerHTML = '';
-      try {
-        const rows = json.table.rows;
-        rows.forEach(r => {
-          if (!r.c || !r.c[0]) return;
-          const title = r.c[0] ? r.c[0].v : 'UPDATE';
-          const date = r.c[1] ? r.c[1].v : '';
-          const content = r.c[2] ? r.c[2].v : '';
+      Papa.parse(CSV_URLS.updates, {
+        download: true,
+        complete: function(results) {
+          container.innerHTML = '';
+          const rows = results.data;
+          rows.forEach(r => {
+            if (!r || !r[0]) return;
+            const title = r[0] || 'UPDATE';
+            const date = r[1] || '';
+            const content = r[2] || '';
 
-          const block = document.createElement('div');
-          block.className = 'update-block';
-          block.innerHTML = `
-            <div class="update-header-title">${title}</div>
-            ${date ? `<div class="update-date-tag">${date}</div>` : ''}
-            <div class="update-content-text">${content}</div>
-          `;
-          container.appendChild(block);
-        });
-      } catch(e) {}
+            const block = document.createElement('div');
+            block.className = 'update-block';
+            block.innerHTML = `
+              <div class="update-header-title">${title}</div>
+              ${date ? `<div class="update-date-tag">${date}</div>` : ''}
+              <div class="update-content-text">${content}</div>
+            `;
+            container.appendChild(block);
+          });
+        }
+      });
     }
 
-    function handleEditorsData(json) {
+    function loadEditorsData() {
       const tbody = document.getElementById('editors-body');
-      try {
-        const rows = json.table.rows;
-        if (!rows || rows.length === 0) return;
-        tbody.innerHTML = '';
+      Papa.parse(CSV_URLS.editors, {
+        download: true,
+        complete: function(results) {
+          const rows = results.data;
+          if (!rows || rows.length === 0) return;
+          tbody.innerHTML = '';
 
-        rows.forEach(r => {
-          if (!r.c || !r.c[1]) return;
-          if (String(r.c[1].v).toLowerCase() === 'username') return;
+          rows.forEach(r => {
+            if (!r || !r[1]) return;
+            if (String(r[1]).toLowerCase() === 'username') return;
 
-          const avatarImg = r.c[0] ? r.c[0].v : '';
-          const username = r.c[1] ? r.c[1].v : '';
-          const role = r.c[2] ? r.c[2].v : 'List Editor';
-          const profileUrl = r.c[3] ? r.c[3].v : '#';
-          const status = r.c[4] ? String(r.c[4].v) : 'Active';
+            const avatarImg = r[0] || '';
+            const username = r[1] || '';
+            const role = r[2] || 'List Editor';
+            const profileUrl = r[3] || '#';
+            const status = r[4] ? String(r[4]) : 'Active';
 
-          const imgSrc = (avatarImg && String(avatarImg).startsWith('http')) 
-            ? avatarImg 
-            : `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=151521&color=a855f7&size=128`;
+            const imgSrc = (avatarImg && String(avatarImg).startsWith('http')) 
+              ? avatarImg 
+              : `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=151521&color=a855f7&size=128`;
 
-          const isActive = status.toLowerCase().trim() === 'active';
+            const isActive = status.toLowerCase().trim() === 'active';
 
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td><img src="${imgSrc}" class="editor-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=151521&color=a855f7&size=128'"></td>
-            <td style="font-weight: 800; font-size: 1.2rem;">${username}</td>
-            <td style="color: var(--text-muted); font-weight: 600;">${role}</td>
-            <td><a href="${profileUrl}" target="_blank" style="color: var(--accent-primary); text-decoration:none; font-weight: 700;">@${username.toLowerCase()}</a></td>
-            <td><span style="display:inline-block; padding:6px 18px; border-radius:30px; font-size:0.8rem; font-weight:800; background:${isActive ? 'rgba(34,197,94,0.15)' : 'rgba(239,68,68,0.15)'}; color:${isActive ? '#4ade80' : '#f87171'}; border:1px solid ${isActive ? 'rgba(34,197,94,0.3)' : 'rgba(239,68,68,0.3)'};">${isActive ? 'ACTIVE' : 'INACTIVE'}</span></td>
-          `;
-          tbody.appendChild(tr);
-        });
-      } catch(e) {}
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td><img src="${imgSrc}" class="editor-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=151521&color=a855f7&size=128'"></td>
+              <td style="font-weight: 800; font-size: 1.2rem;">${username}</td>
+              <td style="color: var(--text-muted); font-weight: 600;">${role}</td>
+              <td><a href="${profileUrl}" target="_blank" style="color: var(--accent-primary); text-decoration:none; font-weight: 700;">@${username.toLowerCase()}</a></td>
+              <td><span style="display:inline-block; padding:6px 18px; border-radius:30px; font-size:0.8rem; font-weight:800; background:${isActive ? 'rgba(34,197,94,0.15)' : 'rgba(239,68,68,0.15)'}; color:${isActive ? '#4ade80' : '#f87171'}; border:1px solid ${isActive ? 'rgba(34,197,94,0.3)' : 'rgba(239,68,68,0.3)'};">${isActive ? 'ACTIVE' : 'INACTIVE'}</span></td>
+            `;
+            tbody.appendChild(tr);
+          });
+        }
+      });
     }
 
-    const scriptTerms = document.createElement('script');
-    scriptTerms.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=Terms&headers=0&tqx=responseHandler:handleTermsData`;
-    document.body.appendChild(scriptTerms);
-
-    const scriptMain = document.createElement('script');
-    scriptMain.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?headers=0&tqx=responseHandler:handleGoogleSheetData`;
-    document.body.appendChild(scriptMain);
-
-    const scriptUpdates = document.createElement('script');
-    scriptUpdates.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=Updates&headers=0&tqx=responseHandler:handleUpdatesData`;
-    document.body.appendChild(scriptUpdates);
-
-    const scriptEditors = document.createElement('script');
-    scriptEditors.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=Editors&headers=0&tqx=responseHandler:handleEditorsData`;
-    document.body.appendChild(scriptEditors);
+    window.addEventListener('DOMContentLoaded', () => {
+      loadTermsData();
+      loadItemsData();
+      loadUpdatesData();
+      loadEditorsData();
+    });
   </script>
 </body>
 </html>
