@@ -118,7 +118,7 @@
 
     .page-title { font-size: 2.4rem; font-weight: 800; text-align: center; margin-bottom: 24px; color: #ffffff; letter-spacing: -0.5px; }
 
-    /* 1. PC PORTUNDA BUTONLARI MERKEZLEME */
+
     .subtab-header {
       position: relative;
       display: flex;
@@ -274,7 +274,7 @@
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 8px;
     }
 
-    /* 2. LIST EDITORS RESİM BOUTLARI VE EFEKTLERİ */
+
     .editors-table { min-width: 100%; width: 100%; table-layout: fixed; }
     .editors-table td { height: 100px; font-size: 1rem; }
     .editor-avatar-container { display: flex; align-items: center; justify-content: center; }
@@ -404,7 +404,7 @@
     </a>
     <div class="nav-links-wrapper">
       <ul class="nav-links">
-        <li><a href="#" class="nav-link active" onclick="openTab(event, 'valuelists')">Value Lists</a></li>
+        <li><a href="#" class="nav-link active" onclick="openTab(event, 'valuelists')">Value List</a></li>
         <li><a href="#" class="nav-link" onclick="openTab(event, 'updates')">Updates</a></li>
         <li><a href="#" class="nav-link" onclick="openTab(event, 'terms')">Terms</a></li>
         <li><a href="#" class="nav-link" onclick="openTab(event, 'editors')">List Editors</a></li>
@@ -418,7 +418,7 @@
   <div class="main-container">
 
     <div id="valuelists" class="tab-content active">
-      <h1 class="page-title">VALUE LISTS</h1>
+      <h1 class="page-title">BL VALUE LIST</h1>
 
       <div class="subtab-header">
         <div id="custom-button-group">
@@ -554,7 +554,7 @@
       <div class="updates-wrapper">
         <h2 style="font-size: 1.4rem; margin-bottom: 10px; color: #ffffff;">About UBV</h2>
         <p style="line-height: 1.65; color: #cbd5e1; font-size: 0.95rem;">
-          UBV provides live trading values, market analytics, average RAP metrics, and item showcases for the trading community.
+          work in progress
         </p>
       </div>
     </div>
@@ -571,7 +571,7 @@
     let isMobileTableView = false;
     let currentSubTab = 'normal-section';
 
-    // 3. FİLTRE SIRALAMA TANIMLARI
+
     const DEMAND_ORDER = [
       "INSANELY HIGH", "GREAT", "GOOD", "ABOVE AVERAGE", 
       "SLIGHTLY ABOVE AVERAGE", "AVERAGE", "SLIGHTLY BELOW AVERAGE", 
@@ -667,7 +667,7 @@
       return rawText;
     }
 
-    /* 5. DÜŞÜK CPU TÜRÜ HIZLI RENDERLEME */
+
     function renderData(data, type) {
       const tbody = document.getElementById(`${type}-body`);
       const cardsContainer = document.getElementById(`${type}-cards`);
@@ -762,7 +762,7 @@
       else if (sortVal === 'name-asc') processed.sort((a, b) => String(a[0] ?? '').localeCompare(String(b[0] ?? '')));
       else if (sortVal === 'name-desc') processed.sort((a, b) => String(b[0] ?? '').localeCompare(String(a[0] ?? '')));
 
-      // 4. SHOWN ITEMS & CLEAR FILTER BARI GÜNCELLEME
+
       const statusContainer = document.getElementById("filter-status-container");
       const statusText = document.getElementById("filter-status-text");
 
@@ -802,7 +802,7 @@
       renderData(collectableListData, 'collectable');
     }
 
-    /* 3. ÖZEL SIRALAMALI FİLTRE MENÜSÜ */
+
     function populateFilterDropdown() {
       const select = document.getElementById('filter-select');
       if (!select) return;
@@ -816,7 +816,7 @@
         if (row[6] && String(row[6]).trim() !== '-') typeSet.add(String(row[6]).trim());
       });
 
-      // Demand Ranking Sıralaması
+
       const sortedDemand = Array.from(demandSet).sort((a, b) => {
         let indexA = DEMAND_ORDER.indexOf(a.toUpperCase());
         let indexB = DEMAND_ORDER.indexOf(b.toUpperCase());
@@ -825,7 +825,7 @@
         return indexA - indexB;
       });
 
-      // Status Sıralaması
+
       const sortedStatus = Array.from(statusSet).sort((a, b) => {
         let indexA = STATUS_ORDER.indexOf(a.toUpperCase());
         let indexB = STATUS_ORDER.indexOf(b.toUpperCase());
@@ -890,7 +890,7 @@
       container.innerHTML = html;
     }
 
-    /* 2. BÜYÜTÜLMÜŞ EDITORS TABLOSU */
+
     function processEditorsData(rows) {
       if (!rows || !Array.isArray(rows)) return;
       const tbody = document.getElementById('editors-body');
