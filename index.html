@@ -14,8 +14,7 @@
     :root {
       --bg-dark: #06080d;
       --card-bg: rgba(13, 18, 28, 0.75);
-      --card-border: rgba(255, 255, 255, 0.07);
-      --card-border-glow: rgba(168, 85, 247, 0.25);
+      --card-border: rgba(255, 255, 255, 0.08);
       --accent-primary: #38bdf8;
       --accent-purple: #a855f7;
       --text-main: #f8fafc;
@@ -45,14 +44,15 @@
       transform: translateX(-50%);
       width: 1200px;
       height: 450px;
-      background: radial-gradient(circle, rgba(168, 85, 247, 0.12) 0%, rgba(56, 189, 248, 0.05) 45%, rgba(0,0,0,0) 75%);
-      filter: blur(90px);
+      background: radial-gradient(circle, rgba(168, 85, 247, 0.1) 0%, rgba(56, 189, 248, 0.04) 45%, rgba(0,0,0,0) 75%);
+      filter: blur(100px);
       z-index: -1;
       pointer-events: none;
+      transform: translate3d(-50%, 0, 0);
     }
 
     .navbar {
-      background: rgba(6, 8, 13, 0.8);
+      background: rgba(6, 8, 13, 0.82);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--card-border);
@@ -64,183 +64,317 @@
       position: sticky;
       top: 0;
       z-index: 1000;
+      transition: border-color 0.3s ease;
+      will-change: transform;
     }
 
-    .nav-logo-container { display: flex; align-items: center; text-decoration: none; }
+    .nav-logo-container { display: flex; align-items: center; text-decoration: none; cursor: pointer; }
     .nav-logo-img {
       height: 42px; width: 42px; object-fit: cover; border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      transition: transform 0.3s var(--ease-smooth), border-color 0.3s var(--ease-smooth);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      transition: transform 0.4s var(--ease-smooth), border-color 0.4s ease, box-shadow 0.4s ease;
+      will-change: transform;
     }
-    .nav-logo-img:hover { transform: scale(1.05); border-color: var(--accent-purple); }
+    .nav-logo-img:hover { 
+      transform: scale(1.08) rotate(-2deg); 
+      border-color: var(--accent-purple);
+      box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+    }
+
+    .nav-links-wrapper { position: relative; display: flex; align-items: center; overflow: hidden; }
 
     .nav-links {
       display: flex; gap: 4px; list-style: none;
       background: rgba(255, 255, 255, 0.025); padding: 4px; border-radius: 14px;
-      border: 1px solid var(--card-border);
+      border: 1px solid var(--card-border); overflow-x: auto; scrollbar-width: none;
     }
+    .nav-links::-webkit-scrollbar { display: none; }
 
     .nav-links a {
       color: var(--text-muted); text-decoration: none; font-weight: 600;
       font-size: 0.88rem; padding: 8px 18px; border-radius: 10px;
-      transition: all 0.25s var(--ease-smooth);
+      transition: transform 0.3s var(--ease-smooth), color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
       white-space: nowrap;
+      will-change: transform;
     }
 
     .nav-links a.active, .nav-links a:hover {
-      color: #ffffff; background: rgba(255, 255, 255, 0.07);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      color: #ffffff; background: rgba(255, 255, 255, 0.09);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      transform: translateY(-1px);
+    }
+
+    .scroll-hint {
+      display: none; position: absolute; right: 0; top: 0; bottom: 0; width: 30px;
+      background: linear-gradient(to right, transparent, var(--bg-dark));
+      pointer-events: none; align-items: center; justify-content: flex-end;
+      padding-right: 4px; color: var(--accent-purple); font-size: 0.8rem;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.4; transform: translateX(0); }
+      50% { opacity: 1; transform: translateX(3px); }
     }
 
     .nav-social {
       color: var(--text-muted); font-size: 1.1rem; text-decoration: none;
       width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
       border-radius: 12px; background: rgba(255, 255, 255, 0.025); border: 1px solid var(--card-border);
-      transition: all 0.3s var(--ease-smooth);
+      transition: transform 0.3s var(--ease-smooth), color 0.3s ease, background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+      will-change: transform;
     }
 
-    .nav-social:hover { color: #ffffff; background: #5865F2; border-color: #5865F2; transform: translateY(-2px); }
+    .nav-social:hover { 
+      color: #ffffff; background: #5865F2; border-color: #5865F2; 
+      transform: translateY(-3px) scale(1.05); 
+      box-shadow: 0 6px 20px rgba(88, 101, 242, 0.4); 
+    }
 
     .main-container { flex: 1; padding: 40px 24px; max-width: 1400px; margin: 0 auto; width: 100%; }
 
     .tab-content {
-      display: none;
-      opacity: 0;
-      transform: translateY(8px);
-      transition: opacity 0.35s var(--ease-smooth), transform 0.35s var(--ease-smooth);
+      display: none; opacity: 0; transform: translateY(12px);
+      transition: opacity 0.4s var(--ease-smooth), transform 0.4s var(--ease-smooth);
+      will-change: transform, opacity;
     }
-    
-    .tab-content.active {
-      display: block;
-      opacity: 1;
-      transform: translateY(0);
+    .tab-content.active { display: block; opacity: 1; transform: translateY(0); }
+
+    .page-title { font-size: 2.4rem; font-weight: 800; text-align: center; margin-bottom: 24px; color: #ffffff; letter-spacing: -0.5px; }
+
+    #search-section {
+      display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 12px;
+      margin-bottom: 1.2rem; width: 100%;
     }
 
-    .page-title { font-size: 2.5rem; font-weight: 800; text-align: center; margin-bottom: 24px; color: #ffffff; letter-spacing: -0.5px; }
-
-    #search-section { text-align: center; margin-bottom: 2rem; }
-    .search-wrapper { position: relative; display: inline-block; width: 100%; max-width: 520px; }
+    .search-wrapper { position: relative; flex: 1 1 300px; max-width: 420px; min-width: 260px; }
 
     #search-box {
-      padding: 14px 20px 14px 48px; width: 100%; font-size: 0.95rem; font-weight: 500;
+      padding: 13px 20px 13px 44px; width: 100%; font-size: 0.9rem; font-weight: 600;
       border-radius: 14px; border: 1px solid var(--card-border);
-      background: rgba(13, 18, 28, 0.6); color: #ffffff; outline: none;
-      backdrop-filter: blur(10px);
-      transition: all 0.3s var(--ease-smooth);
+      background: rgba(13, 18, 28, 0.85); color: #ffffff; outline: none;
+      backdrop-filter: blur(10px); transition: transform 0.3s var(--ease-smooth), border-color 0.3s ease, box-shadow 0.3s ease;
+      will-change: transform;
     }
 
     #search-box:focus {
-      border-color: rgba(168, 85, 247, 0.4);
-      background: rgba(13, 18, 28, 0.85);
-      box-shadow: 0 0 24px rgba(168, 85, 247, 0.12);
+      border-color: rgba(168, 85, 247, 0.6); background: rgba(13, 18, 28, 0.95);
+      box-shadow: 0 0 22px rgba(168, 85, 247, 0.2); transform: translateY(-1px);
     }
 
     .search-icon {
-      position: absolute; left: 18px; top: 50%; transform: translateY(-50%);
-      color: var(--text-muted); font-size: 1rem; pointer-events: none;
+      position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+      color: var(--text-muted); font-size: 0.9rem; pointer-events: none; transition: color 0.3s ease;
+    }
+    #search-box:focus + .search-icon { color: var(--accent-purple); }
+
+    .filter-wrapper { position: relative; flex: 0 1 220px; min-width: 170px; }
+
+    .filter-select {
+      appearance: none; -webkit-appearance: none;
+      width: 100%; padding: 13px 38px 13px 38px; font-size: 0.86rem; font-weight: 700;
+      border-radius: 14px; border: 1px solid var(--card-border);
+      background: rgba(13, 18, 28, 0.85); color: #e2e8f0; outline: none;
+      cursor: pointer; backdrop-filter: blur(10px); transition: transform 0.3s var(--ease-smooth), border-color 0.3s ease, box-shadow 0.3s ease;
+      will-change: transform;
     }
 
-    #custom-button-group { display: flex; justify-content: center; gap: 10px; margin-bottom: 2rem; }
+    .filter-select:hover, .filter-select:focus {
+      border-color: var(--accent-purple); color: #ffffff;
+      box-shadow: 0 0 20px rgba(168, 85, 247, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .filter-select option { background: #0d121c; color: #ffffff; padding: 10px; font-weight: 600; }
+    .filter-select optgroup { background: #06080d; color: var(--accent-primary); font-weight: 800; font-style: normal; }
+
+    .select-leading-icon {
+      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+      color: var(--accent-purple); font-size: 0.85rem; pointer-events: none;
+    }
+
+    .filter-icon {
+      position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+      color: var(--text-muted); font-size: 0.8rem; pointer-events: none; transition: transform 0.3s ease;
+    }
+
+    .active-filter-bar {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      margin-bottom: 1.5rem; transition: all 0.3s var(--ease-smooth); min-height: 28px;
+    }
+
+    .filter-status-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 14px; background: rgba(168, 85, 247, 0.12);
+      border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 20px;
+      font-size: 0.8rem; font-weight: 700; color: #e9d5ff; animation: fadeIn 0.3s ease;
+    }
+
+    .reset-filter-btn {
+      background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #fca5a5; font-size: 0.78rem; font-weight: 700; padding: 6px 12px;
+      border-radius: 20px; cursor: pointer; transition: transform 0.25s var(--ease-smooth), background 0.25s ease, color 0.25s ease;
+      display: inline-flex; align-items: center; gap: 5px;
+      will-change: transform;
+    }
+
+    .reset-filter-btn:hover {
+      background: rgba(239, 68, 68, 0.25); color: #ffffff; transform: scale(1.05);
+    }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+
+    .subtab-header {
+      display: flex; justify-content: center; align-items: center;
+      position: relative; margin-bottom: 1.8rem;
+    }
+
+    #custom-button-group { display: flex; justify-content: center; gap: 10px; }
 
     .custom-btn {
       background: rgba(255, 255, 255, 0.025); border: 1px solid var(--card-border);
       color: var(--text-muted); padding: 10px 24px; border-radius: 12px;
       font-size: 0.9rem; font-weight: 700; cursor: pointer;
-      transition: all 0.25s var(--ease-smooth);
+      transition: transform 0.3s var(--ease-smooth), background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+      will-change: transform;
     }
 
-    .custom-btn:hover { background: rgba(255, 255, 255, 0.06); color: #ffffff; }
-    .custom-btn.active-subtab { background: #ffffff; color: #000000; border-color: #ffffff; box-shadow: 0 4px 20px rgba(255, 255, 255, 0.15); }
+    .custom-btn:hover { background: rgba(255, 255, 255, 0.07); color: #ffffff; transform: translateY(-2px); }
+    .custom-btn.active-subtab { 
+      background: #ffffff; color: #000000; border-color: #ffffff; 
+      box-shadow: 0 4px 20px rgba(255, 255, 255, 0.2); transform: translateY(-1px);
+    }
 
-    .sublist-tab { display: none; opacity: 0; transition: opacity 0.3s var(--ease-smooth); }
+    .view-toggle-btn {
+      display: none; position: absolute; right: 0;
+      background: rgba(255, 255, 255, 0.05); border: 1px solid var(--card-border);
+      color: var(--text-main); padding: 8px 14px; border-radius: 10px;
+      font-size: 0.8rem; font-weight: 700; cursor: pointer; align-items: center; gap: 6px;
+      transition: transform 0.3s var(--ease-smooth), background 0.3s ease;
+      will-change: transform;
+    }
+    .view-toggle-btn:hover { background: rgba(255, 255, 255, 0.12); transform: scale(1.03); }
+
+    .sublist-tab { display: none; opacity: 0; transition: opacity 0.35s var(--ease-smooth); }
     .sublist-tab.active-sublist { display: block; opacity: 1; }
 
+    /* TÜM TABLOLARDA KAYDIRMA ÇUBUĞUNU TAMAMEN ENGELLEYEN VE HIZLANDIRAN KURAL */
     .table-wrapper {
-      width: 100%; border-radius: 16px; overflow-x: auto;
+      width: 100%; border-radius: 16px; 
+      overflow-x: hidden !important; 
       background: var(--card-bg); border: 1px solid var(--card-border);
-      backdrop-filter: blur(16px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(16px); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      scrollbar-width: none !important;
+      -ms-overflow-style: none !important;
+    }
+    .table-wrapper::-webkit-scrollbar {
+      display: none !important;
+      width: 0 !important;
+      height: 0 !important;
     }
 
-    table { width: 100%; min-width: 980px; border-collapse: separate; border-spacing: 0; }
+    table { width: 100%; table-layout: fixed; border-collapse: separate; border-spacing: 0; }
 
     th {
-      padding: 16px 12px; background: rgba(8, 11, 18, 0.85);
-      color: var(--text-muted); font-weight: 700; font-size: 0.78rem;
-      border-bottom: 1px solid var(--card-border); text-align: center; text-transform: uppercase; letter-spacing: 0.5px;
+      padding: 18px 12px; background: rgba(8, 11, 18, 0.85);
+      color: var(--text-muted); font-weight: 700; font-size: 0.76rem;
+      border-bottom: 1px solid var(--card-border); text-align: center; text-transform: uppercase; letter-spacing: 0.6px;
     }
 
     td {
-      padding: 0 !important; height: 60px; text-align: center;
+      padding: 0 !important; height: 62px; text-align: center;
       border-bottom: 1px solid rgba(255, 255, 255, 0.025); font-size: 0.92rem; font-weight: 700;
       vertical-align: middle;
     }
 
-    tbody tr {
-      transition: background-color 0.2s var(--ease-smooth), transform 0.2s var(--ease-smooth);
-      animation: fadeInRow 0.3s var(--ease-smooth) forwards;
-    }
-
-    @keyframes fadeInRow {
-      from { opacity: 0; transform: translateY(3px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    tbody tr:hover { background-color: rgba(255, 255, 255, 0.035); }
+    tbody tr { transition: background-color 0.25s ease; will-change: background-color; }
+    tbody tr:hover { background-color: rgba(255, 255, 255, 0.045); }
 
     .item-cell {
       font-weight: 800; font-size: 0.95rem; height: 100%; display: flex;
       align-items: center; justify-content: center; padding: 0 16px; margin: 0 !important;
+      transition: filter 0.3s ease; box-sizing: border-box;
     }
+    tbody tr:hover .item-cell { filter: brightness(1.15); }
 
-    .val-cell { color: #ffffff; font-size: 0.95rem; }
+    .val-cell { color: #ffffff; font-size: 0.95rem; font-weight: 800; }
     .scale-cell { color: #c084fc; font-size: 0.92rem; }
 
     .badge-container { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; padding: 0 8px; }
+    
     .badge-tag {
       display: inline-flex; align-items: center; justify-content: center;
-      width: 100%; max-width: 125px; height: 34px; border-radius: 8px;
+      width: 100%; max-width: 135px; height: 34px; border-radius: 8px;
       font-weight: 800; font-size: 0.72rem; text-transform: uppercase;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 10px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      transition: transform 0.3s var(--ease-smooth), box-shadow 0.3s ease, filter 0.3s ease;
+      will-change: transform;
+    }
+    .badge-tag:hover {
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+      filter: brightness(1.1);
     }
 
-    .editors-table td { height: 80px !important; font-size: 1rem; }
-    .editor-avatar { width: 52px; height: 52px; border-radius: 50%; object-fit: cover; border: 2px solid var(--card-border); }
+    /* List Editors Özel Görünümü */
+    .editors-table { min-width: 100% !important; width: 100%; table-layout: fixed; }
+    .editors-table td { height: 96px !important; font-size: 1rem; }
+    .editors-table th { padding: 20px 16px; }
+    .editor-avatar-container { display: flex; align-items: center; justify-content: center; padding: 12px 0; }
+    
+    .editor-avatar {
+      width: 64px; height: 64px; border-radius: 50%; object-fit: cover;
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      transition: transform 0.4s var(--ease-smooth), border-color 0.4s ease, box-shadow 0.4s ease;
+      cursor: pointer;
+      will-change: transform;
+      transform: translateZ(0);
+    }
+    .editor-avatar:hover {
+      transform: scale(1.18) rotate(4deg) translateZ(0);
+      border-color: var(--accent-purple);
+      box-shadow: 0 0 25px rgba(168, 85, 247, 0.6);
+      z-index: 10;
+    }
 
     .terms-wrapper, .updates-wrapper {
-      background: var(--card-bg); border: 1px solid var(--card-border); padding: 28px; border-radius: 18px;
+      background: var(--card-bg); border: 1px solid var(--card-border); padding: 32px; border-radius: 18px;
       backdrop-filter: blur(16px);
     }
 
     .terms-section-title {
-      color: var(--accent-primary); font-weight: 800; font-size: 1.4rem;
+      color: var(--accent-primary); font-weight: 800; font-size: 1.35rem;
       padding: 14px 0 8px; border-bottom: 1px solid var(--card-border); margin-top: 8px;
     }
 
-    .term-row { display: grid; grid-template-columns: 240px 1fr; gap: 14px; align-items: center; margin-top: 12px; }
+    .term-row { display: grid; grid-template-columns: 240px 1fr; gap: 16px; align-items: center; margin-top: 14px; }
     .term-badge {
-      height: 44px; font-weight: 800; font-size: 0.98rem; display: flex;
+      height: 44px; font-weight: 800; font-size: 0.95rem; display: flex;
       align-items: center; justify-content: center; border-radius: 10px;
       text-transform: uppercase; color: #000000 !important;
+      transition: transform 0.3s var(--ease-smooth), box-shadow 0.3s ease;
+      will-change: transform;
     }
+    .term-badge:hover { transform: scale(1.03); box-shadow: 0 4px 14px rgba(0,0,0,0.25); }
 
     .term-desc {
       background: rgba(255, 255, 255, 0.02); border: 1px solid var(--card-border);
-      color: #e2e8f0; padding: 12px 18px; font-weight: 600; font-size: 0.95rem; border-radius: 10px;
+      color: #e2e8f0; padding: 12px 20px; font-weight: 600; font-size: 0.95rem; border-radius: 10px;
     }
 
-    .update-block { margin-bottom: 20px; border-bottom: 1px solid var(--card-border); padding-bottom: 20px; }
+    .update-block { margin-bottom: 24px; border-bottom: 1px solid var(--card-border); padding-bottom: 24px; }
+    .update-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
     .update-header-title { font-size: 1.4rem; font-weight: 800; color: #ffffff; }
-    .update-date-tag { font-size: 0.85rem; color: var(--accent-primary); font-weight: 700; margin: 4px 0 10px; }
-    .update-content-text { white-space: pre-wrap; font-size: 0.98rem; line-height: 1.6; color: #cbd5e1; }
+    .update-date-tag { font-size: 0.85rem; color: var(--accent-primary); font-weight: 700; margin: 4px 0 12px; }
+    .update-content-text { white-space: pre-wrap; font-size: 0.98rem; line-height: 1.65; color: #cbd5e1; }
     
     .loading-text {
-      text-align: center; padding: 30px; color: var(--text-muted); font-size: 0.95rem; font-weight: 600;
-      display: flex; align-items: center; justify-content: center; gap: 10px;
+      text-align: center; padding: 36px; color: var(--text-muted); font-size: 0.95rem; font-weight: 600;
+      display: flex; align-items: center; justify-content: center; gap: 12px;
     }
     .spinner {
-      width: 18px; height: 18px; border: 2px solid var(--card-border);
+      width: 20px; height: 20px; border: 2px solid var(--card-border);
       border-top-color: var(--accent-purple); border-radius: 50%;
       animation: spin 0.8s linear infinite;
     }
@@ -248,77 +382,81 @@
 
     .mobile-cards-wrapper { display: none; flex-direction: column; gap: 12px; }
 
+    .mobile-card {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 14px; padding: 16px; backdrop-filter: blur(12px);
+      transition: transform 0.3s var(--ease-smooth), border-color 0.3s ease;
+      will-change: transform;
+    }
+    .mobile-card:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.18); }
+
     @media (max-width: 768px) {
-      .navbar { padding: 0 16px; height: 62px; }
+      .navbar { padding: 0 12px; height: 62px; }
       .nav-logo-img { height: 36px; width: 36px; }
-      .nav-links { gap: 2px; padding: 3px; overflow-x: auto; max-width: calc(100vw - 110px); }
-      .nav-links::-webkit-scrollbar { display: none; }
-      .nav-links a { font-size: 0.78rem; padding: 6px 12px; }
+      
+      .nav-links-wrapper { max-width: calc(100vw - 105px); }
+      .nav-links { gap: 2px; padding: 3px; border-radius: 10px; }
+      .nav-links a { font-size: 0.78rem; padding: 6px 10px; }
+      .scroll-hint { display: flex; }
+
       .nav-social { width: 36px; height: 36px; font-size: 0.95rem; }
 
-      .main-container { padding: 16px 12px; }
-      .page-title { font-size: 1.8rem; margin-bottom: 16px; }
+      .main-container { padding: 20px 12px; }
+      .page-title { font-size: 1.8rem; margin-bottom: 18px; }
       
-      #custom-button-group { gap: 6px; }
-      .custom-btn { padding: 8px 16px; font-size: 0.82rem; width: 50%; }
+      #search-section { flex-direction: column; gap: 10px; align-items: stretch; }
+      .search-wrapper { max-width: 100%; min-width: 100%; }
+      .filter-wrapper { flex: 1 1 100%; width: 100%; }
 
-      .table-wrapper { display: none !important; }
+      .subtab-header { justify-content: space-between; }
+      #custom-button-group { gap: 6px; width: 70%; }
+      .custom-btn { padding: 8px 12px; font-size: 0.78rem; width: 50%; }
+      .view-toggle-btn { display: flex; }
+
+      .force-table-mode .table-wrapper { display: block !important; }
+      .force-table-mode .mobile-cards-wrapper { display: none !important; }
+
+      .table-wrapper { display: none; }
       .mobile-cards-wrapper { display: flex; }
 
-      .mobile-card {
-        background: var(--card-bg);
-        border: 1px solid var(--card-border);
-        border-radius: 14px;
-        padding: 14px;
-        backdrop-filter: blur(12px);
-      }
-
       .mobile-card-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding-bottom: 10px;
-        margin-bottom: 10px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        display: flex; justify-content: space-between; align-items: center;
+        padding-bottom: 10px; margin-bottom: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.05);
       }
 
-      .mobile-item-title {
-        font-weight: 800;
-        font-size: 0.98rem;
-        padding: 5px 12px;
-        border-radius: 8px;
-        display: inline-block;
-      }
-
-      .mobile-card-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 8px 12px;
-      }
-
-      .mobile-field { display: flex; flex-direction: column; gap: 1px; }
-      .mobile-field-label { color: var(--text-muted); font-size: 0.68rem; text-transform: uppercase; font-weight: 700; }
+      .mobile-item-title { font-weight: 800; font-size: 1rem; color: #ffffff; background: transparent !important; padding: 0; }
+      .mobile-card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 14px; }
+      .mobile-field { display: flex; flex-direction: column; gap: 4px; }
+      .mobile-field-label { color: var(--text-muted); font-size: 0.68rem; text-transform: uppercase; font-weight: 700; letter-spacing: 0.4px; }
       .mobile-field-val { color: #ffffff; font-weight: 700; font-size: 0.88rem; }
 
-      .term-row { grid-template-columns: 1fr; gap: 6px; }
-      .term-badge { height: 38px; font-size: 0.85rem; }
-      .terms-wrapper, .updates-wrapper { padding: 16px; }
+      .term-row { grid-template-columns: 1fr; gap: 8px; }
+      .term-badge { height: 40px; font-size: 0.88rem; }
+      .terms-wrapper, .updates-wrapper { padding: 20px 16px; }
+
+      #editors .table-wrapper { display: block !important; }
+      .editors-table { min-width: 100% !important; }
+      .editors-table td { height: 70px !important; font-size: 0.85rem; }
+      .editor-avatar { width: 48px; height: 48px; }
     }
   </style>
 </head>
 <body>
 
   <nav class="navbar">
-    <a href="#" class="nav-logo-container">
-      <img src="logo.png" alt="UBV Logo" class="nav-logo-img" onerror="this.src='https://ui-avatars.com/api/?name=UBV&background=7c3aed&color=fff&size=128'">
+    <a href="#" class="nav-logo-container" onclick="openTabByName('valuelists'); return false;">
+      <img src="logo.png" alt="UBV Logo" class="nav-logo-img" loading="lazy" decoding="async" onerror="this.src='https://ui-avatars.com/api/?name=UBV&background=7c3aed&color=fff&size=128'">
     </a>
-    <ul class="nav-links">
-      <li><a href="#" class="nav-link active" onclick="openTab(event, 'valuelists')">Value Lists</a></li>
-      <li><a href="#" class="nav-link" onclick="openTab(event, 'updates')">Updates</a></li>
-      <li><a href="#" class="nav-link" onclick="openTab(event, 'terms')">Terms</a></li>
-      <li><a href="#" class="nav-link" onclick="openTab(event, 'about')">About</a></li>
-      <li><a href="#" class="nav-link" onclick="openTab(event, 'editors')">List Editors</a></li>
-    </ul>
+    <div class="nav-links-wrapper">
+      <ul class="nav-links" id="nav-scroll-container">
+        <li><a href="#" class="nav-link active" onclick="openTab(event, 'valuelists')">Value Lists</a></li>
+        <li><a href="#" class="nav-link" onclick="openTab(event, 'updates')">Updates</a></li>
+        <li><a href="#" class="nav-link" onclick="openTab(event, 'terms')">Terms</a></li>
+        <li><a href="#" class="nav-link" onclick="openTab(event, 'editors')">List Editors</a></li>
+        <li><a href="#" class="nav-link" onclick="openTab(event, 'about')">About</a></li>
+      </ul>
+      <div class="scroll-hint"><i class="fa-solid fa-chevron-right"></i></div>
+    </div>
     <a href="https://discord.gg/ubv" target="_blank" class="nav-social" title="Discord"><i class="fab fa-discord"></i></a>
   </nav>
 
@@ -327,9 +465,15 @@
     <div id="valuelists" class="tab-content active">
       <h1 class="page-title">VALUE LISTS</h1>
 
-      <div id="custom-button-group">
-        <button id="btn-main" class="custom-btn active-subtab" onclick="switchListTab('normal-section', 'btn-main')">Main List</button>
-        <button id="btn-collect" class="custom-btn" onclick="switchListTab('collectable-section', 'btn-collect')">Collectors List</button>
+      <div class="subtab-header">
+        <div id="custom-button-group">
+          <button id="btn-main" class="custom-btn active-subtab" onclick="switchListTab('normal-section', 'btn-main')">Main List</button>
+          <button id="btn-collect" class="custom-btn" onclick="switchListTab('collectable-section', 'btn-collect')">Collectors List</button>
+        </div>
+        <button class="view-toggle-btn" onclick="toggleMobileView()">
+          <i class="fa-solid fa-table-cells-large" id="toggle-icon"></i>
+          <span id="toggle-text">List</span>
+        </button>
       </div>
 
       <div id="search-section">
@@ -337,6 +481,35 @@
           <input type="text" id="search-box" placeholder="Search item name..." oninput="handleSearchInput()">
           <i class="fa-solid fa-magnifying-glass search-icon"></i>
         </div>
+        
+        <div class="filter-wrapper">
+          <i class="fa-solid fa-arrow-down-wide-short select-leading-icon"></i>
+          <select id="sort-select" class="filter-select" onchange="filterTable()">
+            <option value="default">Sort: Default</option>
+            <option value="val-desc">Value: High → Low</option>
+            <option value="val-asc">Value: Low → High</option>
+            <option value="name-asc">Item Name: A → Z</option>
+            <option value="name-desc">Item Name: Z → A</option>
+          </select>
+          <i class="fa-solid fa-chevron-down filter-icon"></i>
+        </div>
+
+        <div class="filter-wrapper">
+          <i class="fa-solid fa-filter select-leading-icon"></i>
+          <select id="filter-select" class="filter-select" onchange="filterTable()">
+            <option value="all">Filter: Show All</option>
+          </select>
+          <i class="fa-solid fa-chevron-down filter-icon"></i>
+        </div>
+      </div>
+
+      <div class="active-filter-bar" id="filter-status-container" style="display: none;">
+        <span class="filter-status-tag" id="filter-status-text">
+          <i class="fa-solid fa-funnel-dollar"></i> Filter Active
+        </span>
+        <button class="reset-filter-btn" onclick="resetFilters()">
+          <i class="fa-solid fa-xmark"></i> Reset Filter
+        </button>
       </div>
 
       <div id="loading" class="loading-text" style="display: flex;">
@@ -349,14 +522,13 @@
           <table>
             <thead>
               <tr>
-                <th style="width: 14%;">ITEM</th>
-                <th style="width: 15%;">VALUE</th>
-                <th style="width: 13%;">DEMAND SCALE</th>
-                <th style="width: 10%;">AVERAGE RAP</th>
-                <th style="width: 14%;">DEMAND RANKING</th>
-                <th style="width: 12%;">VALUE STATUS</th>
-                <th style="width: 13%;">DEMAND STATUS</th>
-                <th style="width: 9%;">ITEM TYPE</th>
+                <th style="width: 16%;">ITEM</th>
+                <th style="width: 16%;">VALUE</th>
+                <th style="width: 14%;">DEMAND SCALE</th>
+                <th style="width: 16%;">DEMAND RANKING</th>
+                <th style="width: 14%;">STATUS</th>
+                <th style="width: 12%;">AVERAGE RAP</th>
+                <th style="width: 12%;">ITEM TYPE</th>
               </tr>
             </thead>
             <tbody id="normal-body"></tbody>
@@ -371,14 +543,13 @@
           <table>
             <thead>
               <tr>
-                <th style="width: 14%;">ITEM</th>
-                <th style="width: 15%;">VALUE</th>
-                <th style="width: 13%;">DEMAND SCALE</th>
-                <th style="width: 10%;">AVERAGE RAP</th>
-                <th style="width: 14%;">DEMAND RANKING</th>
-                <th style="width: 12%;">VALUE STATUS</th>
-                <th style="width: 13%;">DEMAND STATUS</th>
-                <th style="width: 9%;">ITEM TYPE</th>
+                <th style="width: 16%;">ITEM</th>
+                <th style="width: 16%;">VALUE</th>
+                <th style="width: 14%;">DEMAND SCALE</th>
+                <th style="width: 16%;">DEMAND RANKING</th>
+                <th style="width: 14%;">STATUS</th>
+                <th style="width: 12%;">AVERAGE RAP</th>
+                <th style="width: 12%;">ITEM TYPE</th>
               </tr>
             </thead>
             <tbody id="collectable-body"></tbody>
@@ -402,23 +573,13 @@
       </div>
     </div>
 
-    <div id="about" class="tab-content">
-      <h1 class="page-title">ABOUT US</h1>
-      <div class="updates-wrapper">
-        <h2 style="font-size: 1.5rem; margin-bottom: 10px;">About UBV</h2>
-        <p style="line-height: 1.7; color: #cbd5e1; font-size: 0.98rem;">
-          UBV provides live trading values, market analytics, average RAP metrics, and item showcases for the trading community.
-        </p>
-      </div>
-    </div>
-
     <div id="editors" class="tab-content">
       <h1 class="page-title">LIST EDITORS</h1>
       <div class="table-wrapper">
         <table class="editors-table">
           <thead>
             <tr>
-              <th style="width: 90px;">Avatar</th>
+              <th style="width: 80px;">Avatar</th>
               <th>Username</th>
               <th>Role</th>
               <th>Roblox Profile</th>
@@ -430,26 +591,42 @@
       </div>
     </div>
 
+    <div id="about" class="tab-content">
+      <h1 class="page-title">ABOUT US</h1>
+      <div class="updates-wrapper">
+        <h2 style="font-size: 1.5rem; margin-bottom: 12px; color: #ffffff;">About UBV</h2>
+        <p style="line-height: 1.7; color: #cbd5e1; font-size: 0.98rem;">
+          UBV provides live trading values, market analytics, average RAP metrics, and item showcases for the trading community.
+        </p>
+      </div>
+    </div>
+
   </div>
 
   <script>
-    // Firebase ve Yeni Dağıtım URL'niz Entegre Edildi
     const FIREBASE_DB_URL = "https://ubv-value-list-default-rtdb.firebaseio.com/data.json";
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyUUlIBwZbjytpxtYvv3OwE4Mb8bcaEpuqTmokh3AquMZV_fnrUKWYpL1TQ1Z2c1r3_mQ/exec";
 
     let mainListData = [];
     let collectableListData = [];
     let dynamicColorMap = {};
+    let termsDemandOrder = [];
+    let isMobileTableView = false;
+
+    function openTabByName(tabName) {
+      const targetLink = document.querySelector(`.nav-links a[onclick*="${tabName}"]`);
+      if (targetLink) openTab({ preventDefault: () => {}, currentTarget: targetLink }, tabName);
+    }
 
     function openTab(evt, tabName) {
-      evt.preventDefault();
+      if (evt && evt.preventDefault) evt.preventDefault();
       const tabContents = document.getElementsByClassName("tab-content");
       for (let i = 0; i < tabContents.length; i++) tabContents[i].classList.remove("active");
       const navLinks = document.getElementsByClassName("nav-link");
       for (let i = 0; i < navLinks.length; i++) navLinks[i].classList.remove("active");
       
       document.getElementById(tabName).classList.add("active");
-      evt.currentTarget.classList.add("active");
+      if (evt && evt.currentTarget) evt.currentTarget.classList.add("active");
     }
 
     let currentSubTab = 'normal-section';
@@ -463,7 +640,32 @@
       
       document.getElementById(targetId).classList.add("active-sublist");
       document.getElementById(btnId).classList.add("active-subtab");
+      
+      resetFilters();
+    }
+
+    function resetFilters() {
+      document.getElementById("search-box").value = "";
+      document.getElementById("sort-select").value = "default";
+      document.getElementById("filter-select").value = "all";
       filterTable();
+    }
+
+    function toggleMobileView() {
+      isMobileTableView = !isMobileTableView;
+      const valuelistsEl = document.getElementById('valuelists');
+      const toggleText = document.getElementById('toggle-text');
+      const toggleIcon = document.getElementById('toggle-icon');
+
+      if (isMobileTableView) {
+        valuelistsEl.classList.add('force-table-mode');
+        toggleText.textContent = 'Cards';
+        toggleIcon.className = 'fa-solid fa-address-card';
+      } else {
+        valuelistsEl.classList.remove('force-table-mode');
+        toggleText.textContent = 'List';
+        toggleIcon.className = 'fa-solid fa-table-cells-large';
+      }
     }
 
     function getTextColor(bgColor) {
@@ -475,6 +677,33 @@
       const b = parseInt(hex.substr(4, 2), 16);
       const brightness = (r * 299 + g * 587 + b * 114) / 1000;
       return brightness > 150 ? '#000000' : '#ffffff';
+    }
+
+    function parseNumericValue(valStr) {
+      if (!valStr) return 0;
+      let cleanStr = String(valStr).toUpperCase().trim();
+      let multiplier = 1;
+
+      if (cleanStr.includes('M')) {
+        multiplier = 1000000;
+      } else if (cleanStr.includes('K')) {
+        multiplier = 1000;
+      }
+
+      cleanStr = cleanStr.replace(/,/g, '').replace(/[^0-9.]/g, '');
+      let num = parseFloat(cleanStr);
+      return isNaN(num) ? 0 : num * multiplier;
+    }
+
+    function renderBadgeHTML(text) {
+      const rawText = String(text ?? '-').trim();
+      const lowerText = rawText.toLowerCase();
+      const mappedColor = dynamicColorMap[lowerText];
+
+      if (mappedColor) {
+        return `<span class="badge-tag" style="background-color: ${mappedColor}; color: #000000;" title="${rawText}">${rawText}</span>`;
+      }
+      return rawText;
     }
 
     function processItemsData(allData) {
@@ -501,8 +730,66 @@
         }
       });
 
+      populateFilterDropdown();
       renderData(mainListData, 'normal');
       renderData(collectableListData, 'collectable');
+    }
+
+    function populateFilterDropdown() {
+      const select = document.getElementById('filter-select');
+      if (!select) return;
+
+      const targetData = currentSubTab === 'normal-section' ? mainListData : collectableListData;
+      const statusSet = new Set();
+      const demandSet = new Set();
+      const typeSet = new Set();
+
+      targetData.forEach(row => {
+        if (row[3]) demandSet.add(String(row[3]).trim());
+        if (row[4]) statusSet.add(String(row[4]).trim());
+        if (row[6]) typeSet.add(String(row[6]).trim());
+      });
+
+      select.innerHTML = `<option value="all">Filter: Show All</option>`;
+
+      if (demandSet.size > 0) {
+        const group = document.createElement('optgroup');
+        group.label = "Demand Ranking";
+
+        let sortedDemands = Array.from(demandSet);
+        if (termsDemandOrder.length > 0) {
+          sortedDemands.sort((a, b) => {
+            let idxA = termsDemandOrder.findIndex(t => t.toLowerCase() === a.toLowerCase());
+            let idxB = termsDemandOrder.findIndex(t => t.toLowerCase() === b.toLowerCase());
+            if (idxA === -1) idxA = 999;
+            if (idxB === -1) idxB = 999;
+            return idxA - idxB;
+          });
+        }
+
+        sortedDemands.forEach(val => {
+          if (val && val !== '-') group.innerHTML += `<option value="demand:${val}">${val}</option>`;
+        });
+        select.appendChild(group);
+      }
+
+      if (statusSet.size > 0) {
+        const group = document.createElement('optgroup');
+        group.label = "Status";
+        Array.from(statusSet).sort().forEach(val => {
+          if (val && val !== '-') group.innerHTML += `<option value="status:${val}">${val}</option>`;
+        });
+        select.appendChild(group);
+      }
+
+      if (typeSet.size > 0) {
+        const group = document.createElement('optgroup');
+        group.label = "Item Type";
+        Array.from(typeSet).sort().forEach(val => {
+          if (val && val !== '-') group.innerHTML += `<option value="type:${val}">${val}</option>`;
+        });
+        select.appendChild(group);
+      }
     }
 
     function renderData(data, type) {
@@ -510,131 +797,157 @@
       const cardsContainer = document.getElementById(`${type}-cards`);
       if (!tbody || !cardsContainer) return;
 
-      tbody.innerHTML = "";
-      cardsContainer.innerHTML = "";
-
-      const tableFragment = document.createDocumentFragment();
-      const cardsFragment = document.createDocumentFragment();
+      let tableHTML = '';
+      let cardsHTML = '';
 
       data.forEach(row => {
         if (!row || row.length === 0 || !row[0]) return;
 
         let itemBgColor = '#6366f1';
-        for (let c = 0; c < row.length; c++) {
-          const cellVal = String(row[c] ?? '').trim();
-          if (cellVal.startsWith('#') && cellVal.length === 7) {
-            itemBgColor = cellVal;
-            break;
-          }
-        }
-
-        const tr = document.createElement("tr");
-        for (let idx = 0; idx < 8; idx++) {
-          const td = document.createElement("td");
-          const rawText = String(row[idx] ?? '-').trim();
-          const lowerText = rawText.toLowerCase();
-
-          if (idx === 0) {
-            const itemDiv = document.createElement("div");
-            itemDiv.className = "item-cell";
-            itemDiv.style.backgroundColor = itemBgColor;
-            itemDiv.style.color = getTextColor(itemBgColor);
-            itemDiv.textContent = rawText;
-            td.appendChild(itemDiv);
-          } else if (idx === 1) {
-            td.className = "val-cell";
-            td.textContent = rawText;
-          } else if (idx === 2) {
-            td.className = "scale-cell";
-            td.textContent = rawText;
-          } else if (idx === 4 || idx === 5 || idx === 6) {
-            const mappedColor = dynamicColorMap[lowerText];
-            if (mappedColor) {
-              td.innerHTML = `<div class="badge-container"><span class="badge-tag" style="background-color: ${mappedColor}; color: #000000;" title="${rawText}">${rawText}</span></div>`;
-            } else {
-              td.textContent = rawText;
+        if (row[7] && String(row[7]).trim().startsWith('#')) {
+          itemBgColor = String(row[7]).trim();
+        } else {
+          for (let c = 0; c < row.length; c++) {
+            const cellVal = String(row[c] ?? '').trim();
+            if (cellVal.startsWith('#') && cellVal.length === 7) {
+              itemBgColor = cellVal;
+              break;
             }
-          } else {
-            td.textContent = rawText;
           }
-          tr.appendChild(td);
         }
-        tableFragment.appendChild(tr);
 
-        const card = document.createElement("div");
-        card.className = "mobile-card";
-        
-        card.innerHTML = `
-          <div class="mobile-card-header">
-            <div class="mobile-item-title" style="background-color: ${itemBgColor}; color: ${getTextColor(itemBgColor)};">${String(row[0] ?? '-').trim()}</div>
-            <div style="font-size: 0.75rem; color: var(--text-muted); font-weight:700;">${String(row[7] ?? '-').trim()}</div>
-          </div>
-          <div class="mobile-card-grid">
-            <div class="mobile-field"><span class="mobile-field-label">Value</span><span class="mobile-field-val">${String(row[1] ?? '-').trim()}</span></div>
-            <div class="mobile-field"><span class="mobile-field-label">Demand Scale</span><span class="mobile-field-val" style="color:#c084fc;">${String(row[2] ?? '-').trim()}</span></div>
-            <div class="mobile-field"><span class="mobile-field-label">Avg Rap</span><span class="mobile-field-val">${String(row[3] ?? '-').trim()}</span></div>
-            <div class="mobile-field"><span class="mobile-field-label">Demand Rank</span><span class="mobile-field-val">${String(row[4] ?? '-').trim()}</span></div>
-            <div class="mobile-field"><span class="mobile-field-label">Value Status</span><span class="mobile-field-val">${String(row[5] ?? '-').trim()}</span></div>
-            <div class="mobile-field"><span class="mobile-field-label">Demand Status</span><span class="mobile-field-val">${String(row[6] ?? '-').trim()}</span></div>
+        const textColor = getTextColor(itemBgColor);
+        const itemName = String(row[0] ?? '-').trim();
+        const value = String(row[1] ?? '-').trim();
+        const scale = String(row[2] ?? '-').trim();
+        const demandBadge = renderBadgeHTML(row[3]);
+        const statusBadge = renderBadgeHTML(row[4]);
+        const avgRap = String(row[5] ?? '-').trim();
+        const itemType = String(row[6] ?? '-').trim();
+
+        tableHTML += `<tr>
+          <td><div class="item-cell" style="background-color: ${itemBgColor}; color: ${textColor};">${itemName}</div></td>
+          <td class="val-cell">${value}</td>
+          <td class="scale-cell">${scale}</td>
+          <td><div class="badge-container">${demandBadge}</div></td>
+          <td><div class="badge-container">${statusBadge}</div></td>
+          <td>${avgRap}</td>
+          <td>${itemType}</td>
+        </tr>`;
+
+        cardsHTML += `
+          <div class="mobile-card">
+            <div class="mobile-card-header">
+              <div class="mobile-item-title">${itemName}</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); font-weight:700;">${itemType}</div>
+            </div>
+            <div class="mobile-card-grid">
+              <div class="mobile-field"><span class="mobile-field-label">Value</span><span class="mobile-field-val">${value}</span></div>
+              <div class="mobile-field"><span class="mobile-field-label">Demand Scale</span><span class="mobile-field-val" style="color:#c084fc;">${scale}</span></div>
+              <div class="mobile-field"><span class="mobile-field-label">Status</span><span class="mobile-field-val">${statusBadge}</span></div>
+              <div class="mobile-field"><span class="mobile-field-label">Avg Rap</span><span class="mobile-field-val">${avgRap}</span></div>
+              <div class="mobile-field" style="grid-column: span 2;"><span class="mobile-field-label">Demand Ranking</span><span class="mobile-field-val">${demandBadge}</span></div>
+            </div>
           </div>
         `;
-        cardsFragment.appendChild(card);
       });
 
-      tbody.appendChild(tableFragment);
-      cardsContainer.appendChild(cardsFragment);
+      tbody.innerHTML = tableHTML;
+      cardsContainer.innerHTML = cardsHTML;
     }
 
     let searchTimeout = null;
     function handleSearchInput() {
       clearTimeout(searchTimeout);
-      searchTimeout = setTimeout(() => { filterTable(); }, 60);
+      searchTimeout = setTimeout(() => { filterTable(); }, 40);
     }
 
     function filterTable() {
       const query = document.getElementById("search-box").value.toLowerCase().trim();
+      const sortVal = document.getElementById("sort-select").value;
+      const filterVal = document.getElementById("filter-select").value;
+
       const targetData = currentSubTab === 'normal-section' ? mainListData : collectableListData;
       const type = currentSubTab === 'normal-section' ? 'normal' : 'collectable';
-      
-      if (!query) {
-        renderData(targetData, type);
-        return;
+
+      let processed = [...targetData];
+
+      const statusContainer = document.getElementById("filter-status-container");
+      const statusText = document.getElementById("filter-status-text");
+
+      let isFiltered = (query !== "") || (filterVal !== "all") || (sortVal !== "default");
+
+      if (query) {
+        processed = processed.filter(row => 
+          String(row[0] ?? '').toLowerCase().includes(query)
+        );
       }
 
-      const filtered = targetData.filter(row => 
-        row.some(cell => String(cell).toLowerCase().includes(query))
-      );
-      renderData(filtered, type);
+      if (filterVal && filterVal !== 'all') {
+        const [prefix, val] = filterVal.split(':');
+        processed = processed.filter(row => {
+          if (prefix === 'demand') return String(row[3] ?? '').trim() === val;
+          if (prefix === 'status') return String(row[4] ?? '').trim() === val;
+          if (prefix === 'type') return String(row[6] ?? '').trim() === val;
+          return true;
+        });
+      }
+
+      if (sortVal === 'val-desc') {
+        processed.sort((a, b) => parseNumericValue(b[1]) - parseNumericValue(a[1]));
+      } else if (sortVal === 'val-asc') {
+        processed.sort((a, b) => parseNumericValue(a[1]) - parseNumericValue(b[1]));
+      } else if (sortVal === 'name-asc') {
+        processed.sort((a, b) => String(a[0] ?? '').localeCompare(String(b[0] ?? ''), undefined, { sensitivity: 'base' }));
+      } else if (sortVal === 'name-desc') {
+        processed.sort((a, b) => String(b[0] ?? '').localeCompare(String(a[0] ?? ''), undefined, { sensitivity: 'base' }));
+      }
+
+      if (isFiltered) {
+        statusContainer.style.display = "flex";
+        let labelText = `Showing ${processed.length} of ${targetData.length} items`;
+        if (filterVal !== 'all') labelText += ` (${filterVal.split(':')[1]})`;
+        statusText.innerHTML = `<i class="fa-solid fa-filter"></i> ${labelText}`;
+      } else {
+        statusContainer.style.display = "none";
+      }
+
+      renderData(processed, type);
     }
 
     function processTermsData(rows) {
       if (!rows || !Array.isArray(rows)) return;
       const container = document.getElementById('terms-container');
-      container.innerHTML = '';
+      let htmlContent = '';
+      termsDemandOrder = [];
+
       rows.forEach(r => {
         if (!r || !r[0]) return;
         const term = String(r[0]).trim();
         const desc = r[1] ? String(r[1]).trim() : '';
         let color = r[2] ? String(r[2]).trim() : '#e2e8f0';
 
-        if (term) dynamicColorMap[term.toLowerCase()] = color;
+        if (term) {
+          dynamicColorMap[term.toLowerCase()] = color;
+          if (desc !== 'SECTION_HEADER' && !term.toLowerCase().includes('terms')) {
+            termsDemandOrder.push(term);
+          }
+        }
 
         if (desc === 'SECTION_HEADER' || desc === '' || term.toLowerCase().includes('terms')) {
-          const header = document.createElement('div');
-          header.className = 'terms-section-title';
-          header.textContent = term;
-          container.appendChild(header);
+          htmlContent += `<div class="terms-section-title">${term}</div>`;
         } else {
-          const row = document.createElement('div');
-          row.className = 'term-row';
-          row.innerHTML = `
-            <div class="term-badge" style="background-color: ${color};">${term}</div>
-            <div class="term-desc">${desc}</div>
+          htmlContent += `
+            <div class="term-row">
+              <div class="term-badge" style="background-color: ${color};">${term}</div>
+              <div class="term-desc">${desc}</div>
+            </div>
           `;
-          container.appendChild(row);
         }
       });
 
+      container.innerHTML = htmlContent;
+      populateFilterDropdown();
       if (mainListData.length > 0) {
         renderData(mainListData, 'normal');
         renderData(collectableListData, 'collectable');
@@ -644,24 +957,24 @@
     function processUpdatesData(rows) {
       if (!rows || !Array.isArray(rows)) return;
       const container = document.getElementById('updates-container');
-      container.innerHTML = '';
+      let htmlContent = '';
       rows.forEach(r => {
         if (!r || !r[0]) return;
-        const block = document.createElement('div');
-        block.className = 'update-block';
-        block.innerHTML = `
-          <div class="update-header-title">${r[0] || 'UPDATE'}</div>
-          ${r[1] ? `<div class="update-date-tag">${r[1]}</div>` : ''}
-          <div class="update-content-text">${r[2] || ''}</div>
+        htmlContent += `
+          <div class="update-block">
+            <div class="update-header-title">${r[0] || 'UPDATE'}</div>
+            ${r[1] ? `<div class="update-date-tag">${r[1]}</div>` : ''}
+            <div class="update-content-text">${r[2] || ''}</div>
+          </div>
         `;
-        container.appendChild(block);
       });
+      container.innerHTML = htmlContent;
     }
 
     function processEditorsData(rows) {
       if (!rows || !Array.isArray(rows) || rows.length === 0) return;
       const tbody = document.getElementById('editors-body');
-      tbody.innerHTML = '';
+      let tableHTML = '';
 
       rows.forEach(r => {
         if (!r || !r[1] || String(r[1]).toLowerCase() === 'username') return;
@@ -678,16 +991,21 @@
 
         const isActive = status.toLowerCase().trim() === 'active';
 
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td><img src="${imgSrc}" class="editor-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=151521&color=a855f7&size=128'"></td>
-          <td style="font-weight: 800; font-size: 1rem;">${username}</td>
-          <td style="color: var(--text-muted); font-weight: 600;">${role}</td>
-          <td><a href="${profileUrl}" target="_blank" style="color: var(--accent-primary); text-decoration:none; font-weight: 700;">@${username.toLowerCase()}</a></td>
-          <td><span style="display:inline-block; padding:4px 12px; border-radius:30px; font-size:0.72rem; font-weight:800; background:${isActive ? 'rgba(34,197,94,0.15)' : 'rgba(239,68,68,0.15)'}; color:${isActive ? '#4ade80' : '#f87171'}; border:1px solid ${isActive ? 'rgba(34,197,94,0.3)' : 'rgba(239,68,68,0.3)'};">${isActive ? 'ACTIVE' : 'INACTIVE'}</span></td>
+        tableHTML += `
+          <tr>
+            <td>
+              <div class="editor-avatar-container">
+                <img src="${imgSrc}" class="editor-avatar" alt="${username}" loading="lazy" decoding="async" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=151521&color=a855f7&size=128'">
+              </div>
+            </td>
+            <td style="font-weight: 800; font-size: 1.05rem; color: #ffffff;">${username}</td>
+            <td style="color: var(--text-muted); font-weight: 600; font-size: 0.95rem;">${role}</td>
+            <td><a href="${profileUrl}" target="_blank" style="color: var(--accent-primary); text-decoration:none; font-weight: 700; transition: color 0.2s ease;">@${username.toLowerCase()}</a></td>
+            <td><span style="display:inline-block; padding:5px 14px; border-radius:30px; font-size:0.75rem; font-weight:800; background:${isActive ? 'rgba(34,197,94,0.12)' : 'rgba(239,68,68,0.12)'}; color:${isActive ? '#4ade80' : '#f87171'}; border:1px solid ${isActive ? 'rgba(34,197,94,0.25)' : 'rgba(239,68,68,0.25)'};">${isActive ? 'ACTIVE' : 'INACTIVE'}</span></td>
+          </tr>
         `;
-        tbody.appendChild(tr);
       });
+      tbody.innerHTML = tableHTML;
     }
 
     function applyDataToUI(data) {
@@ -697,7 +1015,6 @@
       if (data.editors) processEditorsData(data.editors);
     }
 
-    // Önce Firebase'den hızlı yükleme dener, başarısız olursa yeni Apps Script dağıtım linkine başvurur
     async function initData() {
       const loadingEl = document.getElementById('loading');
 
@@ -711,16 +1028,15 @@
           return;
         }
       } catch (err) {
-        console.error("Firebase veri çekme hatası, Apps Script kanalına geçiliyor...", err);
+        console.error("Firebase fetch error, falling back to Apps Script...", err);
       }
 
-      // Apps Script Dağıtım Yedek Kanalı
       try {
         const response = await fetch(`${SCRIPT_URL}?_t=${Date.now()}`);
         const data = await response.json();
         if (data) applyDataToUI(data);
       } catch(e) {
-        console.error("Yedek kanal hatası:", e);
+        console.error("Backup script error:", e);
       }
 
       loadingEl.style.display = 'none';
