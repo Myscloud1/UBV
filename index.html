@@ -37,7 +37,6 @@
       position: relative;
     }
 
-    /* Subtle Ambient Lighting */
     body::before {
       content: '';
       position: absolute;
@@ -52,7 +51,6 @@
       pointer-events: none;
     }
 
-    /* NAVBAR */
     .navbar {
       background: rgba(6, 8, 13, 0.8);
       backdrop-filter: blur(20px);
@@ -105,7 +103,6 @@
 
     .main-container { flex: 1; padding: 40px 24px; max-width: 1400px; margin: 0 auto; width: 100%; }
 
-    /* TAB ANIMATIONS */
     .tab-content {
       display: none;
       opacity: 0;
@@ -121,7 +118,6 @@
 
     .page-title { font-size: 2.5rem; font-weight: 800; text-align: center; margin-bottom: 24px; color: #ffffff; letter-spacing: -0.5px; }
 
-    /* SEARCH & BUTTONS */
     #search-section { text-align: center; margin-bottom: 2rem; }
     .search-wrapper { position: relative; display: inline-block; width: 100%; max-width: 520px; }
 
@@ -159,7 +155,6 @@
     .sublist-tab { display: none; opacity: 0; transition: opacity 0.3s var(--ease-smooth); }
     .sublist-tab.active-sublist { display: block; opacity: 1; }
 
-    /* DESKTOP TABLE UI */
     .table-wrapper {
       width: 100%; border-radius: 16px; overflow-x: auto;
       background: var(--card-bg); border: 1px solid var(--card-border);
@@ -251,10 +246,8 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* MOBILE CARDS CONTAINER */
     .mobile-cards-wrapper { display: none; flex-direction: column; gap: 12px; }
 
-    /* MOBILE UI DESIGN */
     @media (max-width: 768px) {
       .navbar { padding: 0 16px; height: 62px; }
       .nav-logo-img { height: 36px; width: 36px; }
@@ -346,8 +339,8 @@
         </div>
       </div>
 
-      <div id="loading" class="loading-text" style="display: none;">
-        <div class="spinner"></div> Synchronizing live values...
+      <div id="loading" class="loading-text" style="display: flex;">
+        <div class="spinner"></div> Connecting live stream...
       </div>
 
       <!-- MAIN LIST -->
@@ -440,8 +433,9 @@
   </div>
 
   <script>
-    // Buraya kendi güncellenmiş Apps Script URL'nizi girin
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwgy0-unscIWFF8CnpZbr8Ff1o6HtJYGPOos9T2L-UBhKyonq61UVzjrPpT3RsnUkCbwA/exec";
+    // Firebase ve Yeni Dağıtım URL'niz Entegre Edildi
+    const FIREBASE_DB_URL = "https://ubv-value-list-default-rtdb.firebaseio.com/data.json";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyUUlIBwZbjytpxtYvv3OwE4Mb8bcaEpuqTmokh3AquMZV_fnrUKWYpL1TQ1Z2c1r3_mQ/exec";
 
     let mainListData = [];
     let collectableListData = [];
@@ -534,7 +528,6 @@
           }
         }
 
-        // DESKTOP TABLE
         const tr = document.createElement("tr");
         for (let idx = 0; idx < 8; idx++) {
           const td = document.createElement("td");
@@ -568,7 +561,6 @@
         }
         tableFragment.appendChild(tr);
 
-        // MOBILE CARD
         const card = document.createElement("div");
         card.className = "mobile-card";
         
@@ -698,42 +690,40 @@
       });
     }
 
-    // TEK İSTEKLE HIZLANDIRILMIŞ VE ÖNBELLEKLENMİŞ YÜKLEME
+    function applyDataToUI(data) {
+      if (data.terms) processTermsData(data.terms);
+      if (data.items) processItemsData(data.items);
+      if (data.updates) processUpdatesData(data.updates);
+      if (data.editors) processEditorsData(data.editors);
+    }
+
+    // Önce Firebase'den hızlı yükleme dener, başarısız olursa yeni Apps Script dağıtım linkine başvurur
     async function initData() {
-      // 1. DÜZEY: Varsa eski verileri anında ekrana bas (Sıfır Bekleme)
-      const cachedBundle = localStorage.getItem('ubv_data_bundle');
-      if (cachedBundle) {
-        try {
-          const parsed = JSON.parse(cachedBundle);
-          if (parsed.terms) processTermsData(parsed.terms);
-          if (parsed.items) processItemsData(parsed.items);
-          if (parsed.updates) processUpdatesData(parsed.updates);
-          if (parsed.editors) processEditorsData(parsed.editors);
-        } catch(e) { console.error("Cache parsing error", e); }
-      } else {
-        document.getElementById('loading').style.display = 'flex';
+      const loadingEl = document.getElementById('loading');
+
+      try {
+        const response = await fetch(FIREBASE_DB_URL);
+        const data = await response.json();
+
+        if (data && data.items) {
+          applyDataToUI(data);
+          loadingEl.style.display = 'none';
+          return;
+        }
+      } catch (err) {
+        console.error("Firebase veri çekme hatası, Apps Script kanalına geçiliyor...", err);
       }
 
-      // 2. DÜZEY: Arka planda TEK BİR İSTEK ile Google Sheets'ten güncel verileri al
+      // Apps Script Dağıtım Yedek Kanalı
       try {
         const response = await fetch(`${SCRIPT_URL}?_t=${Date.now()}`);
         const data = await response.json();
-        
-        document.getElementById('loading').style.display = 'none';
-
-        if (data) {
-          if (data.terms) processTermsData(data.terms);
-          if (data.items) processItemsData(data.items);
-          if (data.updates) processUpdatesData(data.updates);
-          if (data.editors) processEditorsData(data.editors);
-
-          // Gelecek hızlı açılışlar için yerel hafızaya kaydet
-          localStorage.setItem('ubv_data_bundle', JSON.stringify(data));
-        }
-      } catch (err) {
-        console.error("API Fetch error:", err);
-        document.getElementById('loading').style.display = 'none';
+        if (data) applyDataToUI(data);
+      } catch(e) {
+        console.error("Yedek kanal hatası:", e);
       }
+
+      loadingEl.style.display = 'none';
     }
 
     window.addEventListener('DOMContentLoaded', initData);
